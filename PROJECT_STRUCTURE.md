@@ -7,7 +7,9 @@ San3aTech_Tool-kit/
 ├── index.html                    # Main dashboard page
 ├── tools/
 │   ├── qr-generator.html        # QR Code Generator tool
-│   └── video-to-gif.html        # Video to GIF Converter tool
+│   ├── video-to-gif.html        # Video to GIF Converter tool
+│   ├── team-wigs.html           # Team WIGs Dashboard
+│   └── individual-wigs.html     # Individual WIGs Dashboard
 ├── styles/
 │   ├── main.css                 # Dashboard styles
 │   ├── qr-generator.css         # QR Generator styles
@@ -39,7 +41,9 @@ Dashboard (index.html)
 │   ├── Dashboard (active)
 │   ├── Tools Section
 │   │   ├── QR Generator → tools/qr-generator.html
-│   │   └── Video to GIF → tools/video-to-gif.html
+│   │   ├── Video to GIF → tools/video-to-gif.html
+│   │   ├── Team WIGs → tools/team-wigs.html
+│   │   └── Individual WIGs → tools/individual-wigs.html
 │   └── Resources Section
 │       ├── Documentation
 │       └── Updates
@@ -73,6 +77,16 @@ Dashboard (index.html)
    - Trim video start/end time
    - Adjust FPS and Speed
    - Resize output width
+
+3. **Team WIGs Progress** (`tools/team-wigs.html`)
+   - Company-wide progress tracking
+   - Department leaderboards
+   - Visual progress bars with targets
+
+4. **Individual WIGs** (`tools/individual-wigs.html`)
+   - Individual performance tracking
+   - Detailed per-person goals
+   - Progress vs Target visualization
 
 ## 🎨 Branding
 

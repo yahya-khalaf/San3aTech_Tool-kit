@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>San3a Tech Individual WIGs Progress</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* San3a Branding - Red Palette */
+            --primary: #DC2626;
+            /* Red-600 */
+            --primary-dark: #B91C1C;
+            /* Red-700 */
+            --primary-light: #FCA5A5;
+            /* Red-300 */
+            --accent: #10b981;
+            /* Emerald-500 (Kept for Success/Progress) */
+            --accent-glow: rgba(16, 185, 129, 0.2);
+            --bg: #f8fafc;
+            /* Slate-50 */
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            /* Slate-900 */
+            --text-muted: #64748b;
+            /* Slate-500 */
+            --border: #e2e8f0;
+            /* Slate-200 */
+
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-md);
+        }
+
+        h1.page-title {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        #company-progress {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            color: #fee2e2;
+            /* Red-100 */
+            background: rgba(255, 255, 255, 0.1);
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 9999px;
+            backdrop-filter: blur(4px);
+        }
+
+        .nav-buttons {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .nav-button {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-container {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .team-section {
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .team-section.open {
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .team-section-header {
+            padding: 1.5rem 2.5rem;
+            background: #fff;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+
+        .team-section-header:hover {
+            background: #f8fafc;
+        }
+
+        .team-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: baseline;
+            gap: 0.8rem;
+        }
+
+        .member-count {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            background: var(--bg);
+            padding: 0.2rem 0.8rem;
+            border-radius: 999px;
+        }
+
+        .section-toggle-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text-muted);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 1.2rem;
+        }
+
+        .team-section:hover .section-toggle-icon {
+            color: var(--primary);
+        }
+
+        .team-section.open .section-toggle-icon {
+            transform: rotate(180deg);
+            background: var(--primary);
+            color: white;
+        }
+
+        .team-card-container {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #f8fafc;
+            border-top: 1px solid var(--border);
+        }
+
+        .team-section.open .team-card-container {
+            grid-template-rows: 1fr;
+        }
+
+        .team-card-wrapper {
+            overflow: hidden;
+            padding: 0 2rem;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.4s ease 0.1s;
+        }
+
+        .team-section.open .team-card-wrapper {
+            opacity: 1;
+            transform: translateY(0);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .team-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover {
+            border-color: var(--primary-light);
+            transform: translateX(4px);
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            background: #fff;
+        }
+
+        .team-header:hover {
+            background: #f8fafc;
+        }
+
+        .member-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .team-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .team-progress-badge {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: #ecfdf5;
+            padding: 0.25rem 0.6rem;
+            border-radius: 8px;
+            border: 1px solid #a7f3d0;
+        }
+
+        .card-toggle-icon {
+            color: var(--text-muted);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .team-card.open .card-toggle-icon {
+            transform: rotate(90deg);
+            color: var(--primary);
+        }
+
+        .chart-container-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .team-card.open .chart-container-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .chart-area {
+            overflow: hidden;
+            background: #fafafa;
+            border-top: 1px solid var(--border);
+        }
+
+        .chart-content {
+            min-height: 0;
+            padding: 1.5rem 2rem;
+            opacity: 0;
+            transition: opacity 0.4s ease 0.2s;
+        }
+
+        .team-card.open .chart-content {
+            opacity: 1;
+        }
+
+        .legend {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            margin-top: 1.2rem;
+            color: var(--text-muted);
+            justify-content: flex-end;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 4rem 0;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.95);
+            color: white;
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            max-width: 320px;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+            line-height: 1.5;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="nav-buttons">
+            <a href="../index.html" class="nav-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Toolkit
+            </a>
+            <a href="team-wigs.html" class="nav-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back to Team View
+            </a>
+        </div>
+        <h1 class="page-title">San3a Tech Individual WIGs</h1>
+        <div id="company-progress">Loading...</div>
+    </header>
+
+    <div class="dashboard-container" id="dashboard"></div>
+    <footer>Data live-synced from Individual Progress Sheet</footer>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTAlZLAJlBAF-_aPbJwDhrlAAjE2tg30nrJn3fUBfNYym9nmc3dFR5mgTSrr7GTxpd0PMNQXlPPqssB/pub?gid=466066634&single=true&output=csv";
+        const tooltip = d3.select("#tooltip");
+        const companyProgressDiv = d3.select("#company-progress");
+
+        const orderedTeamNames = ["Admin", "Technical Services", "Education", "Comms", "Programs"];
+
+        d3.text(csvUrl).then(textData => {
+            const rows = d3.csvParseRows(textData);
+            if (rows.length < 3) return;
+
+            const teamRow = rows[0];
+            const memberRow = rows[1];
+            const colIndexToMemberStr = {};
+            let currentTeam = "";
+
+            for (let c = 0; c < teamRow.length; c++) {
+                if (teamRow[c] && teamRow[c].trim() !== "" && teamRow[c] !== "WIGs") {
+                    currentTeam = teamRow[c].trim();
+                }
+                if (currentTeam && memberRow[c] && memberRow[c].trim() !== "") {
+                    colIndexToMemberStr[c] = {
+                        team: currentTeam,
+                        member: memberRow[c].trim(),
+                        colIdx: c
+                    };
+                }
+            }
+
+            const processedData = [];
+            for (let i = 2; i < rows.length; i++) {
+                const row = rows[i];
+                const firstCell = row[0] ? row[0].trim() : "";
+
+                if (firstCell.startsWith("WIG/Initiative") || firstCell === "Personal Growth WIG") {
+                    const wigRow = rows[i];
+                    const goalRow = rows[i + 1];
+                    const achievedRow = rows[i + 2];
+
+                    if (!wigRow || !goalRow || !achievedRow) continue;
+
+                    for (const colIdx in colIndexToMemberStr) {
+                        const memberInfo = colIndexToMemberStr[colIdx];
+                        const wigName = wigRow[colIdx]?.trim();
+
+                        if (wigName && wigName !== "" && wigName !== "-") {
+                            const target = parseFloat(goalRow[colIdx]?.replace(/%|,/g, '')) || 0;
+                            const actual = parseFloat(achievedRow[colIdx]?.replace(/%|,/g, '')) || 0;
+
+                            if (target > 0) {
+                                processedData.push({
+                                    team: memberInfo.team,
+                                    member: memberInfo.member,
+                                    wig: wigName,
+                                    target: target,
+                                    actual: actual,
+                                    id: `wig-${colIdx}-${i}`
+                                });
+                            }
+                        }
+                    }
+                    i += 3;
+                }
+            }
+
+            drawIndividualDashboard(processedData);
+        });
+
+        function drawIndividualDashboard(data) {
+            const dashboard = d3.select("#dashboard");
+            dashboard.html("");
+
+            if (data.length === 0) {
+                dashboard.html("<div style='text-align:center;padding:3rem;color:var(--text-muted)'>No data found in the connected sheet.</div>");
+                return;
+            }
+
+            const allProgress = data.map(d => Math.min((d.target > 0 ? (d.actual / d.target) * 100 : 0), 100));
+            const companyAverage = Math.round(d3.mean(allProgress) || 0);
+            companyProgressDiv.text(`Company Overall: ${companyAverage}%`);
+
+            const teamsData = d3.groups(data, d => d.team);
+            const teamDataMap = new Map(teamsData);
+
+            orderedTeamNames.forEach(teamName => {
+                const membersData = teamDataMap.get(teamName);
+                if (!membersData) return;
+
+                const teamSection = dashboard.append("div").attr("class", "team-section");
+
+                const sectionHeader = teamSection.append("div")
+                    .attr("class", "team-section-header")
+                    .on("click", () => teamSection.classed("open", !teamSection.classed("open")));
+
+                const titleDiv = sectionHeader.append("div").attr("class", "team-title");
+                titleDiv.append("span").text(teamName);
+                titleDiv.append("span").attr("class", "member-count").text(`${new Set(membersData.map(d => d.member)).size} members`);
+
+                sectionHeader.append("div").attr("class", "section-toggle-icon").html("▼");
+
+                const teamContainer = teamSection.append("div").attr("class", "team-card-container");
+                const teamWrapper = teamContainer.append("div").attr("class", "team-card-wrapper");
+
+                const members = d3.groups(membersData, d => d.member)
+                    .sort((a, b) => a[0].localeCompare(b[0]));
+
+                members.forEach(([memberName, memberWigs]) => {
+                    const memProgress = memberWigs.map(d => Math.min((d.target > 0 ? (d.actual / d.target) * 100 : 0), 100));
+                    const overall = Math.round(d3.mean(memProgress) || 0);
+
+                    const card = teamWrapper.append("div").attr("class", "team-card");
+
+                    const header = card.append("div").attr("class", "team-header")
+                        .on("click", function () {
+                            const isCurrentlyOpen = card.classed("open");
+                            teamWrapper.selectAll(".team-card.open").classed("open", false);
+                            card.classed("open", !isCurrentlyOpen);
+                        });
+
+                    const memberInfo = header.append("div").attr("class", "member-info");
+                    memberInfo.append("div").attr("class", "team-name").text(memberName);
+                    memberInfo.append("div").attr("class", "team-progress-badge").text(`${overall}%`);
+
+                    header.append("div").attr("class", "card-toggle-icon").html("▶");
+
+                    const chartWrapper = card.append("div").attr("class", "chart-container-wrapper");
+                    const chartArea = chartWrapper.append("div").attr("class", "chart-area");
+                    const chartContent = chartArea.append("div").attr("class", "chart-content");
+
+                    const fullWidth = 950;
+                    const fullHeight = memberWigs.length * 50 + 50;
+                    const svg = chartContent.append("svg")
+                        .attr("viewBox", [0, 0, fullWidth, fullHeight])
+                        .attr("preserveAspectRatio", "xMidYMid meet");
+
+                    drawMemberChart(svg, memberWigs, fullWidth, fullHeight);
+
+                    chartContent.append("div").attr("class", "legend").html(`
+              <div class="legend-item"><div class="legend-color" style="background:var(--primary)"></div> Achieved</div>
+              <div class="legend-item"><div class="legend-color" style="background:#e2e8f0"></div> Target</div>
+            `);
+                });
+            });
+        }
+
+        function drawMemberChart(svg, data, fullWidth, fullHeight) {
+            data.forEach((d, i) => d.shortLabel = `WIG ${i + 1}`);
+            const margin = { top: 30, right: 30, bottom: 10, left: 70 };
+            const width = fullWidth - margin.left - margin.right;
+            const height = fullHeight - margin.top - margin.bottom;
+
+            data.forEach(d => {
+                d.pct = Math.min((d.target > 0 ? (d.actual / d.target) * 100 : 0), 100);
+            });
+
+            const x = d3.scaleLinear().domain([0, 100]).range([0, width]);
+            const y = d3.scaleBand().domain(data.map(d => d.shortLabel)).range([0, height]).padding(0.4);
+
+            const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Background Track
+            g.selectAll(".bg-bar")
+                .data(data).join("rect")
+                .attr("x", 0).attr("y", d => y(d.shortLabel))
+                .attr("width", width).attr("height", y.bandwidth())
+                .attr("fill", "#f1f5f9").attr("rx", y.bandwidth() / 2);
+
+            // Target Line
+            g.selectAll(".target-marker")
+                .data(data).join("line")
+                .attr("x1", x(100)).attr("x2", x(100))
+                .attr("y1", d => y(d.shortLabel) - 3)
+                .attr("y2", d => y(d.shortLabel) + y.bandwidth() + 3)
+                .attr("stroke", "#cbd5e1").attr("stroke-width", 2).attr("stroke-dasharray", "3,3");
+
+            // Foreground Bar
+            g.selectAll(".fg-bar")
+                .data(data).join("rect")
+                .attr("x", 0).attr("y", d => y(d.shortLabel))
+                .attr("height", y.bandwidth())
+                .attr("fill", d => d.pct >= 100 ? "var(--accent)" : "var(--primary)")
+                .attr("rx", y.bandwidth() / 2)
+                .attr("width", 0)
+                .transition().duration(800).ease(d3.easeCubicOut)
+                .attr("width", d => Math.max(y.bandwidth(), x(d.pct)));
+
+            // Interaction Layer
+            g.selectAll(".interaction-bar")
+                .data(data).join("rect")
+                .attr("x", -margin.left).attr("y", d => y(d.shortLabel))
+                .attr("width", fullWidth).attr("height", y.bandwidth())
+                .attr("fill", "transparent").style("cursor", "pointer")
+                .on("mousemove", (event, d) => {
+                    showTooltip(event, `
+               <div style="font-weight:600;margin-bottom:6px;color:#fee2e2;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:6px">${d.wig}</div>
+               <div style="display:flex;justify-content:space-between;align-items:center">
+                 <span style="color:${d.pct >= 100 ? 'var(--accent)' : 'var(--primary-light)'};font-weight:700;font-size:1.1em">${Math.round(d.pct)}% Done</span>
+                 <span style="color:#94a3b8;font-size:0.9em">(${d.actual} / ${d.target})</span>
+               </div>
+             `);
+                })
+                .on("mouseleave", hideTooltip);
+
+            // Labels
+            g.selectAll(".label")
+                .data(data).join("text")
+                .attr("x", d => x(d.pct) + 10)
+                .attr("y", d => y(d.shortLabel) + y.bandwidth() / 2 + 5)
+                .text(d => `${Math.round(d.pct)}%`)
+                .attr("font-size", "13px").attr("font-weight", "700")
+                .attr("fill", "var(--text-dark)");
+
+            g.append("g").call(d3.axisLeft(y).tickSize(0)).call(g => g.select(".domain").remove())
+                .selectAll("text").attr("font-size", "13px").attr("font-weight", "600").attr("fill", "var(--text-muted)");
+
+            g.append("g").attr("transform", "translate(0,-15)")
+                .call(d3.axisTop(x).ticks(10).tickFormat(d => d + "%").tickSize(0))
+                .call(g => g.select(".domain").remove())
+                .selectAll("text").attr("font-size", "12px").attr("font-weight", "600").attr("fill", "#94a3b8");
+        }
+
+        function showTooltip(event, html) {
+            tooltip.html(html).style("opacity", 1)
+                .style("transform", "translateY(0)")
+                .style("left", (event.pageX + 15) + "px").style("top", (event.pageY - 15) + "px");
+        }
+        function hideTooltip() {
+            tooltip.style("opacity", 0).style("transform", "translateY(10px)");
+        }
+    </script>
+</body>
+
+</html>

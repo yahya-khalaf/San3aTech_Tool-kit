@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>San3a Tech TWIGs Progress</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* San3a Branding - Red Palette */
+            --primary: #DC2626;
+            /* Red-600 */
+            --primary-dark: #B91C1C;
+            /* Red-700 */
+            --primary-light: #FCA5A5;
+            /* Red-300 */
+            --accent: #10b981;
+            /* Emerald-500 (Kept for Success/Progress) */
+            --accent-glow: rgba(16, 185, 129, 0.2);
+            --bg: #f8fafc;
+            /* Slate-50 */
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            /* Slate-900 */
+            --text-muted: #64748b;
+            /* Slate-500 */
+            --border: #e2e8f0;
+            /* Slate-200 */
+
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text-dark);
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-md);
+        }
+
+        h1.page-title {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        #company-progress {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            color: #fee2e2;
+            /* Red-100 */
+            background: rgba(255, 255, 255, 0.1);
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 9999px;
+            backdrop-filter: blur(4px);
+        }
+
+        .nav-buttons {
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .nav-button {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Rankings Section Styles */
+        .rankings-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rankings-section:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+        }
+
+        .rankings-header {
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            transition: background 0.2s ease;
+        }
+
+        .rankings-header:hover {
+            background: #f8fafc;
+        }
+
+        .rankings-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rankings-content-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rankings-section.open .rankings-content-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .rankings-content {
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.4s ease 0.1s;
+            padding: 0 2rem;
+        }
+
+        .rankings-section.open .rankings-content {
+            opacity: 1;
+            padding: 0 2rem 2rem;
+        }
+
+        .team-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .team-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            border-color: var(--primary-light);
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            background: #fff;
+            transition: background 0.2s ease;
+        }
+
+        .team-header:hover {
+            background: #f8fafc;
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .team-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            letter-spacing: -0.025em;
+        }
+
+        .team-progress-badge {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: #ecfdf5;
+            /* Emerald-50 */
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            border: 1px solid #a7f3d0;
+            /* Emerald-200 */
+            box-shadow: 0 1px 2px var(--accent-glow);
+        }
+
+        .toggle-icon-wrapper {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--bg);
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .team-card:hover .toggle-icon-wrapper,
+        .rankings-section:hover .toggle-icon-wrapper {
+            background: #e0e7ff;
+            color: var(--primary);
+        }
+
+        .toggle-icon {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .team-card.open .toggle-icon,
+        .rankings-section.open .toggle-icon {
+            transform: rotate(90deg);
+        }
+
+        .team-card.open .toggle-icon-wrapper,
+        .rankings-section.open .toggle-icon-wrapper {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Smooth Collapse Animation */
+        .chart-container-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .team-card.open .chart-container-wrapper {
+            grid-template-rows: 1fr;
+        }
+
+        .chart-area {
+            overflow: hidden;
+            background: #fafafa;
+            /* Slightly off-white for contrast */
+            border-top: 1px solid var(--border);
+        }
+
+        .chart-content {
+            min-height: 0;
+            padding: 2rem 2.5rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease 0.1s;
+        }
+
+        .team-card.open .chart-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .legend {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            margin-top: 1.5rem;
+            color: var(--text-muted);
+            justify-content: center;
+            /* Centered legend looks better */
+            padding-top: 1.5rem;
+            border-top: 1px dashed var(--border);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 500;
+        }
+
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 4rem 0;
+            font-weight: 500;
+        }
+
+        /* Modern Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.95);
+            /* Slate-900, highly opaque */
+            color: white;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            max-width: 320px;
+            z-index: 100;
+            box-shadow: var(--shadow-xl);
+            line-height: 1.5;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            overflow: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="nav-buttons">
+            <a href="../index.html" class="nav-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Toolkit
+            </a>
+            <a href="individual-wigs.html" class="nav-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
+                Go to Individual WIGs
+            </a>
+        </div>
+        <h1 class="page-title">San3a Tech TWIGs Progress</h1>
+        <div id="company-progress">Loading...</div>
+    </header>
+
+    <div class="dashboard-container" id="dashboard">
+        <!-- Rankings Section will be inserted here by JS -->
+    </div>
+    <footer>Data live-synced from Team Progress Sheet</footer>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTAlZLAJlBAF-_aPbJwDhrlAAjE2tg30nrJn3fUBfNYym9nmc3dFR5mgTSrr7GTxpd0PMNQXlPPqssB/pub?gid=2099304034&single=true&output=csv";
+        const tooltip = d3.select("#tooltip");
+        const companyProgressDiv = d3.select("#company-progress");
+
+        d3.csv(csvUrl).then(rawData => {
+            const data = rawData
+                .filter(d => d.Team && d.WIG)
+                .map(d => ({
+                    team: d.Team.trim(),
+                    wig: d.WIG.trim(),
+                    target: +d.Target || 0,
+                    actual: +d.Achieved || 0
+                }))
+                .filter(d => d.target > 0);
+
+            drawDashboard(data);
+        });
+
+        function drawDashboard(data) {
+            const teams = d3.groups(data, d => d.team);
+            const dashboard = d3.select("#dashboard");
+
+            // Calculate team averages for ranking
+            const teamRankings = teams.map(([teamName, teamData]) => {
+                const normalizedProgress = teamData.map(d => Math.min((d.target > 0 ? (d.actual / d.target) * 100 : 0), 100));
+                return {
+                    team: teamName,
+                    average: Math.round(d3.mean(normalizedProgress))
+                };
+            }).sort((a, b) => b.average - a.average); // Sort descending
+
+            const companyAverage = Math.round(d3.mean(teamRankings, d => d.average));
+            companyProgressDiv.text(`Company Overall: ${companyAverage}%`);
+
+            // --- DRAW RANKINGS CHART ---
+            const rankingSection = dashboard.append("div").attr("class", "rankings-section"); // Start closed by default
+            const rankingHeader = rankingSection.append("div").attr("class", "rankings-header")
+                .on("click", function () {
+                    rankingSection.classed("open", !rankingSection.classed("open"));
+                });
+
+            rankingHeader.append("h2").attr("class", "rankings-title")
+                .html('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Team Leaderboard');
+
+            rankingHeader.append("div").attr("class", "toggle-icon-wrapper")
+                .append("div").attr("class", "toggle-icon").html("▶");
+
+            const rankingContentWrapper = rankingSection.append("div").attr("class", "rankings-content-wrapper");
+            const rankingContent = rankingContentWrapper.append("div").attr("class", "rankings-content");
+
+            const rankHeight = teamRankings.length * 50 + 30;
+            const rankSvg = rankingContent.append("svg")
+                .attr("viewBox", [0, 0, 900, rankHeight])
+                .attr("preserveAspectRatio", "xMidYMid meet");
+
+            drawRankingChart(rankSvg, teamRankings, 900, rankHeight);
+
+            // --- DRAW INDIVIDUAL TEAM CARDS ---
+            teams.forEach(([teamName, teamData]) => {
+                const normalizedProgress = teamData.map(d => Math.min((d.target > 0 ? (d.actual / d.target) * 100 : 0), 100));
+                const overall = Math.round(d3.mean(normalizedProgress));
+                teamData.forEach((d, i) => d.shortLabel = `TWIG #${i + 1}`);
+
+                const card = dashboard.append("div").attr("class", "team-card");
+
+                const header = card.append("div").attr("class", "team-header")
+                    .on("click", function () {
+                        const isCurrentlyOpen = card.classed("open");
+                        // Close leaderboard if it's open when opening a team card (optional, keeps it cleaner)
+                        // rankingSection.classed("open", false); 
+                        dashboard.selectAll(".team-card.open").classed("open", false);
+                        card.classed("open", !isCurrentlyOpen);
+                    });
+
+                const info = header.append("div").attr("class", "team-info");
+                info.append("div").attr("class", "team-name").text(teamName);
+                info.append("div").attr("class", "team-progress-badge").text(`${overall}% Completed`);
+
+                header.append("div").attr("class", "toggle-icon-wrapper")
+                    .append("div").attr("class", "toggle-icon").html("▶");
+
+                const chartWrapper = card.append("div").attr("class", "chart-container-wrapper");
+                const chartArea = chartWrapper.append("div").attr("class", "chart-area");
+                const chartContent = chartArea.append("div").attr("class", "chart-content");
+
+                const fullWidth = 900;
+                const fullHeight = teamData.length * 60 + 40;
+
+                const svg = chartContent.append("svg")
+                    .attr("viewBox", [0, 0, fullWidth, fullHeight])
+                    .attr("preserveAspectRatio", "xMidYMid meet");
+
+                drawTeamChart(svg, teamData, fullWidth, fullHeight);
+
+                const legend = chartContent.append("div").attr("class", "legend");
+                legend.html(`
+          <div class="legend-item"><div class="legend-color" style="background:var(--primary)"></div> Achieved Progress</div>
+          <div class="legend-item"><div class="legend-color" style="background:#e2e8f0"></div> Remaining Target</div>
+        `);
+            });
+        }
+
+        function drawRankingChart(svg, data, fullWidth, fullHeight) {
+            const margin = { top: 10, right: 70, bottom: 20, left: 150 };
+            const width = fullWidth - margin.left - margin.right;
+            const height = fullHeight - margin.top - margin.bottom;
+
+            const x = d3.scaleLinear().domain([0, 100]).range([0, width]);
+            const y = d3.scaleBand().domain(data.map(d => d.team)).range([0, height]).padding(0.3);
+
+            const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Background track
+            g.selectAll(".rank-bg")
+                .data(data).join("rect")
+                .attr("x", 0).attr("y", d => y(d.team))
+                .attr("width", width).attr("height", y.bandwidth())
+                .attr("fill", "#f1f5f9").attr("rx", y.bandwidth() / 2);
+
+            // Progress bar with color based on rank (Top 1 gets accent color)
+            g.selectAll(".rank-bar")
+                .data(data).join("rect")
+                .attr("x", 0).attr("y", d => y(d.team))
+                .attr("height", y.bandwidth()).attr("rx", y.bandwidth() / 2)
+                .attr("fill", (d, i) => i === 0 ? "var(--accent)" : "var(--primary)")
+                .attr("width", 0)
+                .transition().duration(1000).ease(d3.easeCubicOut)
+                .attr("width", d => x(d.average));
+
+            // Percentage Labels
+            g.selectAll(".rank-label")
+                .data(data).join("text")
+                .attr("x", d => x(d.average) + 10)
+                .attr("y", d => y(d.team) + y.bandwidth() / 2 + 5)
+                .text(d => `${d.average}%`)
+                .attr("font-size", "14px").attr("font-weight", "700").attr("fill", "var(--text-dark)");
+
+            // Team Name Labels
+            g.append("g").call(d3.axisLeft(y).tickSize(0)).call(g => g.select(".domain").remove())
+                .selectAll("text").attr("font-size", "14px").attr("font-weight", "600").attr("fill", "var(--text-dark)");
+
+            // Add "Top Team" Crown icon for #1
+            if (data.length > 0) {
+                const topTeam = data[0];
+                g.append("text")
+                    .attr("x", -margin.left + 10) // Position near far left
+                    .attr("y", y(topTeam.team) + y.bandwidth() / 2 + 5)
+                    .html("👑")
+                    .attr("font-size", "16px");
+            }
+        }
+
+        function drawTeamChart(svg, data, fullWidth, fullHeight) {
+            const margin = { top: 30, right: 50, bottom: 10, left: 100 };
+            const width = fullWidth - margin.left - margin.right;
+            const height = fullHeight - margin.top - margin.bottom;
+
+            data.forEach(d => {
+                d.progress = d.target ? (d.actual / d.target) * 100 : 0;
+                d.progress = Math.min(d.progress, 100);
+            });
+
+            const x = d3.scaleLinear().domain([0, 100]).range([0, width]);
+            const y = d3.scaleBand().domain(data.map(d => d.shortLabel)).range([0, height]).padding(0.4);
+
+            const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+            g.selectAll(".bg-bar")
+                .data(data).join("rect")
+                .attr("x", 0).attr("y", d => y(d.shortLabel))
+                .attr("width", width).attr("height", y.bandwidth())
+                .attr("fill", "#f1f5f9").attr("rx", y.bandwidth() / 2);
+
+            g.selectAll(".target-marker")
+                .data(data).join("line")
+                .attr("x1", x(100)).attr("x2", x(100))
+                .attr("y1", d => y(d.shortLabel) - 4)
+                .attr("y2", d => y(d.shortLabel) + y.bandwidth() + 4)
+                .attr("stroke", "#cbd5e1").attr("stroke-width", 2).attr("stroke-dasharray", "4,4");
+
+            g.selectAll(".fg-bar")
+                .data(data).join("rect")
+                .attr("x", 0).attr("y", d => y(d.shortLabel))
+                .attr("height", y.bandwidth())
+                .attr("fill", "var(--primary)")
+                .attr("rx", y.bandwidth() / 2)
+                .attr("width", 0)
+                .transition().duration(1000).ease(d3.easeCubicOut)
+                .attr("width", d => Math.max(y.bandwidth(), x(d.progress)));
+
+            g.selectAll(".interaction-bar")
+                .data(data).join("rect")
+                .attr("x", -margin.left).attr("y", d => y(d.shortLabel))
+                .attr("width", fullWidth).attr("height", y.bandwidth())
+                .attr("fill", "transparent").style("cursor", "pointer")
+                .on("mousemove", (event, d) => {
+                    showTooltip(event, `
+               <div style="font-weight:600;margin-bottom:6px;color:#fee2e2;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:6px">${d.wig}</div>
+               <div style="display:flex;justify-content:space-between;align-items:center">
+                 <span style="color:var(--accent);font-weight:700;font-size:1.1em">${Math.round(d.progress)}% Done</span>
+                 <span style="color:#94a3b8;font-size:0.9em">(${d.actual} / ${d.target})</span>
+               </div>
+             `);
+                })
+                .on("mouseleave", hideTooltip);
+
+            g.selectAll(".label")
+                .data(data).join("text")
+                .attr("x", d => x(d.progress) + 12)
+                .attr("y", d => y(d.shortLabel) + y.bandwidth() / 2 + 5)
+                .text(d => `${Math.round(d.progress)}%`)
+                .attr("font-size", "14px").attr("font-weight", "700")
+                .attr("fill", "var(--text-dark)");
+
+            g.selectAll(".y-label")
+                .data(data).join("text")
+                .attr("x", -15)
+                .attr("y", d => y(d.shortLabel) + y.bandwidth() / 2 + 5)
+                .attr("text-anchor", "end")
+                .text(d => d.shortLabel)
+                .attr("font-size", "14px").attr("font-weight", "600").attr("fill", "var(--text-muted)");
+
+            g.append("g").attr("transform", "translate(0,-20)")
+                .call(d3.axisTop(x).ticks(5).tickFormat(d => d + "%").tickSize(0))
+                .call(g => g.select(".domain").remove())
+                .selectAll("text").attr("font-size", "13px").attr("font-weight", "600").attr("fill", "#94a3b8");
+        }
+
+        function showTooltip(event, html) {
+            tooltip.html(html).style("opacity", 1)
+                .style("transform", "translateY(0)")
+                .style("left", (event.pageX + 20) + "px").style("top", (event.pageY - 20) + "px");
+        }
+
+        function hideTooltip() {
+            tooltip.style("opacity", 0).style("transform", "translateY(10px)");
+        }
+    </script>
+</body>
+
+</html>

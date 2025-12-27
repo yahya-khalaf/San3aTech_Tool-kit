@@ -34,6 +34,8 @@ San3aTech_Tool-kit/
 - ✅ Dashboard overview with stats
 - ✅ QR Code Generator tool
 - ✅ Video to GIF Converter tool
+- ✅ Team WIGs Dashboard
+- ✅ Individual WIGs Dashboard
 - ✅ Quick action cards
 - ✅ Responsive mobile menu
 - ✅ User profile section

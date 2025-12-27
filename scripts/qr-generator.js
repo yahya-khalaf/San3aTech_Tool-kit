@@ -1,3 +1,4 @@
+
 // QR Code Generator with Logo Overlay
 // Based on Python implementation using segno + PIL
 
