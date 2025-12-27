@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video to GIF - San3a Toolkit</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/video-to-gif.css">
+
+    <!-- GIF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <img src="../images/San3a-Academy-logo.png" alt="San3a Logo"
+                    style="width: 36px; height: 36px; object-fit: contain;">
+                <span class="logo-text">San3a Toolkit</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="../index.html" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path
+                        d="M3 10H8M8 10C8 11.6569 9.34315 13 11 13H12C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7H11C9.34315 7 8 8.34315 8 10Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <rect x="2" y="2" width="16" height="16" rx="3" stroke="currentColor" stroke-width="2" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Tools</div>
+
+                <a href="qr-generator.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="11" y="2" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="2" y="11" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="11" y="11" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>QR Generator</span>
+                </a>
+
+                <a href="video-to-gif.html" class="nav-item active">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path
+                            d="M4 12V8C4 5.79086 5.79086 4 8 4H12C14.2091 4 16 5.79086 16 8V12C16 14.2091 14.2091 16 12 16H8C5.79086 16 4 14.2091 4 12Z"
+                            stroke="currentColor" stroke-width="2" />
+                        <path d="M8 8V12L12 10L8 8Z" fill="currentColor" />
+                    </svg>
+                    <span>Video to GIF</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">SA</div>
+                <div class="user-info">
+                    <div class="user-name">San3a Team</div>
+                    <div class="user-role">Admin</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+
+            <div class="topbar-title">
+                <h1>Video to GIF Translator</h1>
+                <p>Convert video clips to optimized animated GIFs</p>
+            </div>
+        </header>
+
+        <!-- Tool Content -->
+        <div class="content-wrapper">
+            <div class="tool-container two-column">
+
+                <!-- Input / Config Panel -->
+                <div class="panel input-panel">
+                    <div class="panel-header">
+                        <h2>1. Upload & Configure</h2>
+                        <p>Upload your video and choose settings</p>
+                    </div>
+
+                    <!-- Upload Area -->
+                    <div class="upload-area" id="dropZone">
+                        <input type="file" id="videoInput" accept="video/*" hidden>
+                        <div class="upload-content">
+                            <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="17 8 12 3 7 8" />
+                                <line x1="12" y1="3" x2="12" y2="15" />
+                            </svg>
+                            <h3>Click to upload or drag video</h3>
+                            <p>MP4, WEBM, MOV (Max 50MB)</p>
+                        </div>
+                    </div>
+
+                    <!-- Configuration Controls (Disabled until video loaded) -->
+                    <div id="controlsArea" class="controls-area disabled">
+                        <!-- Trimming Slider -->
+                        <div class="form-group">
+                            <label>Trim Video <span class="badge" id="durationBadge">0s</span></label>
+                            <div class="range-slider-container">
+                                <div class="range-track"></div>
+                                <div class="range-progress" id="rangeProgress"></div>
+                                <input type="range" id="startTime" min="0" max="100" value="0" step="0.1">
+                                <input type="range" id="endTime" min="0" max="100" value="100" step="0.1">
+                            </div>
+                            <div class="time-labels">
+                                <span id="startTimeLabel">00:00</span>
+                                <span id="endTimeLabel">00:00</span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fps">Frame Rate (FPS)</label>
+                                <select id="fps">
+                                    <option value="5">5 (Low Quality)</option>
+                                    <option value="10" selected>10 (Standard)</option>
+                                    <option value="15">15 (Smooth)</option>
+                                    <option value="24">24 (Cinematic)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="quality">Quality/Width</label>
+                                <select id="width">
+                                    <option value="320">320px (Small)</option>
+                                    <option value="480" selected>480px (Medium)</option>
+                                    <option value="600">600px (Large)</option>
+                                    <option value="original">Original Size</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="speed">Speed</label>
+                                <select id="speed">
+                                    <option value="0.5">0.5x (Slow)</option>
+                                    <option value="1" selected>1x (Normal)</option>
+                                    <option value="2">2x (Fast)</option>
+                                    <option value="4">4x (Super Fast)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button id="generateBtn" class="btn-primary btn-large btn-block">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M5 3L19 12L5 21V3Z" fill="currentColor" />
+                            </svg>
+                            Convert to GIF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="panel preview-panel">
+                    <div class="panel-header">
+                        <h2>2. Preview & Download</h2>
+                        <p>View your original video and generated GIF</p>
+                    </div>
+
+                    <div class="preview-container">
+                        <!-- Video Preview -->
+                        <div id="videoContainer" class="media-container" style="display: none;">
+                            <span class="label">Original Video</span>
+                            <video id="videoPreview" controls playsinline></video>
+                        </div>
+
+                        <!-- GIF Output -->
+                        <div id="gifContainer" class="media-container" style="display: none;">
+                            <span class="label">Generated GIF</span>
+                            <img id="gifOutput" alt="Generated GIF">
+                            <div class="gif-meta" id="gifMeta">Size: -- MB</div>
+                        </div>
+
+                        <!-- Placeholder -->
+                        <div id="emptyPreview" class="empty-state-preview">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#E5E7EB"
+                                stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                                <line x1="7" y1="2" x2="7" y2="22" />
+                                <line x1="17" y1="2" x2="17" y2="22" />
+                                <line x1="2" y1="12" x2="22" y2="12" />
+                                <line x1="2" y1="7" x2="7" y2="7" />
+                                <line x1="2" y1="17" x2="7" y2="17" />
+                                <line x1="17" y1="17" x2="22" y2="17" />
+                                <line x1="17" y1="7" x2="22" y2="7" />
+                            </svg>
+                            <p>Upload a video to start</p>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div id="progressContainer" class="progress-container" style="display: none;">
+                        <div class="progress-info">
+                            <span id="progressText">Processing frames...</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Download Actions -->
+                    <div id="downloadActions" class="download-actions" style="display: none;">
+                        <button id="downloadBtn" class="btn-primary">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 13V3M10 13L7 10M10 13L13 10" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                                <path d="M3 17H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                            Download GIF
+                        </button>
+                        <button id="resetBtn" class="btn-secondary">Start Over</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../scripts/main.js"></script>
+    <script src="../scripts/video-to-gif.js"></script>
+</body>
+
+</html>

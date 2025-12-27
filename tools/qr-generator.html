@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator - San3a Toolkit</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/qr-generator.css">
+
+    <!-- QR Code Library - Using cdnjs for reliable delivery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="36" height="36" rx="8" fill="#DC2626" />
+                    <path d="M18 9L25 13.5V22.5L18 27L11 22.5V13.5L18 9Z" stroke="white" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M18 18L25 13.5M18 18L11 13.5M18 18V27" stroke="white" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="logo-text">San3a Toolkit</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="../index.html" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path
+                        d="M3 10H8M8 10C8 11.6569 9.34315 13 11 13H12C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7H11C9.34315 7 8 8.34315 8 10Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <rect x="2" y="2" width="16" height="16" rx="3" stroke="currentColor" stroke-width="2" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Tools</div>
+
+                <a href="qr-generator.html" class="nav-item active">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="11" y="2" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="2" y="11" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="11" y="11" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>QR Generator</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Resources</div>
+
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 6H16M4 10H16M4 14H16" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                    <span>Documentation</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">SA</div>
+                <div class="user-info">
+                    <div class="user-name">San3a Team</div>
+                    <div class="user-role">Admin</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+
+            <div class="topbar-title">
+                <h1>QR Code Generator</h1>
+                <p>Create custom QR codes with logo and branding</p>
+            </div>
+        </header>
+
+        <!-- Tool Content -->
+        <div class="content-wrapper">
+            <div class="tool-container">
+                <!-- Input Panel -->
+                <div class="input-panel">
+                    <div class="panel-header">
+                        <h2>Configure QR Code</h2>
+                        <p>Set parameters for your QR code</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qrText">Text / URL</label>
+                        <input type="text" id="qrText" placeholder="Enter URL or text..."
+                            value="https://www.san3a.academy" />
+                        <small>The content that will be encoded in the QR code</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="qrColor">QR Color</label>
+                            <div class="color-input-group">
+                                <input type="color" id="qrColor" value="#990000" />
+                                <input type="text" id="qrColorHex" value="#990000" placeholder="#990000" />
+                            </div>
+                            <small>Color of the QR code modules</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bgColor">Background</label>
+                            <div class="color-input-group">
+                                <input type="color" id="bgColor" value="#FFFFFF" />
+                                <input type="text" id="bgColorHex" value="#FFFFFF" placeholder="#FFFFFF" />
+                            </div>
+                            <small>Background color</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Center Logo</label>
+                        <div class="logo-selector">
+                            <button class="logo-option active" data-logo="san3a">
+                                <div class="logo-preview">
+                                    <svg width="32" height="32" viewBox="0 0 36 36" fill="none">
+                                        <rect width="36" height="36" rx="8" fill="#DC2626" />
+                                        <path d="M18 9L25 13.5V22.5L18 27L11 22.5V13.5L18 9Z" stroke="white"
+                                            stroke-width="2" />
+                                        <path d="M18 18L25 13.5M18 18L11 13.5M18 18V27" stroke="white"
+                                            stroke-width="2" />
+                                    </svg>
+                                </div>
+                                <span>San3a</span>
+                            </button>
+
+                            <button class="logo-option" data-logo="facebook">
+                                <div class="logo-preview facebook">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="#1877F2">
+                                        <path
+                                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                    </svg>
+                                </div>
+                                <span>Facebook</span>
+                            </button>
+
+                            <button class="logo-option" data-logo="instagram">
+                                <div class="logo-preview instagram">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="url(#instagram-gradient)">
+                                        <defs>
+                                            <linearGradient id="instagram-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                                                <stop offset="0%" style="stop-color:#FD5;stop-opacity:1" />
+                                                <stop offset="50%" style="stop-color:#FF543E;stop-opacity:1" />
+                                                <stop offset="100%" style="stop-color:#C837AB;stop-opacity:1" />
+                                            </linearGradient>
+                                        </defs>
+                                        <path
+                                            d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                                    </svg>
+                                </div>
+                                <span>Instagram</span>
+                            </button>
+
+                            <button class="logo-option" data-logo="none">
+                                <div class="logo-preview no-logo">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <line x1="2" y1="2" x2="22" y2="22" stroke-width="2" />
+                                        <line x1="22" y1="2" x2="2" y2="22" stroke-width="2" />
+                                    </svg>
+                                </div>
+                                <span>No Logo</span>
+                            </button>
+                        </div>
+                        <small>Choose a logo to display in the center</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logoSize">Logo Size</label>
+                        <div class="slider-input">
+                            <input type="range" id="logoSize" min="15" max="30" value="22" step="1" />
+                            <span class="slider-value" id="logoSizeValue">22%</span>
+                        </div>
+                        <small>Size of the center logo relative to QR code</small>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-primary btn-large" id="generateBtn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 2V18M2 10H18" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                            Generate QR Code
+                        </button>
+
+                        <button class="btn-secondary btn-large" id="downloadBtn" disabled>
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 13V3M10 13L7 10M10 13L13 10" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                                <path d="M3 17H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                            Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Preview Panel -->
+                <div class="preview-panel">
+                    <div class="panel-header">
+                        <h2>Preview</h2>
+                        <p>Your QR code will appear here</p>
+                    </div>
+
+                    <div class="preview-container" id="previewContainer">
+                        <div class="preview-placeholder">
+                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                                <rect x="5" y="5" width="30" height="30" stroke="#D1D5DB" stroke-width="3" />
+                                <rect x="45" y="5" width="30" height="30" stroke="#D1D5DB" stroke-width="3" />
+                                <rect x="5" y="45" width="30" height="30" stroke="#D1D5DB" stroke-width="3" />
+                                <rect x="45" y="45" width="30" height="30" stroke="#D1D5DB" stroke-width="3" />
+                            </svg>
+                            <p>Click "Generate QR Code" to preview</p>
+                        </div>
+                        <canvas id="qrCanvas" style="display: none;"></canvas>
+                    </div>
+
+                    <div class="preview-info">
+                        <div class="info-item">
+                            <span class="info-label">Format:</span>
+                            <span class="info-value">PNG</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Size:</span>
+                            <span class="info-value">600x600px</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Error Correction:</span>
+                            <span class="info-value">High</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="../scripts/main.js"></script>
+    <script src="../scripts/qr-generator.js"></script>
+</body>
+
+</html>

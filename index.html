@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San3a Academy Toolkit - Internal Tools Dashboard</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="36" height="36" rx="8" fill="#DC2626" />
+                    <path d="M18 9L25 13.5V22.5L18 27L11 22.5V13.5L18 9Z" stroke="white" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M18 18L25 13.5M18 18L11 13.5M18 18V27" stroke="white" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="logo-text">San3a Toolkit</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path
+                        d="M3 10H8M8 10C8 11.6569 9.34315 13 11 13H12C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7H11C9.34315 7 8 8.34315 8 10Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <rect x="2" y="2" width="16" height="16" rx="3" stroke="currentColor" stroke-width="2" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Tools</div>
+
+                <a href="tools/qr-generator.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <rect x="2" y="2" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="11" y="2" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="2" y="11" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                        <rect x="11" y="11" width="7" height="7" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>QR Generator</span>
+                </a>
+
+                <a href="tools/video-to-gif.html" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path
+                            d="M4 12V8C4 5.79086 5.79086 4 8 4H12C14.2091 4 16 5.79086 16 8V12C16 14.2091 14.2091 16 12 16H8C5.79086 16 4 14.2091 4 12Z"
+                            stroke="currentColor" stroke-width="2" />
+                        <path d="M8 8V12L12 10L8 8Z" fill="currentColor" />
+                    </svg>
+                    <span>Video to GIF</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Resources</div>
+
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 6H16M4 10H16M4 14H16" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                    <span>Documentation</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2" />
+                        <path d="M10 7V10L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <span>Updates</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">SA</div>
+                <div class="user-info">
+                    <div class="user-name">San3a Team</div>
+                    <div class="user-role">Admin</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+
+            <div class="topbar-title">
+                <h1>Toolkit Dashboard</h1>
+                <p>Internal tools for San3a Academy team</p>
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-button">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path
+                            d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z"
+                            stroke="currentColor" stroke-width="2" />
+                        <path d="M18 18L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </button>
+                <button class="icon-button notification">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path
+                            d="M15 7C15 5.67392 14.4732 4.40215 13.5355 3.46447C12.5979 2.52678 11.3261 2 10 2C8.67392 2 7.40215 2.52678 6.46447 3.46447C5.52678 4.40215 5 5.67392 5 7C5 13 2 15 2 15H18C18 15 15 13 15 7Z"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M11.73 18C11.5542 18.3031 11.3019 18.5547 10.9982 18.7295C10.6946 18.9044 10.3504 18.9965 10 18.9965C9.64964 18.9965 9.30541 18.9044 9.00179 18.7295C8.69818 18.5547 8.44583 18.3031 8.27002 18"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span class="notification-dot"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="content-wrapper">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <div class="welcome-card">
+                    <div class="welcome-content">
+                        <h2>Welcome to San3a Toolkit</h2>
+                        <p>Manage and access all your internal tools in one place</p>
+                    </div>
+                    <div class="welcome-illustration">
+                        <div class="floating-icons">
+                            <div class="float-icon" style="--delay: 0s;">🛠️</div>
+                            <div class="float-icon" style="--delay: 0.3s;">⚙️</div>
+                            <div class="float-icon" style="--delay: 0.6s;">🔧</div>
+                            <div class="float-icon" style="--delay: 0.9s;">⚡</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M20 7H4C2.89543 7 2 7.89543 2 9V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19V9C22 7.89543 21.1046 7 20 7Z"
+                                stroke="currentColor" stroke-width="2" />
+                            <path d="M16 7V5C16 3.89543 15.1046 3 14 3H10C8.89543 3 8 3.89543 8 5V7"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total Tools</div>
+                        <div class="stat-value">2</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" />
+                            <path d="M12 7V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Active</div>
+                        <div class="stat-value">0</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2" />
+                            <path
+                                d="M23 21V19C23 18.0144 22.6156 17.0765 21.9403 16.3788C21.265 15.6812 20.3531 15.2767 19.3847 15.2491"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <path
+                                d="M16 3.12988C16.9683 3.15796 17.8801 3.56232 18.5553 4.25967C19.2306 4.95703 19.615 5.89472 19.615 6.87988C19.615 7.86503 19.2306 8.80273 18.5553 9.50008C17.8801 10.1974 16.9683 10.6018 16 10.6299"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Team Members</div>
+                        <div class="stat-value">5</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon yellow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-label">Quick Actions</div>
+                        <div class="stat-value">12</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools Grid -->
+            <section class="tools-section">
+                <div class="section-header">
+                    <h2>Your Tools</h2>
+                </div>
+
+                <div class="tools-grid">
+                    <!-- QR Generator Tool -->
+                    <a href="tools/qr-generator.html" class="tool-card">
+                        <div class="tool-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect x="4" y="4" width="16" height="16" rx="2" stroke="#DC2626" stroke-width="2.5" />
+                                <rect x="28" y="4" width="16" height="16" rx="2" stroke="#DC2626" stroke-width="2.5" />
+                                <rect x="4" y="28" width="16" height="16" rx="2" stroke="#DC2626" stroke-width="2.5" />
+                                <rect x="28" y="28" width="16" height="16" rx="2" stroke="#DC2626" stroke-width="2.5" />
+                                <circle cx="12" cy="12" r="3" fill="#DC2626" />
+                                <circle cx="36" cy="12" r="3" fill="#DC2626" />
+                                <circle cx="12" cy="36" r="3" fill="#DC2626" />
+                                <circle cx="36" cy="36" r="3" fill="#DC2626" />
+                            </svg>
+                        </div>
+                        <h3 class="tool-title">QR Code Generator</h3>
+                        <p class="tool-description">Create custom QR codes with logo and branding</p>
+                        <div class="tool-meta">
+                            <span class="tool-tag">Generator</span>
+                            <span class="tool-tag">Image</span>
+                        </div>
+                    </a>
+
+                    <!-- Video to GIF Tool -->
+                    <a href="tools/video-to-gif.html" class="tool-card">
+                        <div class="tool-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#DC2626"
+                                stroke-width="2.5">
+                                <rect x="4" y="8" width="40" height="32" rx="4" />
+                                <path d="M16 8V40M32 8V40" stroke-width="2" stroke-dasharray="4 4" />
+                                <path d="M10 24L14 24M34 24L38 24" stroke-width="2" />
+                                <path d="M20 20L28 24L20 28V20Z" fill="#DC2626" stroke="none" />
+                            </svg>
+                        </div>
+                        <h3 class="tool-title">Video to GIF</h3>
+                        <p class="tool-description">Convert videos clips to optimized GIFs</p>
+                        <div class="tool-meta">
+                            <span class="tool-tag">Converter</span>
+                            <span class="tool-tag">Video</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="actions-grid">
+                    <button class="action-card">
+                        <div class="action-icon">📝</div>
+                        <div class="action-label">New Document</div>
+                    </button>
+
+                    <button class="action-card">
+                        <div class="action-icon">📊</div>
+                        <div class="action-label">Analytics</div>
+                    </button>
+
+                    <button class="action-card">
+                        <div class="action-icon">⚙️</div>
+                        <div class="action-label">Settings</div>
+                    </button>
+
+                    <button class="action-card">
+                        <div class="action-icon">💬</div>
+                        <div class="action-label">Feedback</div>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="scripts/main.js"></script>
+</body>
+
+</html>
