@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Course Calendar</title>
+    <link rel="stylesheet" href="./style.css">
+    <script>
+        // Simple authentication check
+        if (localStorage.getItem('san3a_auth') !== 'true') {
+            window.location.href = '../login.html';
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-calendar">May</span> Calendar
+            </div>
+            <div class="nav-controls">
+                <button class="btn btn-today" id="today-btn">Today</button>
+                <button class="btn" id="prev-btn">&lt;</button>
+                <button class="btn" id="next-btn">&gt;</button>
+                <span class="current-date" id="current-month">January 2026</span>
+            </div>
+        </div>
+        <div class="header-right" style="padding-right: 20px;">
+            <button class="btn"
+                onclick="localStorage.removeItem('san3a_auth'); window.location.href='../index.html';">Logout</button>
+        </div>
+    </header>
+
+    <main>
+        <aside class="sidebar">
+            <div class="mini-calendar">
+                <!-- Mini calendar placeholder -->
+            </div>
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Courses</h3>
+                <div class="course-list" id="course-list">
+                    <!-- Dynamic course list -->
+                </div>
+            </div>
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Rooms</h3>
+                <div class="course-list" id="room-list">
+                    <!-- Dynamic room list -->
+                </div>
+            </div>
+        </aside>
+
+        <section class="calendar-container">
+            <div class="loading-overlay" id="loading-overlay">
+                <div class="spinner"></div>
+            </div>
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- Calendar grid will be generated here -->
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+</body>
+
+</html>

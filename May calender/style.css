@@ -1,0 +1,306 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap');
+
+:root {
+  --primary-color: #1a73e8;
+  --secondary-color: #f1f3f4;
+  --text-main: #3c4043;
+  --text-light: #70757a;
+  --border-color: #dadce0;
+  --bg-sidebar: #ffffff;
+  --bg-main: #ffffff;
+  --event-blue: #039be5;
+  --event-green: #33b679;
+  --event-yellow: #f4b400;
+  --event-red: #d50000;
+  --event-purple: #8e24aa;
+  --hover-bg: #e8f0fe;
+  --sidebar-width: 280px;
+  --header-height: 64px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-main);
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border-color);
+  justify-content: space-between;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 22px;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-calendar {
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  margin-left: 40px;
+  gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background: white;
+  cursor: pointer;
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: #f8f9fa;
+}
+
+.btn-today {
+  margin-right: 12px;
+}
+
+.current-date {
+  font-size: 22px;
+  font-family: 'Google Sans', sans-serif;
+  margin-left: 12px;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  border-right: 1px solid var(--border-color);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.calendar-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.calendar-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto repeat(6, 1fr);
+  border-left: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
+}
+
+.day-header {
+  padding: 8px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-light);
+  text-transform: uppercase;
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.day-cell {
+  position: relative;
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  min-height: 100px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.day-number {
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 4px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  margin: 4px auto;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.day-number:hover {
+  background: var(--secondary-color);
+}
+
+.day-today .day-number {
+  background: var(--primary-color);
+  color: white;
+}
+
+.day-other-month {
+  color: var(--text-light);
+  background-color: #f8f9fa;
+}
+
+.event {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: var(--event-blue);
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.event:hover {
+  opacity: 0.8;
+}
+
+.event.vacation {
+  background-color: var(--event-red);
+}
+
+.event.tot {
+  background-color: var(--event-yellow);
+  color: black;
+}
+
+/* Sidebar Elements */
+.mini-calendar {
+  margin-bottom: 16px;
+}
+
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.course-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.course-item:hover {
+  background: var(--secondary-color);
+}
+
+.course-item input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  border: 1px solid var(--border-color);
+}
+
+.course-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.course-item label {
+  cursor: pointer;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.2s;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.event:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.event.vacation {
+  background-color: var(--event-red) !important;
+}
+
+.event.tot {
+  border: 1px dashed rgba(0, 0, 0, 0.3);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.show {
+  display: flex !important;
+}
