@@ -108,6 +108,7 @@ class CalendarApp {
             'start': ['start', 'start date', 'starting date', 'from'],
             'end': ['end', 'end date', 'to'],
             'course name': ['course name', 'track name', 'name', 'course'],
+            'course code': ['course code', 'code', 'id'],
             'start date': ['start date', 'starting date', 'date'],
             'sessions': ['sessions', 'number of sessions', 'total sessions', 'count'],
             'days': ['days', 'schedule', 'occurrence', 'sessions days', 'tot days of the week'],
@@ -142,6 +143,7 @@ class CalendarApp {
         this.events = [];
         data.forEach(row => {
             const courseName = this.getVal(row, 'Course name');
+            const courseCode = this.getVal(row, 'Course code');
             const startDateStr = this.getVal(row, 'Start Date');
             const sessionsStr = this.getVal(row, 'Sessions');
             const daysStr = this.getVal(row, 'Days');
@@ -183,6 +185,7 @@ class CalendarApp {
                     if (!this.isVacation(currentSessionDate)) {
                         this.events.push({
                             title: courseName,
+                            code: courseCode,
                             date: new Date(currentSessionDate),
                             time: time,
                             room: room,
@@ -321,7 +324,7 @@ class CalendarApp {
             }
 
             eventEl.textContent = `${e.time ? e.time + ' ' : ''}${e.title}`;
-            eventEl.title = `${e.title}\nRoom: ${e.room || 'N/A'}\nTime: ${e.time || 'N/A'}`;
+            eventEl.title = `${e.title}${e.code ? ' (' + e.code + ')' : ''}\nRoom: ${e.room || 'N/A'}\nTime: ${e.time || 'N/A'}`;
             cell.appendChild(eventEl);
         });
 
