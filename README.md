@@ -1,92 +1,59 @@
 # San3a Academy Toolkit
 
-Internal tools dashboard for the San3a Academy team.
+Internal tools dashboard for the San3a Academy team, featuring live utilities and scheduling management.
 
 ## 🎨 Design
 
-- **Modern Dashboard UI** with sidebar navigation
-- **Red Branding** (#DC2626) consistent with San3a Academy logo
-- **Minimal Text** - Clean, focused interface
-- **Responsive** - Works on desktop, tablet, and mobile
+- **Modern Dashboard UI** with sidebar navigation and tool-specific cards.
+- **Vibrant Branding**: Uses San3a Academy's signature Red (#DC2626) with a premium, clean aesthetic.
+- **Modular Architecture**: Supports standalone tool components like the integrated Calendar system.
 
-## 🗂️ Project Structure
+## 🚀 Key Features
+
+- **Crash Courses Calendar**:
+  - Live data sync with Google Sheets (CSV).
+  - **Dynamic Shifting**: Automatically moves sessions that clash with vacations to the next available slot.
+  - **Organization**: Color-coded courses and room-based filtering.
+- **Internal Authentication**: Secure access via `auth.json` to protect sensitive schedules.
+- **Conversion Utilities**: Video to GIF converter and QR code generator.
+- **Performance Tracking**: WIGs dashboards for both teams and individuals.
+
+## 🛠️ Project Structure
 
 ```
 San3aTech_Tool-kit/
 ├── index.html           # Main dashboard page
-├── styles/
-│   └── main.css        # Dashboard styles (red branding, sidebar layout)
-├── scripts/
-│   └── main.js         # Interactive functionality
-└── README.md           # This file
+├── login.html           # Internal login portal
+├── auth.json            # Credentials (admin/password123)
+├── May calender/         # Live Calendar module
+└── tools/               # Standard web tools
 ```
 
-## 🚀 Getting Started
+## 🎯 Developer Guide: Updating the Calendar
 
-1. Open `index.html` in your browser
-2. The sidebar shows available tools and navigation
-3. Use the "Add Tool" button to add new tools to your dashboard
+The "May calender" is built with Vanilla JS and pulls from public Google Sheets CSVs.
 
-## 📋 Features
+### To Update Sync Logic:
+1. Open `May calender/main.js`.
+2. Modify `processScheduler()` to add new column mappings or change how sessions are calculated.
+3. The vacation shifting logic is handled within the main loop—it checks `isVacation()` before incrementing the session count.
 
-### Current
-- ✅ Sidebar navigation with sections
-- ✅ Dashboard overview with stats
-- ✅ QR Code Generator tool
-- ✅ Video to GIF Converter tool
-- ✅ Team WIGs Dashboard
-- ✅ Individual WIGs Dashboard
-- ✅ Quick action cards
-- ✅ Responsive mobile menu
-- ✅ User profile section
-- ✅ Keyboard shortcuts (Cmd/Ctrl + K for search)
+### To Add New Tools:
+1. Create your tool directory or file.
+2. In `index.html`, add your tool to the `.tools-grid` section.
+3. To protect the tool, wrap the link to `login.html` or add the session check script:
+```javascript
+if (localStorage.getItem('san3a_auth') !== 'true') window.location.href = '/login.html';
+```
 
-### Coming Soon
-- 🔄 More tools (added by developers)
-- 🔄 Search functionality
-- 🔄 Notifications panel
-- 🔄 Settings page
-- 🔄 Documentation pages
+## 📦 Getting Started
 
-## 🎯 Adding New Tools (For Developers)
-
-To add a new tool to the toolkit:
-
-1. **Create the tool page**: Create a new HTML file in `tools/` directory (e.g., `tools/my-tool.html`)
-2. **Add navigation**: Update `index.html` sidebar to add a link in the "Tools" section
-3. **Add tool card**: Update the tools grid in `index.html` to display a card for your tool
-4. **Update stats**: Increment the "Total Tools" count in the dashboard stats
-5. **Add styles**: Create a CSS file in `styles/` if needed (e.g., `styles/my-tool.css`)
-6. **Add functionality**: Create a JS file in `scripts/` for interactivity (e.g., `scripts/my-tool.js`)
-
-**Note**: Tools are only added through code by developers, not through the UI. This ensures quality control and proper integration.
-
-## 🎨 Color Scheme
-
-- **Primary Red**: #DC2626
-- **Red Dark**: #B91C1C  
-- **Red Light**: #FEE2E2
-- **Gray Scale**: From #F9FAFB to #111827
-- **Accent Colors**: Blue (#3B82F6), Green (#10B981), Yellow (#F59E0B)
-
-## 💡 Usage Tips
-
-- **Keyboard Shortcuts**: Use Cmd/Ctrl + K for search
-- **Mobile**: Tap the menu icon to toggle sidebar
-- **Navigation**: Click on tool cards to open the tool in a new page
-- **Customization**: Edit CSS variables in `/styles/main.css` to adjust colors and spacing
-- **Adding Tools**: Only developers can add tools through code to maintain quality
-
-## 📝 Notes
-
-This is an internal tool for the San3a Academy team. The design prioritizes:
-- Quick access to tools
-- Clean, professional interface
-- Easy scalability for future features
-- Minimal text, maximum clarity
+1. **Deploy**: Host the root folder on any static web server (NGINX, Apache, GitHub Pages).
+2. **Login**: Use `admin` / `password123` to access protected tools.
+3. **Customize**: Update `auth.json` to change credentials.
 
 ---
 
-**Version**: 1.0  
-**Last Updated**: 2024  
-**Team**: San3a Academy
+**Version**: 1.1  
+**Last Updated**: January 2026  
+**Team**: San3a Academy Engineering
