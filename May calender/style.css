@@ -99,7 +99,8 @@ header {
 main {
   flex: 1;
   display: flex;
-  overflow: hidden;
+  min-height: 0;
+  /* Important for flex child scrolling */
 }
 
 .sidebar {
@@ -109,6 +110,9 @@ main {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  background: var(--bg-sidebar);
+  overflow-y: auto;
+  flex-shrink: 0;
 }
 
 .calendar-container {
@@ -116,15 +120,19 @@ main {
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: auto;
+  /* Allow scrolling if grid is too large */
 }
 
 .calendar-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: auto repeat(6, 1fr);
+  grid-template-columns: repeat(7, minmax(100px, 1fr));
+  grid-template-rows: auto repeat(6, minmax(120px, 1fr));
   border-left: 1px solid var(--border-color);
   border-top: 1px solid var(--border-color);
+  min-width: 700px;
+  /* Ensure grid doesn't squash too much */
 }
 
 .day-header {
