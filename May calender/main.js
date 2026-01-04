@@ -1,4 +1,4 @@
-import Papa from 'papaparse';
+import Papa from 'https://cdn.skypack.dev/papaparse';
 
 const VACATIONS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQv7sjY_gVLhrhyT4SfM-TgNaXlFKFCVy8x_eNKpbJtTTkXD6YqjUAO2rXTx6MA1GsA_Q_KTT6ZyZW7/pub?gid=1665450693&single=true&output=csv';
 const SCHEDULER_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQv7sjY_gVLhrhyT4SfM-TgNaXlFKFCVy8x_eNKpbJtTTkXD6YqjUAO2rXTx6MA1GsA_Q_KTT6ZyZW7/pub?gid=688123287&single=true&output=csv';
