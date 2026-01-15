@@ -15,24 +15,36 @@ let snapshot;
 let undoStack = [];
 const MAX_UNDO = 20;
 
+const LOGICAL_WIDTH = 1920;
+const LOGICAL_HEIGHT = 1080;
+
 // Initialize
 function initCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = LOGICAL_WIDTH;
+    canvas.height = LOGICAL_HEIGHT;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     saveState(); // Save initial empty state
 }
 
+// Remove window resize content clearing - CSS handles the visual resize now
 window.addEventListener('resize', () => {
-    // Save current content before resize
-    const tempImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    ctx.putImageData(tempImage, 0, 0);
+    // No longer resizing canvas internal buffer, just re-ensuring line styles
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 });
+
+// Coordinate Mapping Utility
+function getCoords(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+    const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+
+    return {
+        x: (clientX - rect.left) * (canvas.width / rect.width),
+        y: (clientY - rect.top) * (canvas.height / rect.height)
+    };
+}
 
 // Event Listeners for Tools
 document.querySelectorAll('.tool-btn').forEach(btn => {
@@ -57,8 +69,9 @@ sizeSlider.addEventListener('input', (e) => {
 // Drawing Logic
 const startDraw = (e) => {
     isDrawing = true;
-    startX = e.offsetX || e.touches[0].clientX;
-    startY = e.offsetY || e.touches[0].clientY;
+    const coords = getCoords(e);
+    startX = coords.x;
+    startY = coords.y;
 
     ctx.beginPath();
     ctx.lineWidth = currentSize;
@@ -81,8 +94,9 @@ const startDraw = (e) => {
 const draw = (e) => {
     if (!isDrawing) return;
 
-    const x = e.offsetX || e.touches[0].clientX;
-    const y = e.offsetY || e.touches[0].clientY;
+    const coords = getCoords(e);
+    const x = coords.x;
+    const y = coords.y;
 
     if (currentTool === 'pen' || currentTool === 'eraser') {
         ctx.lineTo(x, y);
@@ -102,8 +116,9 @@ const stopDraw = (e) => {
     if (!isDrawing) return;
     isDrawing = false;
 
-    const x = e.offsetX || (e.changedTouches ? e.changedTouches[0].clientX : startX);
-    const y = e.offsetY || (e.changedTouches ? e.changedTouches[0].clientY : startY);
+    const coords = e.type && e.type.includes('touch') ? getCoords(e.changedTouches[0]) : getCoords(e);
+    const x = coords.x;
+    const y = coords.y;
 
     if (currentTool !== 'pen' && currentTool !== 'eraser') {
         drawShape(currentTool, startX, startY, x, y);

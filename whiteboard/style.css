@@ -127,11 +127,21 @@ body {
     flex: 1;
     position: relative;
     cursor: crosshair;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-color);
+    padding: 20px;
 }
 
 #whiteboard {
     display: block;
     background-color: var(--canvas-bg);
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: 16 / 9;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
 }
 
 /* Badges & Indicators */
