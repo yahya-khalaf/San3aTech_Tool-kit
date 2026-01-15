@@ -24,7 +24,22 @@ function initCanvas() {
     canvas.height = LOGICAL_HEIGHT;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    saveState(); // Save initial empty state
+
+    // Load from local storage if exists
+    const urlParams = new URLSearchParams(window.location.search);
+    const rid = urlParams.get('room') || 'local';
+    const savedState = localStorage.getItem(`whiteboard_state_${rid}`);
+
+    if (savedState) {
+        const img = new Image();
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0);
+            saveState(false); // Push to undo stack but don't re-persist
+        };
+        img.src = savedState;
+    } else {
+        saveState(); // Save initial empty state
+    }
 }
 
 // Remove window resize content clearing - CSS handles the visual resize now
@@ -153,9 +168,15 @@ function drawShape(tool, x1, y1, x2, y2) {
 }
 
 // State Management
-function saveState() {
+function saveState(shouldPersist = true) {
     if (undoStack.length >= MAX_UNDO) undoStack.shift();
     undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+
+    if (shouldPersist) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const rid = urlParams.get('room') || 'local';
+        localStorage.setItem(`whiteboard_state_${rid}`, canvas.toDataURL());
+    }
 }
 
 function undo() {
@@ -173,6 +194,12 @@ function undo() {
 function clearBoard(remote = false) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     saveState();
+
+    if (!remote) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const rid = urlParams.get('room') || 'local';
+        localStorage.removeItem(`whiteboard_state_${rid}`);
+    }
 
     if (!remote && window.broadcastDraw) {
         window.broadcastDraw('clear', {});

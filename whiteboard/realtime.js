@@ -3,7 +3,7 @@
 
 const urlParams = new URLSearchParams(window.location.search);
 let roomId = urlParams.get('room');
-let isInstructor = !roomId;
+let isInstructor = !roomId || sessionStorage.getItem(`instructor_${roomId}`) === 'true';
 let peer;
 let connections = [];
 let learnerLocked = false;
@@ -17,16 +17,19 @@ const toggleLockBtn = document.getElementById('toggle-lock');
 // Initialize Peer
 function initPeer() {
     if (isInstructor) {
-        roomId = Math.random().toString(36).substring(2, 9);
-        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?room=' + roomId;
-        window.history.pushState({ path: newUrl }, '', newUrl);
+        if (!roomId) {
+            roomId = Math.random().toString(36).substring(2, 9);
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?room=' + roomId;
+            window.history.pushState({ path: newUrl }, '', newUrl);
+        }
 
+        sessionStorage.setItem(`instructor_${roomId}`, 'true');
         peer = new Peer(roomId);
         roleBadge.textContent = 'Instructor';
         roleBadge.classList.add('bg-accent');
         instructorControls.classList.remove('hidden');
 
-        showToast('You are the Instructor. Share this URL to collab!');
+        showToast('You are the Instructor.');
     } else {
         peer = new Peer();
         roleBadge.textContent = 'Learner';
