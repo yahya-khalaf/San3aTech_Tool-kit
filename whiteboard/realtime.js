@@ -46,9 +46,6 @@ function initPeer() {
         connections.push(conn);
         setupConnection(conn);
         showToast('New learner joined!');
-
-        // Send current lock status to new learner
-        conn.send({ type: 'lock-status', locked: learnerLocked });
     });
 
     peer.on('error', (err) => {
@@ -67,6 +64,11 @@ function setupConnection(conn) {
         if (!isInstructor) {
             connections.push(conn);
             showToast('Connected to Instructor!');
+        } else {
+            // Instructor sends current state once connection is open
+            conn.send({ type: 'lock-status', locked: learnerLocked });
+            const canvas = document.getElementById('whiteboard');
+            conn.send({ type: 'canvas-sync', dataUrl: canvas.toDataURL() });
         }
     });
 
@@ -102,6 +104,9 @@ function handleIncomingData(data) {
         case 'lock-status':
             learnerLocked = data.locked;
             updateLockUI();
+            break;
+        case 'canvas-sync':
+            window.remoteDraw.loadState(data.dataUrl);
             break;
     }
 }
@@ -152,7 +157,11 @@ toggleLockBtn.addEventListener('click', () => {
         toggleLockBtn.classList.remove('active');
         showToast('Unlocked drawing for all learners');
     }
-    lucide.createIcons();
+
+    // Refresh Lucide icons for the button
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
 
     // Broadcast lock status
     connections.forEach(conn => {
