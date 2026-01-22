@@ -1,4 +1,5 @@
 import Papa from 'https://cdn.skypack.dev/papaparse';
+import { InstructorAvailability } from './instructor-availability.js';
 
 const VACATIONS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQv7sjY_gVLhrhyT4SfM-TgNaXlFKFCVy8x_eNKpbJtTTkXD6YqjUAO2rXTx6MA1GsA_Q_KTT6ZyZW7/pub?gid=1665450693&single=true&output=csv';
 const SCHEDULER_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQv7sjY_gVLhrhyT4SfM-TgNaXlFKFCVy8x_eNKpbJtTTkXD6YqjUAO2rXTx6MA1GsA_Q_KTT6ZyZW7/pub?gid=688123287&single=true&output=csv';
@@ -19,6 +20,8 @@ class CalendarApp {
             courses: {},
             rooms: {}
         };
+        this.viewMode = 'month'; // 'month' or 'week' (instructors)
+        this.instructorAvailability = new InstructorAvailability();
 
         this.palette = [
             '#1a73e8', '#d93025', '#188038', '#f9ab00', '#8e24aa',
@@ -33,7 +36,13 @@ class CalendarApp {
             todayBtn: document.getElementById('today-btn'),
             courseList: document.getElementById('course-list'),
             roomList: document.getElementById('room-list'),
-            loading: document.getElementById('loading-overlay')
+            loading: document.getElementById('loading-overlay'),
+            viewMonthBtn: document.getElementById('view-month'),
+            viewWeekBtn: document.getElementById('view-week'),
+            availabilityToggle: document.getElementById('availability-toggle-container'),
+            courseSection: document.getElementById('course-section'),
+            roomSection: document.getElementById('room-section'),
+            instructorSection: document.getElementById('instructor-section')
         };
 
         this.init();
@@ -60,6 +69,43 @@ class CalendarApp {
             this.currentDate = new Date();
             this.render();
         });
+
+        this.elements.viewMonthBtn.addEventListener('click', () => {
+            this.switchView('month');
+        });
+
+        this.elements.viewWeekBtn.addEventListener('click', () => {
+            this.switchView('week');
+        });
+    }
+
+    async switchView(mode) {
+        if (this.viewMode === mode) return;
+        this.viewMode = mode;
+
+        this.elements.viewMonthBtn.classList.toggle('active', mode === 'month');
+        this.elements.viewWeekBtn.classList.toggle('active', mode === 'week');
+
+        if (mode === 'month') {
+            document.body.classList.remove('week-view-active');
+            this.elements.availabilityToggle.style.display = 'none';
+            this.elements.courseSection.style.display = 'block';
+            this.elements.roomSection.style.display = 'block';
+            this.elements.instructorSection.style.display = 'none';
+            this.elements.grid.className = 'calendar-grid';
+            this.render();
+        } else {
+            document.body.classList.add('week-view-active');
+            this.elements.availabilityToggle.style.display = 'flex';
+            this.elements.courseSection.style.display = 'none';
+            this.elements.roomSection.style.display = 'none';
+            this.elements.instructorSection.style.display = 'block';
+
+            if (this.instructorAvailability.instructors.length === 0) {
+                await this.instructorAvailability.init();
+            }
+            this.instructorAvailability.render();
+        }
     }
 
     async fetchData() {

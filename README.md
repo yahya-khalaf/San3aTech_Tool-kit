@@ -1,59 +1,75 @@
-# San3a Academy Toolkit
+# 🚀 San3a Academy Toolkit
 
-Internal tools dashboard for the San3a Academy team, featuring live utilities and scheduling management.
+> **The ultimate internal power-suite for the San3a Academy team.**
 
-## 🎨 Design
-
-- **Modern Dashboard UI** with sidebar navigation and tool-specific cards.
-- **Vibrant Branding**: Uses San3a Academy's signature Red (#DC2626) with a premium, clean aesthetic.
-- **Modular Architecture**: Supports standalone tool components like the integrated Calendar system.
-
-## 🚀 Key Features
-
-- **Crash Courses Calendar**:
-  - Live data sync with Google Sheets (CSV).
-  - **Dynamic Shifting**: Automatically moves sessions that clash with vacations to the next available slot.
-  - **Organization**: Color-coded courses and room-based filtering.
-- **Internal Authentication**: Secure access via `auth.json` to protect sensitive schedules.
-- **Conversion Utilities**: Video to GIF converter and QR code generator.
-- **Performance Tracking**: WIGs dashboards for both teams and individuals.
-
-## 🛠️ Project Structure
-
-```
-San3aTech_Tool-kit/
-├── index.html           # Main dashboard page
-├── login.html           # Internal login portal
-├── auth.json            # Credentials (admin/password123)
-├── May calender/         # Live Calendar module
-└── tools/               # Standard web tools
-```
-
-## 🎯 Developer Guide: Updating the Calendar
-
-The "May calender" is built with Vanilla JS and pulls from public Google Sheets CSVs.
-
-### To Update Sync Logic:
-1. Open `May calender/main.js`.
-2. Modify `processScheduler()` to add new column mappings or change how sessions are calculated.
-3. The vacation shifting logic is handled within the main loop—it checks `isVacation()` before incrementing the session count.
-
-### To Add New Tools:
-1. Create your tool directory or file.
-2. In `index.html`, add your tool to the `.tools-grid` section.
-3. To protect the tool, wrap the link to `login.html` or add the session check script:
-```javascript
-if (localStorage.getItem('san3a_auth') !== 'true') window.location.href = '/login.html';
-```
-
-## 📦 Getting Started
-
-1. **Deploy**: Host the root folder on any static web server (NGINX, Apache, GitHub Pages).
-2. **Login**: Use `admin` / `password123` to access protected tools.
-3. **Customize**: Update `auth.json` to change credentials.
+Internal tools dashboard featuring live course scheduling, collaborative utilities, and performance analytics. Designed for speed, precision, and a premium user experience.
 
 ---
 
-**Version**: 1.1  
+## 🎨 Design Philosophy
+
+- **Premium Aesthetic**: Clean, modern UI using San3a's signature Red (`#DC2626`) and deep charcoal accents.
+- **Glassmorphism**: Elegant, semi-transparent interface elements for a state-of-the-art feel.
+- **Unified Experience**: Consistent navigation and design language across all internal tools.
+
+---
+
+## 🧰 The Tool Suite
+
+### 1. 📅 Crash Courses Calendar
+The core of our scheduling operations.
+- **Live Sync**: Pulls real-time data from Google Sheets.
+- **Intelligent Shifting**: Automatically detects vacations/clashes and moves sessions to the next available slot.
+- **Filtering**: View by room, course, or instructor.
+
+### 2. 🎨 Online Whiteboard
+Real-time collaborative drawing for brainstorming and meetings.
+- **Zero Latency**: Powered by real-time sync for seamless teamwork.
+- **Versatile Tools**: Support for drawing, shapes, and annotations.
+
+### 3. 📊 Team & Individual WIGs
+Performance tracking dashboards for Academy goals.
+- **Visual Analytics**: Progress bars and leaderboards.
+- **Goal Alignment**: Ensures everyone is focused on Wildly Important Goals.
+
+### 4. 🛠️ Utility Toolbox
+- **QR Generator**: Create branded QR codes for course materials.
+- **Video to GIF**: Instant, client-side conversion for social media and documentation.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Any modern web browser (Chrome, Safari, Edge).
+- No backend installation required; runs as a distributed static application.
+
+### Setup & Deployment
+1. **Clone**: Pull the repository to your local machine or server.
+2. **Configure**: Update `auth.json` with your desired credentials.
+3. **Deploy**: Host the root folder on any static provider (GitHub Pages, Vercel, or internal NGINX).
+
+---
+
+## 🛠️ Developer Guide
+
+### Updating the Calendar Logic
+The **May Calendar** logic is located in `May calender/main.js`. 
+- To modify holiday logic, adjust the `isVacation()` function.
+- To update column mappings, see the `processScheduler()` function.
+
+### Adding New Tools
+Integration is standardized. Visit [PROJECT_STRUCTURE.md](file:///Users/yahyaalariny/Documents/GitHub/San3aTech_Tool-kit/PROJECT_STRUCTURE.md) for a step-by-step guide on adding new utilities to the dashboard.
+
+---
+
+## 📦 Tech Stack
+- **Frontend**: HTML5, Vanilla JavaScript (ES6+), CSS3 (Custom Variables).
+- **Modules**: Vite (Calendar), Socket.io (Whiteboard logic).
+- **Data Integration**: Google Sheets CSV API.
+
+---
+
+**Version**: 1.2  
 **Last Updated**: January 2026  
-**Team**: San3a Academy Engineering
+**Engineering**: San3a Academy Product Team

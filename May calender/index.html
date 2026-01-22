@@ -26,8 +26,18 @@
                 <button class="btn" id="next-btn">&gt;</button>
                 <span class="current-date" id="current-month">January 2026</span>
             </div>
+            <div class="view-toggle">
+                <button class="btn active" id="view-month">Courses Calendar</button>
+                <button class="btn" id="view-week">Instructors View</button>
+            </div>
         </div>
-        <div class="header-right" style="padding-right: 20px;">
+        <div class="header-right" style="padding-right: 20px; display: flex; align-items: center; gap: 15px;">
+            <div id="availability-toggle-container"
+                style="display: none; align-items: center; gap: 10px; background: #f3f4f6; padding: 4px 10px; border-radius: 8px;">
+                <span style="font-size: 13px; font-weight: 600; color: #4b5563;">Mode:</span>
+                <button class="btn btn-sm active" id="mode-online">Online</button>
+                <button class="btn btn-sm" id="mode-offline">Offline</button>
+            </div>
             <button class="btn"
                 onclick="localStorage.removeItem('san3a_auth'); window.location.href='../index.html';">Logout</button>
         </div>
@@ -38,16 +48,22 @@
             <div class="mini-calendar">
                 <!-- Mini calendar placeholder -->
             </div>
-            <div class="sidebar-section">
+            <div class="sidebar-section" id="course-section">
                 <h3 class="sidebar-title">Courses</h3>
                 <div class="course-list" id="course-list">
                     <!-- Dynamic course list -->
                 </div>
             </div>
-            <div class="sidebar-section">
+            <div class="sidebar-section" id="room-section">
                 <h3 class="sidebar-title">Rooms</h3>
                 <div class="course-list" id="room-list">
                     <!-- Dynamic room list -->
+                </div>
+            </div>
+            <div class="sidebar-section" id="instructor-section" style="display: none;">
+                <h3 class="sidebar-title">Instructors</h3>
+                <div class="course-list" id="instructor-list">
+                    <!-- Dynamic instructor list -->
                 </div>
             </div>
         </aside>
