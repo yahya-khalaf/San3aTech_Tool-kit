@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useFlowStore } from '../stores/useFlowStore.ts';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, RefreshCw, CheckCircle2, AlertCircle, HelpCircle } from 'lucide-react';
+import { ArrowLeft, RefreshCw, CheckCircle2, AlertCircle, HelpCircle, ArrowRightCircle, ArrowRight, Network } from 'lucide-react';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import { LoadingSpinner } from '../components/LoadingSpinner.tsx';
@@ -81,6 +81,14 @@ export default function DebuggerWizard() {
                             <ArrowLeft size={16} /> Back
                         </button>
                     )}
+                    <a
+                        href="/system-map"
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold text-primary hover:text-primary-dark transition-colors mr-2"
+                        title="View System Map"
+                    >
+                        <Network size={16} /> Map
+                    </a>
+                    <div className="h-4 w-[1px] bg-gray-200 mx-1" />
                     <button
                         onClick={resetSession}
                         className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold text-primary hover:bg-primary-light rounded-md transition-all"
@@ -113,7 +121,23 @@ export default function DebuggerWizard() {
                     >
                         {/* Logic for Success/Unresolved/Regular Nodes */}
                         <div className="p-10">
-                            {currentNode.type === 'terminal' ? (
+                            {currentNode.type === 'link' ? (
+                                <div className="text-center space-y-6">
+                                    <div className="mx-auto w-20 h-20 rounded-full flex items-center justify-center bg-blue-100 text-blue-600">
+                                        <ArrowRightCircle size={48} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <h3 className="text-2xl font-montserrat">Next Module</h3>
+                                        <p className="text-gray-600 text-lg">{currentNode.text}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => currentNode.meta?.nextFlowId && startSession(currentNode.meta.nextFlowId)}
+                                        className="btn-primary px-8 py-3 text-lg mt-4 w-full flex items-center justify-center gap-2"
+                                    >
+                                        Proceed <ArrowRight size={20} />
+                                    </button>
+                                </div>
+                            ) : currentNode.type === 'terminal' ? (
                                 <div className="text-center space-y-6">
                                     <div className={`mx-auto w-20 h-20 rounded-full flex items-center justify-center ${currentSession.status === 'success' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
                                         {currentSession.status === 'success' ? <CheckCircle2 size={48} /> : <AlertCircle size={48} />}

@@ -1,4 +1,4 @@
-export type NodeType = 'question' | 'diagnosis' | 'action' | 'decision' | 'terminal';
+export type NodeType = 'question' | 'diagnosis' | 'action' | 'decision' | 'terminal' | 'link';
 
 export interface Option {
     label: string;

@@ -165,7 +165,18 @@ export function parseMermaid(source: string, existingFlow: Partial<Flow> = {}): 
             });
 
             // 2. Type Inference Logic
-            if (node.options.length === 0) {
+            if (id.startsWith('GO_')) {
+                node.type = 'link';
+                const map: Record<string, string> = {
+                    'GO_CORE': 'coreSystem',
+                    'GO_FIRMWARE': 'firmwareRuntime',
+                    'GO_INPUT': 'inputTroubleshoot',
+                    'GO_OUTPUT': 'outputTroubleshoot',
+                    'GO_ELECTRICAL': 'electricalPower',
+                    'GO_CONNECTIVITY': 'connectivity'
+                };
+                if (map[id]) node.meta = { ...node.meta, nextFlowId: map[id] };
+            } else if (node.options.length === 0) {
                 // No options = terminal (leaf node)
                 node.type = 'terminal';
             } else {

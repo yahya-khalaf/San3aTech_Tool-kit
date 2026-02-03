@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useFlowStore } from './stores/useFlowStore.ts';
-import { sampleFlow } from './data/sampleFlow.ts';
+import { initialFlows } from './data/flowRegistry.ts';
 import DebuggerWizard from './pages/DebuggerWizard.tsx';
 import DebuggerFlowchart from './pages/DebuggerFlowchart.tsx';
 import DeveloperEditor from './pages/DeveloperEditor.tsx';
@@ -10,22 +10,29 @@ import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 
+function SystemMapRedirect() {
+  const { setCurrentFlow } = useFlowStore();
+  useEffect(() => {
+    setCurrentFlow('systemOverview');
+  }, []);
+  return <DebuggerFlowchart />;
+}
+
 function App() {
-  const { setFlows, setCurrentFlow, flows, currentFlowId, currentSession, resetSession } = useFlowStore();
+  const { setFlows, setCurrentFlow, currentFlowId, currentSession, resetSession } = useFlowStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    // Always update the sample flow from source to keep it in sync with code
-    const updatedFlows = { ...flows };
-    updatedFlows[sampleFlow.flowId] = sampleFlow;
-    setFlows(updatedFlows);
+    // Load all modules
+    setFlows(initialFlows);
 
-    // Set current flow if not set
-    if (!currentFlowId) {
-      setCurrentFlow(sampleFlow.flowId);
+    // Set current flow if not set or invalid
+    if (!currentFlowId || !initialFlows[currentFlowId]) {
+      setCurrentFlow('coreSystem');
     }
 
-    // Reset session if it exists to clear any stale node references
+    // Always reset session on app load to ensure clean state with new modules
+    // This is safer than trying to migrate the session
     if (currentSession) {
       resetSession();
     }
@@ -74,6 +81,8 @@ function App() {
             <div className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
               <NavLink to="/" icon={<LayoutDashboard size={20} />} label="Wizard (Learner)" onClick={() => setSidebarOpen(false)} />
               <NavLink to="/flowchart" icon={<GitGraph size={20} />} label="Flowchart" onClick={() => setSidebarOpen(false)} />
+              <NavLink to="/system-map" icon={<GitGraph size={20} />} label="System Map" onClick={() => setSidebarOpen(false)} />
+              <div className="h-px bg-gray-200 my-2" />
               <NavLink to="/developer" icon={<Settings size={20} />} label="Developer Editor" onClick={() => setSidebarOpen(false)} />
             </div>
 
@@ -102,6 +111,7 @@ function App() {
             <Routes>
               <Route path="/" element={<DebuggerWizard />} />
               <Route path="/flowchart" element={<DebuggerFlowchart />} />
+              <Route path="/system-map" element={<SystemMapRedirect />} />
               <Route path="/developer" element={<DeveloperEditor />} />
             </Routes>
           </main>

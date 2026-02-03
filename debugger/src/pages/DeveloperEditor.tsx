@@ -18,7 +18,7 @@ mermaid.initialize({
 });
 
 export default function DeveloperEditor() {
-    const { currentFlowId, flows, updateFlow } = useFlowStore();
+    const { currentFlowId, flows, updateFlow, setCurrentFlow } = useFlowStore();
     const [mermaidContent, setMermaidContent] = useState('');
     const [isValid, setIsValid] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -114,7 +114,17 @@ export default function DeveloperEditor() {
                         <span>Mermaid IDE</span>
                     </div>
                     <div className="h-4 w-[1px] bg-gray-700" />
-                    <span className="text-gray-400 text-sm font-mono">{currentFlowId}.mmd</span>
+                    <select
+                        value={currentFlowId || ''}
+                        onChange={(e) => setCurrentFlow(e.target.value)}
+                        className="bg-[#333] border border-[#444] text-gray-200 text-sm rounded focus:ring-primary focus:border-primary block w-48 p-1 font-mono outline-none"
+                    >
+                        {Object.values(flows).map((flow) => (
+                            <option key={flow.flowId} value={flow.flowId}>
+                                {flow.flowId}.mmd
+                            </option>
+                        ))}
+                    </select>
                     {hasUnsavedChanges && (
                         <span className="text-amber-500 text-xs font-medium animate-pulse ml-2">• Unsaved</span>
                     )}

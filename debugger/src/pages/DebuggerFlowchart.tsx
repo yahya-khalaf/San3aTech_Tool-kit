@@ -16,7 +16,7 @@ import {
 import '@xyflow/react/dist/style.css';
 import dagre from 'dagre';
 import { useFlowStore } from '../stores/useFlowStore.ts';
-import { Maximize, Search, Filter, Share2 } from 'lucide-react';
+import { Maximize, Filter, Share2 } from 'lucide-react';
 
 // Hierarchical layout configuration
 const nodeWidth = 280;
@@ -58,7 +58,7 @@ const getLayoutedElements = (nodes: RFNode[], edges: Edge[], direction = 'TB') =
 };
 
 function FlowchartContent() {
-    const { currentFlowId, flows } = useFlowStore();
+    const { currentFlowId, flows, setCurrentFlow } = useFlowStore();
     const [nodes, setNodes, onNodesChange] = useNodesState<RFNode>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
     const { fitView, setCenter } = useReactFlow();
@@ -138,12 +138,19 @@ function FlowchartContent() {
 
     // Zoom to node on click
     const handleNodeClick = useCallback((_event: React.MouseEvent, node: RFNode) => {
+        // If it's a link node, switch flow
+        if (node.data.type === 'link' && flows[currentFlowId || '']?.nodes[node.id]?.meta?.nextFlowId) {
+            const nextFlow = flows[currentFlowId || '']?.nodes[node.id]?.meta?.nextFlowId;
+            if (nextFlow) setCurrentFlow(nextFlow);
+            return;
+        }
+
         const zoom = 1.2;
         const x = node.position.x + nodeWidth / 2;
         const y = node.position.y + nodeHeight / 2;
 
         setCenter(x, y, { zoom, duration: 600 });
-    }, [setCenter]);
+    }, [setCenter, currentFlowId, flows, setCurrentFlow]);
 
     // Fit view handler
     const handleFitView = useCallback(() => {
@@ -156,13 +163,18 @@ function FlowchartContent() {
             <header className="h-16 px-8 flex items-center justify-between bg-white border-b border-gray-200 z-10">
                 <div className="flex items-center gap-6">
                     <h2 className="text-lg font-bold">Flow Visualization</h2>
-                    <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200">
-                        <Search size={16} className="text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="Search nodes..."
-                            className="bg-transparent text-sm focus:outline-none w-48 font-medium"
-                        />
+                    <div className="flex items-center gap-2">
+                        <select
+                            value={currentFlowId || ''}
+                            onChange={(e) => setCurrentFlow(e.target.value)}
+                            className="bg-gray-100 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-primary focus:border-primary block w-64 p-2.5 font-medium"
+                        >
+                            {Object.values(flows).map((flow) => (
+                                <option key={flow.flowId} value={flow.flowId}>
+                                    {flow.title || flow.flowId}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
