@@ -5,7 +5,8 @@ import { initialFlows } from './data/flowRegistry.ts';
 import DebuggerWizard from './pages/DebuggerWizard.tsx';
 import DebuggerFlowchart from './pages/DebuggerFlowchart.tsx';
 import DeveloperEditor from './pages/DeveloperEditor.tsx';
-import { LayoutDashboard, GitGraph, Settings, HelpCircle, Menu, X } from 'lucide-react';
+import San3aAcademy from './pages/San3aAcademy.tsx';
+import { LayoutDashboard, GitGraph, Settings, HelpCircle, Menu, X, GraduationCap } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { ErrorBoundary } from './components/ErrorBoundary.tsx';
@@ -82,6 +83,7 @@ function App() {
               <NavLink to="/" icon={<LayoutDashboard size={20} />} label="Wizard (Learner)" onClick={() => setSidebarOpen(false)} />
               <NavLink to="/flowchart" icon={<GitGraph size={20} />} label="Flowchart" onClick={() => setSidebarOpen(false)} />
               <NavLink to="/system-map" icon={<GitGraph size={20} />} label="System Map" onClick={() => setSidebarOpen(false)} />
+              <NavLink to="/academy" icon={<GraduationCap size={20} />} label="San3a academy courses tools" onClick={() => setSidebarOpen(false)} />
               <div className="h-px bg-gray-200 my-2" />
               <NavLink to="/developer" icon={<Settings size={20} />} label="Developer Editor" onClick={() => setSidebarOpen(false)} />
             </div>
@@ -112,6 +114,8 @@ function App() {
               <Route path="/" element={<DebuggerWizard />} />
               <Route path="/flowchart" element={<DebuggerFlowchart />} />
               <Route path="/system-map" element={<SystemMapRedirect />} />
+              <Route path="/academy" element={<San3aAcademy />} />
+              <Route path="/academy/:courseId" element={<San3aAcademy />} />
               <Route path="/developer" element={<DeveloperEditor />} />
             </Routes>
           </main>
