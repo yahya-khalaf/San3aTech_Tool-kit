@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code &amp; Create — Session 1: Foundations &amp; Design Thinking</title>
+<style>
+  :root {
+    --ink: #240D18;
+    --maroon-d: #3D1221;
+    --maroon: #781629;
+    --red: #CF2027;
+    --paper: #FFF7F3;
+    --white: #ffffff;
+    --sun: #FFC93C;
+    --teal: #2EC4B6;
+    --shadow: 0 18px 40px rgba(36,13,24,.28);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { 
+    font-family: "Myriad Pro", "Segoe UI", Avenir, sans-serif; 
+    background: var(--ink); 
+    color: var(--ink); 
+    overflow: hidden; 
+  }
+  .heading { font-family: "Big John", "Arial Black", "Helvetica Neue", Impact, sans-serif; }
+  
+  #stage { position: fixed; inset: 0; }
+  .slide { 
+    position: absolute; inset: 0; display: none; flex-direction: column; padding: 60px 76px 92px; 
+    opacity: 0; transform: translateX(40px); 
+    transition: opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1); 
+    background: var(--paper); 
+  }
+  .slide.active { display: flex; opacity: 1; transform: translateX(0); z-index: 2; }
+  .slide.leaving { display: flex; opacity: 0; transform: translateX(-40px); z-index: 1; }
+  .slide::before { 
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 14px; 
+    background: linear-gradient(90deg, var(--ink), var(--maroon-d), var(--maroon), var(--red)); 
+  }
+
+  .brandbar { 
+    position: absolute; top: 24px; left: 76px; right: 76px; display: flex; align-items: center; justify-content: space-between; 
+    font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: var(--maroon); 
+  }
+  .brandbar .logo { height: 36px; display: flex; align-items: center; }
+  .brandbar .logo img { height: 36px; }
+  .brandbar .logo .fallback { font-weight: bold; color: var(--red); letter-spacing: 1px; font-size: 16px; }
+  .brandbar .tag { font-weight: bold; }
+
+  .slidebody { margin-top: 52px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  h1.title { font-size: 64px; line-height: 1.05; color: var(--ink); }
+  h1.title .pop { color: var(--sun); }
+  .subtitle { font-size: 25px; color: #ffd9dc; margin-top: 20px; font-family: "Arvo", Georgia, serif; }
+  h2 { font-size: 42px; color: var(--ink); margin-bottom: 22px; }
+  h2 .pop { color: var(--red); }
+  p.lead { font-size: 24px; line-height: 1.5; color: var(--maroon-d); max-width: 920px; }
+  p.lead + p.lead { margin-top: 12px; }
+  
+  .chip { 
+    display: inline-block; background: var(--red); color: #fff; font-size: 15px; font-weight: bold; letter-spacing: 1.5px; 
+    text-transform: uppercase; padding: 8px 18px; border-radius: 999px; margin-bottom: 18px; width: fit-content;
+  }
+  .chip.sun { background: var(--sun); color: var(--ink); } 
+  .chip.teal { background: var(--teal); color: var(--ink); }
+
+  ol.steps, ul.steps { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 6px; }
+  ol.steps li, ul.steps li { display: flex; gap: 16px; align-items: flex-start; font-size: 22px; color: var(--maroon-d); }
+  .num { 
+    flex: none; width: 44px; height: 44px; border-radius: 50%; background: var(--red); color: #fff; display: flex; 
+    align-items: center; justify-content: center; font-weight: bold; font-size: 20px; 
+  }
+  ol.steps li b, ul.steps li b { color: var(--ink); }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px; margin-top: 8px; }
+  .card { background: #fff; border-radius: 20px; padding: 24px; box-shadow: var(--shadow); border-top: 8px solid var(--red); }
+  .card:nth-child(2){ border-top-color: var(--sun); } 
+  .card:nth-child(3){ border-top-color: var(--teal); } 
+  .card:nth-child(4){ border-top-color: var(--maroon); }
+  .card .ico { font-size: 34px; margin-bottom: 8px; }
+  .card h3 { font-size: 22px; color: var(--ink); margin-bottom: 6px; }
+  .card p { font-size: 17px; color: var(--maroon-d); line-height: 1.4; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .code { 
+    background: var(--ink); color: #ffeaea; border-radius: 18px; padding: 24px 28px; font-family: "SF Mono", Menlo, Consolas, monospace; 
+    font-size: 22px; line-height: 1.55; white-space: pre; box-shadow: var(--shadow); border-left: 6px solid var(--red);
+  }
+  .code .k { color: #ff9d6c; } 
+  .code .f { color: #7fd7ff; } 
+  .code .s { color: #b8e994; } 
+  .code .c { color: #9a8; }
+
+  .imgwrap { 
+    border-radius: 20px; background: #fff; box-shadow: var(--shadow); overflow: hidden; display: flex; align-items: center; justify-content: center; 
+    min-height: 320px; position: relative; padding: 16px;
+  }
+  .imgwrap img { max-width: 100%; max-height: 340px; display: block; border-radius: 12px; }
+  .imgwrap .ph { 
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; 
+    color: var(--maroon); font-size: 17px; padding: 24px; border: 3px dashed var(--maroon); border-radius: 20px; 
+  }
+
+  .ipo { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 12px; align-items: center; margin-top: 12px; }
+  .ipo .box { background: #fff; border-radius: 18px; padding: 24px; text-align: center; box-shadow: var(--shadow); }
+  .ipo .box.brain { background: var(--ink); color: #fff; }
+  .ipo .box .t { font-size: 24px; font-weight: bold; color: var(--red); } 
+  .ipo .box.brain .t { color: var(--sun); }
+  .ipo .box .d { font-size: 16px; color: var(--maroon-d); margin-top: 6px; } 
+  .ipo .box.brain .d { color: #e9c9cf; }
+  .ipo .arrow { font-size: 36px; color: var(--maroon); }
+
+  .microdots { 
+    display: inline-grid; grid-template-columns: repeat(5, 18px); gap: 5px; padding: 14px; background: var(--ink); border-radius: 12px; 
+  }
+  .microdots span { width: 18px; height: 18px; border-radius: 3px; background: #3a1a1a; }
+  .microdots span.on { background: var(--red); box-shadow: 0 0 10px var(--red); animation: pulse 1.5s infinite alternate; }
+  @keyframes pulse { from { opacity: 0.6; } to { opacity: 1; } }
+
+  .slide.hero { 
+    align-items: center; justify-content: center; text-align: center; 
+    background: linear-gradient(135deg, var(--ink), var(--maroon-d) 55%, var(--maroon)); 
+  }
+  .slide.hero::before { background: linear-gradient(90deg, var(--red), var(--sun)); }
+  .slide.hero .slidebody { align-items: center; }
+  .slide.hero h1.title, .slide.hero h2 { color: #fff; }
+  .slide.hero .brandbar { color: #ffd9dc; }
+  .slide.hero .quote { font-size: 44px; color: #fff; line-height: 1.25; max-width: 950px; }
+  .slide.hero .quote .pop { color: var(--sun); }
+  .slide.hero .qattr { font-size: 22px; color: #ffd9dc; margin-top: 24px; font-family: "Arvo", Georgia, serif; }
+
+  .slide.active .anim { animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
+  .slide.active .anim:nth-child(2){ animation-delay: .07s; } 
+  .slide.active .anim:nth-child(3){ animation-delay: .14s; }
+  .slide.active .anim:nth-child(4){ animation-delay: .21s; } 
+  .slide.active .anim:nth-child(5){ animation-delay: .28s; }
+  .slide.active .anim:nth-child(6){ animation-delay: .35s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  .nav { position: fixed; bottom: 20px; left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: 18px; z-index: 30; }
+  .nav button { 
+    background: var(--red); color: #fff; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; cursor: pointer; 
+    box-shadow: var(--shadow); transition: transform .15s, background .2s; 
+  }
+  .nav button:hover { background: var(--maroon); } 
+  .nav button:active { transform: scale(.9); }
+  .counter { color: #fff; font-size: 15px; letter-spacing: 1px; background: rgba(0,0,0,.45); padding: 8px 16px; border-radius: 999px; }
+  .progress { position: fixed; top: 0; left: 0; height: 6px; background: var(--sun); z-index: 40; transition: width .4s ease; }
+  .dots { position: fixed; bottom: 24px; right: 28px; display: flex; gap: 7px; z-index: 30; flex-wrap: wrap; max-width: 260px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.4); cursor: pointer; }
+  .dot.on { background: var(--sun); }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div id="stage">
+
+  <!-- 1. Title -->
+  <section class="slide hero">
+    <div class="brandbar"><span class="tag">Code &amp; Create · Session 1</span><span>ZERO to MAKER</span></div>
+    <div class="slidebody">
+      <h1 class="title anim heading">We’re not just learning to code.<br>We’re learning to <span class="pop">make a difference.</span></h1>
+      <p class="subtitle anim">Micro:bit · Python · Design Thinking</p>
+    </div>
+  </section>
+
+  <!-- 2. What we'll do today -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Session 1</span>
+    </div>
+    <div class="slidebody">
+      <h2 class="anim heading">What we’ll do <span class="pop">today</span></h2>
+      <ol class="steps">
+        <li class="anim"><span class="num">1</span><span><b>Learn Design Thinking</b> — solve a real problem, fast.</span></li>
+        <li class="anim"><span class="num">2</span><span><b>Build our Challenge Wall</b> — find problems worth solving.</span></li>
+        <li class="anim"><span class="num">3</span><span><b>Meet the micro:bit</b> — your own tiny computer brain.</span></li>
+        <li class="anim"><span class="num">4</span><span><b>Write our first Python code</b> — control the display, then loop it.</span></li>
+        <li class="anim"><span class="num">5</span><span><b>Build a real project</b> — solve a Home challenge.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 3. The 30-Minute Design Sprint (intro) -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Design Thinking</span>
+    </div>
+    <div class="slidebody">
+      <span class="chip anim">45 min · Hands-on</span>
+      <h2 class="anim heading">The 30-Minute Design Sprint</h2>
+      <p class="lead anim">Before we solve problems with technology, we master a powerful method: <b>Design Thinking</b> — a way to solve messy, human problems.</p>
+      <p class="lead anim" style="color:var(--red); font-weight:bold; margin-top:16px;">Our motto: Fall in love with the problem, not your solution.</p>
+    </div>
+  </section>
+
+  <!-- 4. Reimagine the school bag -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Design Thinking</span>
+    </div>
+    <div class="slidebody">
+      <h2 class="anim heading">Reimagine the <span class="pop">school bag</span></h2>
+      <ol class="steps">
+        <li class="anim"><span class="num">1</span><span><b>Pair up</b> — one Designer, one User.</span></li>
+        <li class="anim"><span class="num">2</span><span><b>Interview (5 min)</b> — what’s the worst thing about your bag? When did it fail you?</span></li>
+        <li class="anim"><span class="num">3</span><span><b>Define</b> — “My user needs a way to ___ because ___.”</span></li>
+        <li class="anim"><span class="num">4</span><span><b>Ideate &amp; sketch</b> — 3–5 wild ideas, then draw the best one.</span></li>
+        <li class="anim"><span class="num">5</span><span><b>Test</b> — show it; user says “I like… / I wonder…”</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 5. That was Design Thinking -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Design Thinking</span>
+    </div>
+    <div class="slidebody">
+      <h2 class="anim heading">That was Design Thinking</h2>
+      <div class="cards">
+        <div class="card anim"><div class="ico">🔍</div><h3>Empathize</h3><p>Understand the person and their real needs.</p></div>
+        <div class="card anim"><div class="ico">🎯</div><h3>Define</h3><p>“My user needs a way to… because…”</p></div>
+        <div class="card anim"><div class="ico">💡</div><h3>Ideate</h3><p>Lots of ideas, even crazy ones.</p></div>
+        <div class="card anim"><div class="ico">🛠️</div><h3>Prototype &amp; Test</h3><p>Make it quick, get feedback, improve.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Build the Challenge Wall -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Challenge Wall</span>
+    </div>
+    <div class="slidebody">
+      <span class="chip teal anim">30 min</span>
+      <h2 class="anim heading">Build the <span class="pop">Challenge Wall</span></h2>
+      <p class="lead anim">Open the Challenge Wall form on your laptop and add the real problems you see around you — one per submission, with its theme and your name.</p>
+      <div class="cards" style="margin-top:18px;">
+        <div class="card anim"><div class="ico">🏫</div><h3>School</h3><p>Lockers, class, schedule.</p></div>
+        <div class="card anim"><div class="ico">🏠</div><h3>Home</h3><p>Kitchen, room, chores.</p></div>
+        <div class="card anim"><div class="ico">🚌</div><h3>Transportation</h3><p>Walking, bus, biking.</p></div>
+        <div class="card anim"><div class="ico">🚦</div><h3>Street</h3><p>Safety, signs, spaces.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. IPO Pattern -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Meet Micro:bit</span>
+    </div>
+    <div class="slidebody">
+      <span class="chip anim">30 min</span>
+      <h2 class="anim heading">Every smart thing follows one pattern</h2>
+      <div class="ipo anim">
+        <div class="box"><div class="t">Input</div><div class="d">Press a button, tilt, a message arrives.</div></div>
+        <div class="arrow">→</div>
+        <div class="box brain"><div class="t">Process</div><div class="d">A brain decides what to do.</div></div>
+        <div class="arrow">→</div>
+        <div class="box"><div class="t">Output</div><div class="d">A screen lights up, a sound plays.</div></div>
+      </div>
+      <p class="lead anim" style="margin-top:20px;">Your phone: a message arrives (input) → it buzzes (output). And everything needs power.</p>
+    </div>
+  </section>
+
+  <!-- 8. Meet your new brain -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Meet Micro:bit</span>
+    </div>
+    <div class="slidebody">
+      <h2 class="anim heading">Meet your new <span class="pop">brain</span>: the micro:bit</h2>
+      <div class="two">
+        <div class="imgwrap anim">
+          <img src="https://drive.google.com/uc?export=view&id=1vXMoW4OCnQtvlXvvtWK5c9K54Z4Srh6q" alt="micro:bit board" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="ph" style="display:none">micro:bit board photo</div>
+        </div>
+        <div class="anim">
+          <ul class="steps">
+            <li><span class="num">IN</span><span><b>Inputs:</b> buttons, accelerometer, light, temperature</span></li>
+            <li><span class="num">OUT</span><span><b>Outputs:</b> LED display, speaker, radio</span></li>
+            <li><span class="num">⚡</span><span><b>Power:</b> USB or battery</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Setup -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Python Editor</span>
+    </div>
+    <div class="slidebody">
+      <span class="chip sun anim">10 min</span>
+      <h2 class="anim heading">Set up the Python Editor</h2>
+      <ol class="steps">
+        <li class="anim"><span class="num">1</span><span><b>Unpack safely</b> — hold the micro:bit by its edges.</span></li>
+        <li class="anim"><span class="num">2</span><span><b>Open the editor</b> — where we write, simulate, and save code.</span></li>
+        <li class="anim"><span class="num">3</span><span><b>Try it</b> — drag a heart, simulate, plug in USB, upload.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 10. Display Code -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>The Display</span>
+    </div>
+    <div class="slidebody">
+      <span class="chip sun anim">15 min</span>
+      <h2 class="anim heading">Your first code: the <span class="pop">Display</span></h2>
+      <div class="two">
+        <div class="code anim"><span class="k">from</span> microbit <span class="k">import</span> *
+
+display.<span class="f">show</span>(Image.HEART)
+<span class="f">sleep</span>(<span class="s">1000</span>)
+display.<span class="f">clear</span>()</div>
+        <div class="anim">
+          <ul class="steps">
+            <li><span class="num">1</span><span><b>library</b> — teaches the brain its commands</span></li>
+            <li><span class="num">2</span><span><b>show</b> — puts an image on the screen</span></li>
+            <li><span class="num">3</span><span><b>sleep</b> — waits, in milliseconds</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Your turn: light it up! -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Your Turn</span>
+    </div>
+    <div class="slidebody">
+      <h2 class="anim heading">Your turn — light it up! 
+        <span class="microdots anim" style="vertical-align:middle; margin-left:12px;">
+          <span></span><span class="on"></span><span></span><span class="on"></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+          <span class="on"></span><span></span><span></span><span></span><span class="on"></span>
+          <span></span><span class="on"></span><span></span><span class="on"></span><span></span>
+          <span></span><span></span><span class="on"></span><span></span><span></span>
+        </span>
+      </h2>
+      <ol class="steps">
+        <li class="anim"><span class="num">1</span><span><b>Write your name</b> with <code>display.scroll</code></span></li>
+        <li class="anim"><span class="num">2</span><span><b>Show an emoji</b> — try <code>Image.HAPPY</code></span></li>
+        <li class="anim"><span class="num">3</span><span><b>Clear it</b> — and notice why <code>sleep</code> still matters</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 12. For loop -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Loops</span>
+    </div>
+    <div class="slidebody">
+      <span class="chip anim">30 min</span>
+      <h2 class="anim heading">Spot the pattern: the <span class="pop">for</span> loop</h2>
+      <div class="two">
+        <div class="code anim"><span class="k">for</span> i <span class="k">in</span> <span class="f">range</span>(<span class="s">3</span>):
+    display.<span class="f">show</span>(Image.HAPPY)
+    <span class="f">sleep</span>(<span class="s">500</span>)
+    display.<span class="f">clear</span>()
+    <span class="f">sleep</span>(<span class="s">500</span>)</div>
+        <div class="anim">
+          <p class="lead">Instead of writing the same lines over and over, a <b>loop</b> repeats them.</p>
+          <p class="lead" style="margin-top:16px;">Patterns are everywhere: tiger stripes, road tiles, sunrise.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. While loop -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Loops</span>
+    </div>
+    <div class="slidebody">
+      <h2 class="anim heading">Forever: the <span class="pop">while True</span> loop</h2>
+      <div class="two">
+        <div class="code anim"><span class="k">while</span> <span class="k">True</span>:
+    display.<span class="f">show</span>(Image.HEART)
+    <span class="f">sleep</span>(<span class="s">500</span>)
+    display.<span class="f">clear</span>()
+    <span class="f">sleep</span>(<span class="s">500</span>)</div>
+        <div class="anim">
+          <ul class="steps">
+            <li><span class="num">↻</span><span><b>for loop</b> — repeats a set number of times</span></li>
+            <li><span class="num">∞</span><span><b>while True</b> — repeats forever</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. Build project -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Project</span>
+    </div>
+    <div class="slidebody">
+      <span class="chip teal anim">45 min · Home theme</span>
+      <h2 class="anim heading">Build your first <span class="pop">project</span></h2>
+      <ol class="steps">
+        <li class="anim"><span class="num">1</span><span><b>Interview</b> — pick a Home challenge, understand it.</span></li>
+        <li class="anim"><span class="num">2</span><span><b>Ideate</b> — where can the micro:bit help?</span></li>
+        <li class="anim"><span class="num">3</span><span><b>Build</b> — pseudo-code, then code with display + loops.</span></li>
+        <li class="anim"><span class="num">4</span><span><b>Craft</b> — make a project plate to show it off.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 15. Reflection -->
+  <section class="slide">
+    <div class="brandbar">
+      <span class="logo">
+        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
+      </span>
+      <span>Reflect</span>
+    </div>
+    <div class="slidebody">
+      <span class="chip anim">15 min</span>
+      <h2 class="anim heading">Show what you made</h2>
+      <ol class="steps">
+        <li class="anim"><span class="num">1</span><span><b>Demo it</b> — the problem, your solution, its features.</span></li>
+        <li class="anim"><span class="num">2</span><span><b>Bug of the day</b> — what did an obstacle teach you?</span></li>
+        <li class="anim"><span class="num">3</span><span><b>3 things</b> you learned today.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 16. Closing -->
+  <section class="slide hero">
+    <div class="brandbar"><span class="tag">Code &amp; Create</span><span>ZERO to MAKER</span></div>
+    <div class="slidebody">
+      <p class="quote anim heading">You’re not just learning to code.<br>You’re learning to <span class="pop">make a difference.</span></p>
+      <p class="qattr anim">See you in Session 2 · Theme: School</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="dots" id="dots"></div>
+<div class="nav">
+  <button id="prev" aria-label="Previous">‹</button>
+  <span class="counter" id="counter">1 / 16</span>
+  <button id="next" aria-label="Next">›</button>
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dotsWrap = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  let i = 0;
+
+  slides.forEach((_, idx) => { 
+    const d = document.createElement('div'); 
+    d.className = 'dot' + (idx === 0 ? ' on' : ''); 
+    d.onclick = () => go(idx); 
+    dotsWrap.appendChild(d); 
+  });
+  
+  const dots = [...document.querySelectorAll('.dot')];
+
+  function render() {
+    slides.forEach((s, idx) => { 
+      s.classList.remove('active', 'leaving'); 
+      if (idx === i) s.classList.add('active'); 
+    });
+    dots.forEach((d, idx) => d.classList.toggle('on', idx === i));
+    counter.textContent = (i + 1) + ' / ' + slides.length;
+    progress.style.width = ((i + 1) / slides.length * 100) + '%';
+  }
+
+  function go(n) { 
+    if (n < 0 || n >= slides.length || n === i) return; 
+    const cur = slides[i]; 
+    cur.classList.add('leaving'); 
+    cur.classList.remove('active'); 
+    i = n; 
+    render(); 
+  }
+
+  document.getElementById('next').onclick = () => go(i + 1);
+  document.getElementById('prev').onclick = () => go(i - 1);
+  
+  document.addEventListener('keydown', e => { 
+    if (e.key === 'ArrowRight' || e.key === ' ') go(i + 1); 
+    if (e.key === 'ArrowLeft') go(i - 1); 
+  });
+
+  let sx = null;
+  document.addEventListener('touchstart', e => sx = e.touches[0].clientX);
+  document.addEventListener('touchend', e => { 
+    if (sx === null) return; 
+    const dx = e.changedTouches[0].clientX - sx; 
+    if (dx < -50) go(i + 1); 
+    if (dx > 50) go(i - 1); 
+    sx = null; 
+  });
+
+  render();
+</script>
+
+</body>
+</html>
