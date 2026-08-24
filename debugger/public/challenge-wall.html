@@ -3,26 +3,42 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#101426" />
-<title>Challenge Wall | Code & Create</title>
+<meta name="theme-color" content="#240D18" />
+<title>Challenge Wall | Code &amp; Create</title>
+
+<!-- San3a Brand Typography: Montserrat (Headlines), Arvo (Subheadings/Chips), Inter (Body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
 
 <style>
   :root{
-    --bg:#080b16;
-    --bg-2:#101426;
-    --panel:rgba(20,25,45,.82);
-    --panel-solid:#151b31;
-    --text:#f7f8ff;
-    --muted:#aeb6d1;
-    --line:rgba(255,255,255,.09);
-    --purple:#8b5cf6;
-    --cyan:#22d3ee;
-    --yellow:#fbbf24;
-    --pink:#f472b6;
-    --green:#34d399;
-    --blue:#60a5fa;
-    --danger:#fb7185;
-    --shadow:0 20px 70px rgba(0,0,0,.35);
+    /* San3a Academy Brand Palette */
+    --san3a-ink:#240D18;
+    --san3a-maroon-d:#3D1221;
+    --san3a-wine:#781629;
+    --san3a-red:#CF2027;
+    --san3a-paper:#FFF7F3;
+    --san3a-white:#FFFFFF;
+    --san3a-sun:#FFC93C;
+    --san3a-teal:#2EC4B6;
+
+    /* Theme Tokens */
+    --bg:#14070F;
+    --bg-2:#240D18;
+    --panel:rgba(36, 13, 24, 0.85);
+    --panel-solid:#2D101E;
+    --text:#FFF7F3;
+    --muted:#D8C7CD;
+    --line:rgba(255,255,255,.12);
+    --purple:var(--san3a-wine);
+    --cyan:var(--san3a-teal);
+    --yellow:var(--san3a-sun);
+    --pink:var(--san3a-red);
+    --green:var(--san3a-teal);
+    --blue:var(--san3a-red);
+    --danger:var(--san3a-red);
+    --shadow:0 20px 70px rgba(0,0,0,.45);
     --radius:24px;
   }
 
@@ -31,27 +47,24 @@
   body{
     margin:0;
     min-height:100vh;
-    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-family:'Inter',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     color:var(--text);
     background:
-      radial-gradient(circle at 15% 10%, rgba(139,92,246,.22), transparent 30%),
-      radial-gradient(circle at 85% 15%, rgba(34,211,238,.15), transparent 28%),
-      radial-gradient(circle at 70% 90%, rgba(244,114,182,.10), transparent 30%),
-      linear-gradient(145deg,var(--bg),var(--bg-2));
+      radial-gradient(circle at 15% 10%, rgba(120, 22, 41, 0.28), transparent 32%),
+      radial-gradient(circle at 85% 15%, rgba(207, 32, 39, 0.18), transparent 30%),
+      radial-gradient(circle at 70% 90%, rgba(255, 201, 60, 0.12), transparent 32%),
+      linear-gradient(145deg, var(--bg), var(--bg-2));
     overflow-x:hidden;
   }
 
+  /* Top San3a Signature Gradient Accent Bar */
   body::before{
     content:"";
     position:fixed;
-    inset:0;
-    pointer-events:none;
-    opacity:.22;
-    background-image:
-      linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-    background-size:40px 40px;
-    mask-image:linear-gradient(to bottom,black,transparent 90%);
+    top:0; left:0; right:0;
+    height:6px;
+    background:linear-gradient(90deg, var(--san3a-ink), var(--san3a-wine), var(--san3a-red), var(--san3a-sun));
+    z-index:1000;
   }
 
   button,select,input{font:inherit}
@@ -77,41 +90,66 @@
   .brand{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:14px;
   }
 
   .logo{
-    width:46px;
-    height:46px;
+    width:48px;
+    height:48px;
     border-radius:14px;
     display:grid;
     place-items:center;
     font-weight:900;
     font-size:20px;
     color:#fff;
-    background:linear-gradient(135deg,var(--purple),var(--cyan));
-    box-shadow:0 10px 30px rgba(139,92,246,.25);
+    background:var(--san3a-maroon-d);
+    border:1px solid var(--line);
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(207, 32, 39, 0.25);
   }
 
-  .brand-text strong{display:block;font-size:15px;letter-spacing:.03em}
-  .brand-text span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+  .logo img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+  }
+
+  .brand-text strong{
+    display:block;
+    font-size:16px;
+    letter-spacing:.04em;
+    font-family:'Montserrat', sans-serif;
+    text-transform:uppercase;
+  }
+
+  .brand-text span{
+    display:block;
+    color:var(--san3a-sun);
+    font-size:11px;
+    letter-spacing:1.5px;
+    font-weight:700;
+    margin-top:2px;
+    font-family:'Arvo', Georgia, serif;
+    text-transform:uppercase;
+  }
 
   .live-pill{
     display:flex;
     align-items:center;
     gap:8px;
-    padding:9px 12px;
+    padding:9px 14px;
     border:1px solid var(--line);
     border-radius:999px;
-    background:rgba(255,255,255,.04);
+    background:rgba(255,255,255,.05);
     color:var(--muted);
     font-size:12px;
+    font-family:'Arvo', Georgia, serif;
   }
 
   .live-dot{
     width:8px;height:8px;border-radius:50%;
-    background:var(--green);
-    box-shadow:0 0 0 5px rgba(52,211,153,.10);
+    background:var(--san3a-teal);
+    box-shadow:0 0 0 5px rgba(46,196,182,.15);
     animation:pulse 1.8s infinite;
   }
 
@@ -121,8 +159,8 @@
     border:1px solid var(--line);
     border-radius:32px;
     background:
-      linear-gradient(135deg,rgba(139,92,246,.16),rgba(34,211,238,.05) 45%,rgba(255,255,255,.025)),
-      rgba(14,18,34,.78);
+      linear-gradient(135deg, rgba(120, 22, 41, 0.28), rgba(207, 32, 39, 0.12) 45%, rgba(255, 255, 255, 0.025)),
+      rgba(36, 13, 24, 0.85);
     box-shadow:var(--shadow);
     overflow:hidden;
     opacity:0;
@@ -136,7 +174,7 @@
     width:280px;height:280px;
     right:-100px;top:-130px;
     border-radius:50%;
-    background:radial-gradient(circle,rgba(34,211,238,.22),transparent 65%);
+    background:radial-gradient(circle, rgba(207, 32, 39, 0.22), transparent 65%);
     pointer-events:none;
   }
 
@@ -144,29 +182,32 @@
     display:inline-flex;
     align-items:center;
     gap:8px;
-    color:#d8d7ff;
+    color:var(--san3a-sun);
     font-weight:800;
     font-size:12px;
-    letter-spacing:.11em;
+    letter-spacing:.12em;
     text-transform:uppercase;
+    font-family:'Arvo', Georgia, serif;
   }
 
   .eyebrow::before{
     content:"";
     width:26px;height:3px;border-radius:99px;
-    background:linear-gradient(90deg,var(--purple),var(--cyan));
+    background:linear-gradient(90deg, var(--san3a-red), var(--san3a-sun));
   }
 
   h1{
     margin:14px 0 10px;
-    font-size:clamp(38px,6vw,76px);
+    font-size:clamp(38px,6vw,72px);
     line-height:.95;
-    letter-spacing:-.055em;
-    max-width:850px;
+    letter-spacing:-.03em;
+    max-width:880px;
+    font-family:'Montserrat', sans-serif;
+    text-transform:uppercase;
   }
 
   .gradient{
-    background:linear-gradient(90deg,#fff 5%,#c4b5fd 45%,#67e8f9 90%);
+    background:linear-gradient(90deg, #FFFFFF 5%, #FFD9DC 45%, var(--san3a-sun) 90%);
     -webkit-background-clip:text;
     background-clip:text;
     color:transparent;
@@ -202,31 +243,39 @@
 
   select.field{
     appearance:none;
-    background-image:linear-gradient(45deg,transparent 50%,#aeb6d1 50%),linear-gradient(135deg,#aeb6d1 50%,transparent 50%);
+    background-image:linear-gradient(45deg,transparent 50%,#d8c7cd 50%),linear-gradient(135deg,#d8c7cd 50%,transparent 50%);
     background-position:calc(100% - 20px) 22px,calc(100% - 15px) 22px;
     background-size:5px 5px,5px 5px;
     background-repeat:no-repeat;
     padding-right:42px;
   }
 
+  select.field option {
+    background-color: var(--san3a-ink);
+    color: var(--text);
+  }
+
   .field:focus{
-    border-color:rgba(139,92,246,.7);
-    box-shadow:0 0 0 4px rgba(139,92,246,.12);
+    border-color:rgba(207, 32, 39, 0.7);
+    box-shadow:0 0 0 4px rgba(207, 32, 39, 0.18);
   }
 
   .control-btn{
     padding:0 18px;
     font-weight:800;
     transition:.2s ease;
+    font-family:'Arvo', Georgia, serif;
   }
 
   .control-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.09)}
+  
   .primary{
     border:0;
-    background:linear-gradient(135deg,var(--purple),#6d5dfc);
-    box-shadow:0 12px 28px rgba(139,92,246,.24);
+    background:linear-gradient(135deg, var(--san3a-red), var(--san3a-wine));
+    color:#fff;
+    box-shadow:0 12px 28px rgba(207, 32, 39, 0.28);
   }
-  .primary:hover{background:linear-gradient(135deg,#9a72ff,#776cff)}
+  .primary:hover{background:linear-gradient(135deg, #e52830, var(--san3a-maroon-d));}
 
   .stats{
     display:grid;
@@ -258,11 +307,25 @@
     right:-35px;bottom:-50px;
     border-radius:50%;
     background:var(--accent);
-    opacity:.13;
+    opacity:.15;
   }
 
-  .stat .label{color:var(--muted);font-size:13px;font-weight:700}
-  .stat .value{font-size:42px;line-height:1;margin-top:9px;font-weight:900;letter-spacing:-.04em}
+  .stat .label{
+    color:var(--muted);
+    font-size:12px;
+    font-weight:800;
+    font-family:'Arvo', Georgia, serif;
+    letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  .stat .value{
+    font-size:42px;
+    line-height:1;
+    margin-top:9px;
+    font-weight:900;
+    letter-spacing:-.02em;
+    font-family:'Montserrat', sans-serif;
+  }
   .stat .sub{margin-top:8px;color:var(--muted);font-size:12px}
 
   .layout{
@@ -276,7 +339,7 @@
     border:1px solid var(--line);
     border-radius:24px;
     background:var(--panel);
-    box-shadow:0 15px 50px rgba(0,0,0,.18);
+    box-shadow:0 15px 50px rgba(0,0,0,.22);
   }
 
   .themes{
@@ -296,8 +359,13 @@
     margin-bottom:18px;
   }
 
-  .panel-head h2{margin:0;font-size:18px}
-  .panel-head span{color:var(--muted);font-size:12px}
+  .panel-head h2{
+    margin:0;
+    font-size:18px;
+    font-family:'Montserrat', sans-serif;
+    text-transform:uppercase;
+  }
+  .panel-head span{color:var(--muted);font-size:12px;font-family:'Arvo', Georgia, serif;}
 
   .theme{
     margin:16px 0 20px;
@@ -341,8 +409,9 @@
     font-weight:900;
     letter-spacing:.05em;
     text-transform:uppercase;
-    background:color-mix(in srgb,var(--theme) 12%,transparent);
+    background:color-mix(in srgb,var(--theme) 15%,transparent);
     color:var(--theme);
+    font-family:'Arvo', Georgia, serif;
   }
 
   .challenge-panel{
@@ -361,20 +430,26 @@
     margin-bottom:18px;
   }
 
-  .challenge-tools h2{margin:0;font-size:18px}
+  .challenge-tools h2{
+    margin:0;
+    font-size:18px;
+    font-family:'Montserrat', sans-serif;
+    text-transform:uppercase;
+  }
   .challenge-tools small{color:var(--muted)}
 
   .random-btn{
-    border:1px solid rgba(251,191,36,.25);
-    color:#fde68a;
-    background:rgba(251,191,36,.08);
+    border:1px solid rgba(255, 201, 60, 0.3);
+    color:var(--san3a-sun);
+    background:rgba(255, 201, 60, 0.12);
     padding:10px 14px;
     border-radius:13px;
     font-weight:900;
     transition:.2s;
+    font-family:'Arvo', Georgia, serif;
   }
 
-  .random-btn:hover{transform:translateY(-2px);background:rgba(251,191,36,.13)}
+  .random-btn:hover{transform:translateY(-2px);background:rgba(255, 201, 60, 0.22)}
 
   .ideas{
     display:grid;
@@ -383,7 +458,7 @@
   }
 
   .card{
-    --theme:var(--purple);
+    --theme:var(--san3a-red);
     position:relative;
     padding:20px;
     min-height:205px;
@@ -391,7 +466,7 @@
     border-radius:20px;
     background:
       linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.02)),
-      #12172a;
+      #220B17;
     overflow:hidden;
     transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;
     animation:cardIn .5s both;
@@ -404,27 +479,28 @@
     right:-90px;top:-100px;
     border-radius:50%;
     background:var(--theme);
-    opacity:.09;
+    opacity:.12;
   }
 
   .card:hover{
     transform:translateY(-6px);
-    border-color:color-mix(in srgb,var(--theme) 45%,var(--line));
-    box-shadow:0 18px 45px rgba(0,0,0,.25);
+    border-color:color-mix(in srgb,var(--theme) 55%,var(--line));
+    box-shadow:0 18px 45px rgba(0,0,0,.35);
   }
 
   .tag{
     display:inline-flex;
     align-items:center;
     gap:6px;
-    padding:6px 9px;
+    padding:6px 10px;
     border-radius:9px;
     color:var(--theme);
-    background:color-mix(in srgb,var(--theme) 12%,transparent);
-    font-size:10px;
+    background:color-mix(in srgb,var(--theme) 15%,transparent);
+    font-size:11px;
     font-weight:900;
     text-transform:uppercase;
     letter-spacing:.07em;
+    font-family:'Arvo', Georgia, serif;
   }
 
   .tag::before{
@@ -467,7 +543,7 @@
     color:#fff;
     font-size:10px;
     font-weight:900;
-    background:linear-gradient(135deg,var(--theme),#64748b);
+    background:linear-gradient(135deg,var(--theme),var(--san3a-maroon-d));
   }
 
   .student{
@@ -481,6 +557,7 @@
     border:1px solid var(--line);
     border-radius:8px;
     white-space:nowrap;
+    font-family:'Arvo', Georgia, serif;
   }
 
   .empty,.error,.loading{
@@ -495,14 +572,14 @@
     color:var(--muted);
   }
 
-  .empty strong,.error strong{display:block;color:var(--text);font-size:20px;margin-bottom:7px}
-  .error{border-color:rgba(251,113,133,.3);color:#fecdd3;background:rgba(251,113,133,.06)}
-  .error strong{color:#fda4af}
+  .empty strong,.error strong{display:block;color:var(--text);font-size:20px;margin-bottom:7px;font-family:'Montserrat', sans-serif;}
+  .error{border-color:rgba(207,32,39,.4);color:#ffd9dc;background:rgba(207,32,39,.10)}
+  .error strong{color:#ffb7b9}
 
   .spinner{
     width:38px;height:38px;
     border:4px solid rgba(255,255,255,.12);
-    border-top-color:var(--cyan);
+    border-top-color:var(--san3a-red);
     border-radius:50%;
     animation:spin .8s linear infinite;
     margin:0 auto 15px;
@@ -511,17 +588,18 @@
   .spotlight{
     margin-top:18px;
     padding:20px;
-    border:1px solid rgba(139,92,246,.25);
+    border:1px solid rgba(207,32,39,.3);
     border-radius:20px;
-    background:linear-gradient(135deg,rgba(139,92,246,.10),rgba(34,211,238,.05));
+    background:linear-gradient(135deg,rgba(120,22,41,.25),rgba(207,32,39,.12));
   }
 
   .spotlight-label{
-    color:#c4b5fd;
+    color:var(--san3a-sun);
     font-size:10px;
     font-weight:900;
     letter-spacing:.1em;
     text-transform:uppercase;
+    font-family:'Arvo', Georgia, serif;
   }
 
   .spotlight-text{
@@ -533,9 +611,10 @@
 
   footer{
     text-align:center;
-    color:#737d9c;
-    font-size:11px;
+    color:#a8959d;
+    font-size:12px;
     padding:28px 0 0;
+    font-family:'Arvo', Georgia, serif;
   }
 
   .refreshing .refresh-icon{animation:spin .6s linear infinite}
@@ -552,8 +631,8 @@
   }
   @keyframes spin{to{transform:rotate(360deg)}}
   @keyframes pulse{
-    0%,100%{opacity:1;box-shadow:0 0 0 5px rgba(52,211,153,.10)}
-    50%{opacity:.55;box-shadow:0 0 0 9px rgba(52,211,153,.02)}
+    0%,100%{opacity:1;box-shadow:0 0 0 5px rgba(46,196,182,.15)}
+    50%{opacity:.55;box-shadow:0 0 0 9px rgba(46,196,182,.02)}
   }
 
   @media (max-width:1000px){
@@ -594,10 +673,12 @@
 
   <header class="topbar">
     <div class="brand">
-      <div class="logo">&lt;/&gt;</div>
+      <div class="logo">
+        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&amp;sz=w1000" alt="San3a Academy Logo" onerror="this.parentElement.innerHTML='&lt;/&gt;'">
+      </div>
       <div class="brand-text">
-        <strong>CODE & CREATE</strong>
-        <span>SPRIX · Challenge Wall</span>
+        <strong>CODE &amp; CREATE</strong>
+        <span>ZERO TO MAKER · CHALLENGE WALL</span>
       </div>
     </div>
     <div class="live-pill">
@@ -631,19 +712,19 @@
   </section>
 
   <section class="stats" aria-label="Challenge statistics">
-    <article class="stat" style="--accent:var(--purple)">
+    <article class="stat" style="--accent:var(--san3a-red)">
       <div class="label">IDEAS IN VIEW</div>
       <div id="ideaCount" class="value">—</div>
       <div id="ideaCountSub" class="sub">Waiting for the wall…</div>
     </article>
 
-    <article class="stat" style="--accent:var(--cyan)">
+    <article class="stat" style="--accent:var(--san3a-teal)">
       <div class="label">GROUPS</div>
       <div id="groupCount" class="value">—</div>
       <div class="sub">Across the full challenge wall</div>
     </article>
 
-    <article class="stat" style="--accent:var(--pink)">
+    <article class="stat" style="--accent:var(--san3a-sun)">
       <div class="label">CONTRIBUTORS</div>
       <div id="contributorCount" class="value">—</div>
       <div class="sub">Students represented in this view</div>
@@ -690,39 +771,40 @@
   </main>
 
   <footer>
-    Code & Create · SPRIX · Challenge Wall
+    Code &amp; Create · SPRIX · Challenge Wall
   </footer>
 </div>
 
 <script>
   /*
     ================================================================
-    CHALLENGE WALL — DATA SOURCE
+    CHALLENGE WALL — DATA SOURCE & SAN3A BRAND MAPPING
     ================================================================
-    Published Google Sheet CSV. Keep the sheet published to the web.
+    Published Google Sheet CSV.
   */
   const SHEET_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQL26g1UnLK-WHZ-370j80VWbKHHnU4aCswRlloCc87IU4JMoG39M7-_sN4T3c9aqXTdoyQ2DlyW1Ye/pub?gid=1908418637&single=true&output=csv";
 
+  // San3a Academy Media Kit Color Mapping for Categories
   const THEMES = {
     school: {
       label: "School",
-      color: "#60a5fa",
+      color: "#CF2027", // San3a Red
       icon: "🏫"
     },
     home: {
       label: "Home",
-      color: "#34d399",
+      color: "#2EC4B6", // San3a Teal
       icon: "🏠"
     },
     transportation: {
       label: "Transportation",
-      color: "#fbbf24",
+      color: "#FFC93C", // San3a Sun Yellow
       icon: "🚌"
     },
     street: {
       label: "Street",
-      color: "#f472b6",
+      color: "#781629", // San3a Wine / Dark Maroon
       icon: "🛣️"
     }
   };
@@ -762,13 +844,6 @@
       .trim();
   }
 
-  /*
-    Small CSV parser supporting:
-    - quoted cells
-    - commas inside quotes
-    - escaped quotes ("")
-    - line breaks inside quoted cells
-  */
   function parseCSV(text) {
     const rows = [];
     let row = [];
@@ -842,14 +917,14 @@
   }
 
   function initials(name) {
-    const parts = clean(name).split(/\\s+/).filter(Boolean);
+    const parts = clean(name).split(/\s+/).filter(Boolean);
     if (!parts.length) return "?";
     return parts.slice(0,2).map(p => p[0]).join("").toUpperCase();
   }
 
   function groupSort(a,b) {
-    const na = parseInt(String(a).match(/\\d+/)?.[0] ?? "", 10);
-    const nb = parseInt(String(b).match(/\\d+/)?.[0] ?? "", 10);
+    const na = parseInt(String(a).match(/\d+/)?.[0] ?? "", 10);
+    const nb = parseInt(String(b).match(/\d+/)?.[0] ?? "", 10);
 
     if (!Number.isNaN(na) && !Number.isNaN(nb)) return na - nb;
     if (!Number.isNaN(na)) return -1;
@@ -1051,7 +1126,7 @@
       const key = themeKey(item.theme);
       const theme = THEMES[key] || {
         label: item.theme || "Other",
-        color: "#94a3b8",
+        color: "#CF2027",
         icon: "💡"
       };
 
@@ -1111,7 +1186,7 @@
       cards[index].animate(
         [
           { transform:"scale(1)", boxShadow:"0 0 0 rgba(0,0,0,0)" },
-          { transform:"scale(1.035)", boxShadow:"0 0 40px rgba(139,92,246,.28)" },
+          { transform:"scale(1.035)", boxShadow:"0 0 40px rgba(207, 32, 39, 0.35)" },
           { transform:"scale(1)", boxShadow:"0 0 0 rgba(0,0,0,0)" }
         ],
         { duration:900, easing:"ease-out" }
@@ -1183,7 +1258,6 @@
     setTimeout(() => button.classList.remove("refreshing"), 500);
   });
 
-  // Initial load
   loadIdeas();
 </script>
 </body>

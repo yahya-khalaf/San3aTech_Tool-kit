@@ -32,6 +32,16 @@ const academyCourses: AcademyCourse[] = [
         status: 'Ready'
       },
       {
+        name: 'Student Projects Portfolio',
+        description: 'Browse the student projects portfolio and discover completed Code & Create work.',
+        status: 'Ready'
+      },
+      {
+        name: 'Submit Student Project',
+        description: 'Submit a student project to the Code & Create portfolio.',
+        status: 'Ready'
+      },
+      {
         name: 'Submit Challenge',
         description: 'Fill in the challenge submission form for Code & Create.',
         status: 'Ready'
@@ -106,7 +116,9 @@ export default function San3aAcademy() {
                 <div className="grid gap-4 md:grid-cols-2">
                   {selectedCourse.tools.map((tool) => {
                     const isChallengeWall = tool.name === 'Challenge Wall';
+                    const isStudentProjectsPortfolio = tool.name === 'Student Projects Portfolio';
                     const isSubmitChallenge = tool.name === 'Submit Challenge';
+                    const isSubmitStudentProject = tool.name === 'Submit Student Project';
 
                     return (
                       <div key={tool.name} className="rounded-xl border border-gray-200 bg-gray-50 p-4 shadow-sm">
@@ -116,14 +128,26 @@ export default function San3aAcademy() {
                         </div>
                         <p className="text-sm leading-6 text-gray-600">{tool.description}</p>
 
-                        {(isChallengeWall || isSubmitChallenge) && (
+                        {(isChallengeWall || isStudentProjectsPortfolio || isSubmitChallenge || isSubmitStudentProject) && (
                           <a
-                            href={isChallengeWall ? '/challenge-wall.html' : 'https://forms.gle/SJX54XQpiazQJih8A'}
+                            href={
+                              isChallengeWall
+                                ? '/challenge-wall.html'
+                                : isStudentProjectsPortfolio
+                                  ? '/student-projects-portfolio.html'
+                                  : isSubmitStudentProject
+                                    ? 'https://forms.gle/xLrEQwgiiLGuLKMG8'
+                                    : 'https://forms.gle/SJX54XQpiazQJih8A'
+                            }
                             target="_blank"
                             rel="noreferrer"
                             className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white transition hover:bg-primary-dark"
                           >
-                            {isChallengeWall ? 'Open challenge wall' : 'Open submission form'}
+                            {isChallengeWall
+                              ? 'Open challenge wall'
+                              : isStudentProjectsPortfolio
+                                ? 'Open student portfolio'
+                                : 'Open submission form'}
                           </a>
                         )}
                       </div>
