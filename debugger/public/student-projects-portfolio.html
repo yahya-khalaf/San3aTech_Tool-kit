@@ -41,6 +41,93 @@
       padding-bottom: 60px;
     }
 
+    .app-shell {
+      display: none;
+    }
+
+    .auth-gate {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(36, 13, 24, 0.96), rgba(120, 22, 41, 0.94));
+      z-index: 3000;
+      padding: 24px;
+    }
+
+    .auth-gate.hidden {
+      display: none;
+    }
+
+    .auth-panel {
+      width: min(100%, 420px);
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 24px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+      padding: 28px 24px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .auth-panel h2 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: var(--san3a-ink);
+      font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .auth-panel p {
+      color: var(--san3a-maroon-d);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .auth-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .auth-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(36, 13, 24, 0.15);
+      font-size: 16px;
+      background: var(--san3a-paper);
+      color: var(--san3a-ink);
+    }
+
+    .auth-input:focus {
+      outline: none;
+      border-color: var(--san3a-red);
+      box-shadow: 0 0 0 4px rgba(207, 32, 39, 0.08);
+    }
+
+    .auth-button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, var(--san3a-red), var(--san3a-wine));
+      color: var(--san3a-white);
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .auth-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .auth-status {
+      min-height: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--san3a-red);
+    }
+
     h1, h2, h3, h4, .brand-heading {
       font-family: 'Montserrat', sans-serif;
       text-transform: uppercase;
@@ -665,71 +752,141 @@
   </style>
 </head>
 <body>
-
-  <!-- Header & Brand Lockup -->
-  <header>
-    <div class="container">
-      <div class="header-top">
-        <div class="brand-lockup">
-          <div class="logo-slot">
-            <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy Logo" onerror="this.style.display='none'">
-          </div>
-          <div class="brand-text">
-            <h1>CODE &amp; <span>CREATE</span></h1>
-            <div class="brand-tagline">ZERO TO MAKER • PORTFOLIO</div>
-          </div>
-        </div>
-        <div class="refresh-meta">
-          <button class="btn-action btn-secondary" onclick="goHome()">🏠 Home View</button>
-          <span id="lastUpdated">Updating...</span>
-          <button class="btn-action" id="refreshBtn">🔄 Refresh</button>
-        </div>
-      </div>
+  <div id="authGate" class="auth-gate">
+    <div class="auth-panel">
+      <h2>Sign In</h2>
+      <p>Enter the protected portfolio password to access student projects.</p>
+      <form class="auth-form" id="authForm">
+        <input class="auth-input" id="portfolioPassword" type="password" placeholder="Password" autocomplete="current-password" required>
+        <button class="auth-button" type="submit">Access Portfolio</button>
+        <div class="auth-status" id="authStatus" aria-live="polite"></div>
+      </form>
     </div>
-  </header>
+  </div>
 
-  <main class="container">
-
-    <!-- Filters & Controls Bar -->
-    <section class="controls-card">
-      <div class="controls-grid">
-        <div class="control-group">
-          <label for="groupSelect">1. Group Number</label>
-          <select id="groupSelect">
-            <option value="ALL">All Groups</option>
-          </select>
-        </div>
-        <div class="control-group">
-          <label for="nameSelect">2. Student Name</label>
-          <select id="nameSelect">
-            <option value="ALL">All Students</option>
-          </select>
-        </div>
-        <div class="control-group">
-          <label for="typeSelect">3. Activity Type</label>
-          <select id="typeSelect">
-            <option value="ALL">All Activity Types</option>
-          </select>
-        </div>
-        <div class="control-group">
-          <label for="searchInput">4. Search Projects</label>
-          <input type="text" id="searchInput" placeholder="Search keywords...">
+  <div id="appShell" class="app-shell">
+    <!-- Header & Brand Lockup -->
+    <header>
+      <div class="container">
+        <div class="header-top">
+          <div class="brand-lockup">
+            <div class="logo-slot">
+              <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy Logo" onerror="this.style.display='none'">
+            </div>
+            <div class="brand-text">
+              <h1>CODE &amp; <span>CREATE</span></h1>
+              <div class="brand-tagline">ZERO TO MAKER • PORTFOLIO</div>
+            </div>
+          </div>
+          <div class="refresh-meta">
+            <button class="btn-action btn-secondary" onclick="goHome()">🏠 Home View</button>
+            <span id="lastUpdated">Updating...</span>
+            <button class="btn-action" id="refreshBtn">🔄 Refresh</button>
+          </div>
         </div>
       </div>
-    </section>
+    </header>
 
-    <!-- Main Stage View -->
-    <div id="dashboardStage"></div>
+    <main class="container">
 
-  </main>
+      <!-- Filters & Controls Bar -->
+      <section class="controls-card">
+        <div class="controls-grid">
+          <div class="control-group">
+            <label for="groupSelect">1. Group Number</label>
+            <select id="groupSelect">
+              <option value="ALL">All Groups</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="nameSelect">2. Student Name</label>
+            <select id="nameSelect">
+              <option value="ALL">All Students</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="typeSelect">3. Activity Type</label>
+            <select id="typeSelect">
+              <option value="ALL">All Activity Types</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="searchInput">4. Search Projects</label>
+            <input type="text" id="searchInput" placeholder="Search keywords...">
+          </div>
+        </div>
+      </section>
 
-  <!-- Lightbox Modal -->
-  <div class="lightbox" id="lightbox">
-    <span class="lightbox-close" id="lightboxClose">&times;</span>
-    <img id="lightboxImg" src="" alt="Submission photo preview">
+      <!-- Main Stage View -->
+      <div id="dashboardStage"></div>
+
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+      <span class="lightbox-close" id="lightboxClose">&times;</span>
+      <img id="lightboxImg" src="" alt="Submission photo preview">
+    </div>
   </div>
 
   <script>
+    /* ==========================================================================
+       ACCESS CONTROL
+       ========================================================================== */
+    const PORTFOLIO_PASSWORD_HASH = '40d6ac2265d0a7dfee9ad07808259c9dd48f03e23584482ece151d10eba3fcda';
+    const AUTH_SESSION_KEY = 'san3a_portfolio_authenticated';
+    let listenersReady = false;
+
+    async function hashString(value) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(value);
+      const digest = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(digest))
+        .map(byte => byte.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    async function validatePassword(inputValue) {
+      const normalized = String(inputValue || '').trim();
+      if (!normalized) return false;
+      const enteredHash = await hashString(normalized);
+      return enteredHash === PORTFOLIO_PASSWORD_HASH;
+    }
+
+    function initializePortfolio() {
+      if (listenersReady) return;
+      setupEventListeners();
+      fetchData();
+      listenersReady = true;
+    }
+
+    function unlockPortfolio() {
+      const authGate = document.getElementById('authGate');
+      const appShell = document.getElementById('appShell');
+      const authStatus = document.getElementById('authStatus');
+      authGate.classList.add('hidden');
+      appShell.style.display = 'block';
+      sessionStorage.setItem(AUTH_SESSION_KEY, 'true');
+      authStatus.textContent = '';
+      initializePortfolio();
+    }
+
+    document.getElementById('authForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const passwordInput = document.getElementById('portfolioPassword');
+      const authStatus = document.getElementById('authStatus');
+      const isValid = await validatePassword(passwordInput.value);
+
+      if (isValid) {
+        unlockPortfolio();
+        return;
+      }
+
+      authStatus.textContent = 'Incorrect password. Please try again.';
+      passwordInput.value = '';
+      passwordInput.focus();
+    });
+
     /* ==========================================================================
        DATA CONTROLLER & PARSER
        ========================================================================== */
@@ -755,8 +912,18 @@
     const lightboxImg = document.getElementById('lightboxImg');
 
     window.addEventListener('DOMContentLoaded', () => {
-      fetchData();
-      setupEventListeners();
+      const isAuthenticated = sessionStorage.getItem(AUTH_SESSION_KEY) === 'true';
+      const authGate = document.getElementById('authGate');
+      const appShell = document.getElementById('appShell');
+
+      if (isAuthenticated) {
+        authGate.classList.add('hidden');
+        appShell.style.display = 'block';
+        initializePortfolio();
+      } else {
+        appShell.style.display = 'none';
+        authGate.classList.remove('hidden');
+      }
     });
 
     function setupEventListeners() {
