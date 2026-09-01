@@ -36,6 +36,27 @@ function DebuggingGate({ children }: { children: React.ReactNode }) {
   );
 }
 
+declare global {
+  interface Window {
+    ym?: (id: number, action: string, ...params: unknown[]) => void;
+  }
+}
+
+function MetrikaRouteTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof window.ym === 'function') {
+      window.ym(112138602, 'hit', window.location.href, {
+        title: document.title,
+        referer: document.referrer
+      });
+    }
+  }, [location.pathname, location.search]);
+
+  return null;
+}
+
 function SystemMapRedirect() {
   const { setCurrentFlow } = useFlowStore();
   useEffect(() => {
@@ -67,6 +88,7 @@ function App() {
   return (
     <ErrorBoundary>
       <Router>
+        <MetrikaRouteTracker />
         <div className="relative flex h-screen overflow-hidden font-inter">
           {/* Decorative brand-toned background (glassmorphism needs something colorful behind it) */}
           <div className="pointer-events-none fixed inset-0 bg-[#FFF7F3]">
