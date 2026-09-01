@@ -1,0 +1,2746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code &amp; Create — Final Project Journal Exhibition</title>
+
+  <!-- Google Fonts: Montserrat (Headlines), Arvo (Subheadings/Accents), Inter (Body), JetBrains Mono (Code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Arvo:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <!-- PapaParse for future live Google Sheet CSV integration -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       SAN3A BRAND DESIGN SYSTEM & DESIGN TOKENS
+       ========================================================================== */
+    :root {
+      --san3a-ink: #240D18;
+      --san3a-maroon-d: #3D1221;
+      --san3a-wine: #781629;
+      --san3a-red: #CF2027;
+      --san3a-paper: #FFF7F3;
+      --san3a-white: #FFFFFF;
+      --san3a-sun: #FFC93C;
+      --san3a-teal: #2EC4B6;
+      --san3a-card-bg: #FFFFFF;
+      --san3a-border: rgba(36, 13, 24, 0.08);
+      --san3a-shadow-sm: 0 4px 12px rgba(36, 13, 24, 0.05);
+      --san3a-shadow-md: 0 12px 28px rgba(36, 13, 24, 0.08);
+      --san3a-shadow-lg: 0 20px 45px rgba(36, 13, 24, 0.12);
+      --san3a-radius-sm: 12px;
+      --san3a-radius-md: 18px;
+      --san3a-radius-lg: 28px;
+      --san3a-radius-full: 9999px;
+
+      /* Themes */
+      --theme-school: #CF2027;
+      --theme-home: #2EC4B6;
+      --theme-transportation: #FFC93C;
+      --theme-street: #781629;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--san3a-paper);
+      color: var(--san3a-ink);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top signature gradient accent bar */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--san3a-ink), var(--san3a-wine), var(--san3a-red), var(--san3a-sun));
+      z-index: 9999;
+    }
+
+    h1, h2, h3, h4, .brand-font {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+
+    .accent-font {
+      font-family: 'Arvo', Georgia, serif;
+    }
+
+    .mono-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Utility Container */
+    .container {
+      width: min(1280px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .journal-container {
+      width: min(1080px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    /* ==========================================================================
+       TOP GLOBAL HEADER
+       ========================================================================== */
+    .main-header {
+      background: linear-gradient(135deg, var(--san3a-ink) 0%, var(--san3a-maroon-d) 60%, var(--san3a-wine) 100%);
+      color: var(--san3a-white);
+      padding: 24px 0;
+      box-shadow: var(--san3a-shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logo-slot {
+      width: 46px;
+      height: 46px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .brand-logo-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .brand-titles h1 {
+      font-size: 1.25rem;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-titles h1 span {
+      color: var(--san3a-sun);
+    }
+
+    .brand-slogan {
+      font-family: 'Arvo', serif;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 2px;
+      text-transform: uppercase;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-count {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 6px 14px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--san3a-white);
+    }
+
+    .btn-hub-action {
+      background: linear-gradient(135deg, var(--san3a-red), var(--san3a-wine));
+      color: var(--san3a-white);
+      border: none;
+      padding: 8px 18px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(207, 32, 39, 0.35);
+    }
+
+    .btn-hub-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(207, 32, 39, 0.45);
+    }
+
+    /* ==========================================================================
+       VIEW 1: EXHIBITION WALL (LANDING VIEW)
+       ========================================================================== */
+    #exhibitionView {
+      padding: 40px 0 80px;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .exhibition-hero {
+      background: linear-gradient(135deg, rgba(120, 22, 41, 0.08) 0%, rgba(207, 32, 39, 0.04) 50%, rgba(255, 201, 60, 0.05) 100%), var(--san3a-white);
+      border: 1px solid var(--san3a-border);
+      border-radius: var(--san3a-radius-lg);
+      padding: 40px;
+      box-shadow: var(--san3a-shadow-md);
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .exhibition-hero::after {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      right: -80px;
+      top: -80px;
+      background: radial-gradient(circle, rgba(207, 32, 39, 0.12), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Arvo', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--san3a-wine);
+      margin-bottom: 12px;
+    }
+
+    .hero-eyebrow::before {
+      content: "";
+      width: 24px;
+      height: 3px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--san3a-red), var(--san3a-sun));
+    }
+
+    .exhibition-hero h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+      color: var(--san3a-ink);
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .exhibition-hero p {
+      font-size: 1.05rem;
+      color: #5A404C;
+      max-width: 720px;
+    }
+
+    /* Filter Chips Bar */
+    .filter-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+      background: var(--san3a-white);
+      padding: 16px 20px;
+      border-radius: var(--san3a-radius-md);
+      box-shadow: var(--san3a-shadow-sm);
+      border: 1px solid var(--san3a-border);
+    }
+
+    .filter-chips {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      background: var(--san3a-paper);
+      color: var(--san3a-ink);
+      border: 1.5px solid transparent;
+      padding: 8px 16px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-chip:hover {
+      background: rgba(120, 22, 41, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .filter-chip.active {
+      background: var(--san3a-ink);
+      color: var(--san3a-white);
+      box-shadow: var(--san3a-shadow-sm);
+    }
+
+    .filter-chip.active[data-theme="School"] { background: var(--theme-school); color: #fff; }
+    .filter-chip.active[data-theme="Home"] { background: var(--theme-home); color: var(--san3a-ink); }
+    .filter-chip.active[data-theme="Transportation"] { background: var(--theme-transportation); color: var(--san3a-ink); }
+    .filter-chip.active[data-theme="Street"] { background: var(--theme-street); color: #fff; }
+
+    .search-box {
+      position: relative;
+      min-width: 240px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 9px 16px 9px 36px;
+      border-radius: var(--san3a-radius-full);
+      border: 1.5px solid var(--san3a-border);
+      background: var(--san3a-paper);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--san3a-ink);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--san3a-red);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(207, 32, 39, 0.12);
+    }
+
+    .search-box::before {
+      content: "🔍";
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    /* Cards Grid */
+    .teams-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 28px;
+    }
+
+    .team-card {
+      background: var(--san3a-white);
+      border-radius: var(--san3a-radius-lg);
+      border: 1px solid var(--san3a-border);
+      box-shadow: var(--san3a-shadow-md);
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .team-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--san3a-shadow-lg);
+      border-color: rgba(207, 32, 39, 0.3);
+    }
+
+    .card-media-wrapper {
+      width: 100%;
+      height: 200px;
+      background: #240D18;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-media-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .team-card:hover .card-media-img {
+      transform: scale(1.05);
+    }
+
+    .card-theme-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      padding: 5px 12px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      z-index: 2;
+    }
+
+    .card-group-pill {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(36, 13, 24, 0.85);
+      color: var(--san3a-sun);
+      backdrop-filter: blur(8px);
+      padding: 4px 10px;
+      border-radius: var(--san3a-radius-full);
+      font-family: 'Arvo', serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      z-index: 2;
+    }
+
+    .card-content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-team-meta {
+      font-family: 'Arvo', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--san3a-wine);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      color: var(--san3a-ink);
+      margin-bottom: 10px;
+      line-height: 1.2;
+    }
+
+    .card-pitch {
+      font-size: 0.92rem;
+      color: #55404B;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(36, 13, 24, 0.06);
+      padding-top: 14px;
+      margin-top: auto;
+    }
+
+    .card-members-preview {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #6C5562;
+      font-weight: 600;
+    }
+
+    .card-cta {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--san3a-red);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap 0.2s ease;
+    }
+
+    .team-card:hover .card-cta {
+      gap: 8px;
+    }
+
+    /* Branded Placeholder Blocks for Media */
+    .branded-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--san3a-maroon-d) 0%, var(--san3a-ink) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--san3a-white);
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    .branded-placeholder::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(207, 32, 39, 0.25) 0%, transparent 70%);
+    }
+
+    .placeholder-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      z-index: 1;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+    }
+
+    .placeholder-label {
+      font-family: 'Arvo', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--san3a-sun);
+      text-transform: uppercase;
+      z-index: 1;
+    }
+
+    .placeholder-sub {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 4px;
+      z-index: 1;
+    }
+
+    /* ==========================================================================
+       VIEW 2: JOURNAL PAGE (PER TEAM STORY CARDS)
+       ========================================================================== */
+    #journalView {
+      display: none;
+      padding: 30px 0 140px;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .journal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn-back {
+      background: var(--san3a-white);
+      border: 1.5px solid var(--san3a-border);
+      color: var(--san3a-ink);
+      padding: 10px 20px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: var(--san3a-shadow-sm);
+      text-decoration: none;
+    }
+
+    .btn-back:hover {
+      background: var(--san3a-ink);
+      color: var(--san3a-white);
+      transform: translateX(-3px);
+    }
+
+    .journal-nav-quick {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-nav-arrow {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid var(--san3a-border);
+      background: var(--san3a-white);
+      color: var(--san3a-ink);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav-arrow:hover {
+      background: var(--san3a-red);
+      color: #fff;
+      border-color: var(--san3a-red);
+    }
+
+    /* Journal Slide Cards — Structured Story Blocks */
+    .journal-card {
+      background: var(--san3a-card-bg);
+      border-radius: var(--san3a-radius-lg);
+      border: 1px solid var(--san3a-border);
+      box-shadow: var(--san3a-shadow-md);
+      padding: clamp(28px, 4vw, 44px);
+      margin-bottom: 32px;
+      scroll-snap-align: start;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .journal-card:hover {
+      box-shadow: var(--san3a-shadow-lg);
+    }
+
+    .block-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid rgba(36, 13, 24, 0.06);
+    }
+
+    .block-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--san3a-red), var(--san3a-wine));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 10px rgba(207, 32, 39, 0.25);
+    }
+
+    .block-title {
+      font-size: 1.35rem;
+      color: var(--san3a-ink);
+    }
+
+    .block-tagline {
+      font-family: 'Arvo', serif;
+      font-size: 0.8rem;
+      color: #7A626F;
+      margin-left: auto;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* BLOCK 1: HERO */
+    .hero-banner-card {
+      background: linear-gradient(135deg, #240D18 0%, #3D1221 60%, #781629 100%);
+      color: var(--san3a-white);
+      border: none;
+      box-shadow: var(--san3a-shadow-lg);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-meta-strip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .hero-badge-group {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--san3a-sun);
+      padding: 5px 14px;
+      border-radius: var(--san3a-radius-full);
+      font-family: 'Arvo', serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .hero-theme-chip {
+      padding: 5px 14px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-team-label {
+      font-family: 'Arvo', serif;
+      font-size: 1.1rem;
+      color: var(--san3a-sun);
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero-project-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.05;
+      margin-bottom: 16px;
+      color: var(--san3a-white);
+    }
+
+    .hero-pitch-quote {
+      font-size: 1.15rem;
+      line-height: 1.5;
+      color: #FFE6EB;
+      font-weight: 500;
+      margin-bottom: 24px;
+      border-left: 3px solid var(--san3a-red);
+      padding-left: 16px;
+      font-style: italic;
+    }
+
+    .hero-members-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .member-pill {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--san3a-radius-full);
+      padding: 6px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+
+    .member-pill strong {
+      color: #fff;
+    }
+
+    .member-pill .member-role {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--san3a-red);
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .hero-image-frame {
+      border-radius: var(--san3a-radius-md);
+      overflow: hidden;
+      height: 320px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* BLOCK 2: THE PROBLEM */
+    .problem-callout {
+      background: linear-gradient(135deg, rgba(207, 32, 39, 0.08) 0%, rgba(120, 22, 41, 0.04) 100%);
+      border: 2px solid rgba(207, 32, 39, 0.25);
+      border-radius: var(--san3a-radius-md);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .problem-callout-badge {
+      font-family: 'Arvo', serif;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--san3a-red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .problem-callout-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--san3a-ink);
+      line-height: 1.45;
+    }
+
+    .problem-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 700px) {
+      .problem-meta-grid { grid-template-columns: 1fr; }
+    }
+
+    .problem-sub-box {
+      background: var(--san3a-paper);
+      border: 1px solid var(--san3a-border);
+      border-radius: var(--san3a-radius-sm);
+      padding: 18px 20px;
+    }
+
+    .problem-sub-box h4 {
+      font-size: 0.85rem;
+      color: var(--san3a-wine);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .problem-sub-box p {
+      font-size: 0.95rem;
+      color: #4A343F;
+    }
+
+    /* BLOCK 3: IDEATION */
+    .ideas-considered-box {
+      background: var(--san3a-paper);
+      border: 1px solid var(--san3a-border);
+      border-radius: var(--san3a-radius-md);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+
+    .ideas-considered-box h4 {
+      font-size: 0.88rem;
+      color: var(--san3a-wine);
+      margin-bottom: 8px;
+    }
+
+    .sketches-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .sketch-card {
+      height: 200px;
+      border-radius: var(--san3a-radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--san3a-border);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .sketch-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .sketch-card:hover img {
+      transform: scale(1.04);
+    }
+
+    /* BLOCK 4: OUR SOLUTION */
+    .solution-desc-lead {
+      font-size: 1.15rem;
+      color: var(--san3a-ink);
+      line-height: 1.6;
+      margin-bottom: 28px;
+      font-weight: 500;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, #FFFDFB 0%, var(--san3a-paper) 100%);
+      border: 1.5px solid rgba(207, 32, 39, 0.2);
+      border-radius: var(--san3a-radius-md);
+      padding: 20px;
+      box-shadow: var(--san3a-shadow-sm);
+      position: relative;
+    }
+
+    .feature-flow-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--san3a-red);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .feature-text {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--san3a-ink);
+      line-height: 1.5;
+    }
+
+    .parts-container {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(36, 13, 24, 0.08);
+    }
+
+    .parts-label {
+      font-family: 'Arvo', serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--san3a-wine);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .parts-chips-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .part-chip {
+      background: rgba(36, 13, 24, 0.06);
+      border: 1px solid rgba(36, 13, 24, 0.12);
+      color: var(--san3a-ink);
+      padding: 6px 14px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .part-chip::before {
+      content: "⚙️";
+      font-size: 0.75rem;
+    }
+
+    /* BLOCK 5: HOW WE BUILT IT (STORYBOARD TIMELINE - SIGNATURE ELEMENT) */
+    .timeline-container {
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .timeline-container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      background: linear-gradient(180deg, var(--san3a-red), var(--san3a-wine), var(--san3a-sun));
+      transform: translateX(-50%);
+      border-radius: 99px;
+    }
+
+    @media (max-width: 768px) {
+      .timeline-container::before {
+        left: 24px;
+      }
+    }
+
+    .timeline-step-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 36px;
+      position: relative;
+    }
+
+    .timeline-step-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-step-row:nth-child(odd) {
+      flex-direction: row-reverse;
+    }
+
+    @media (max-width: 768px) {
+      .timeline-step-row,
+      .timeline-step-row:nth-child(odd) {
+        flex-direction: row;
+        padding-left: 56px;
+      }
+    }
+
+    .timeline-card-box {
+      width: calc(50% - 36px);
+      background: var(--san3a-paper);
+      border: 1.5px solid var(--san3a-border);
+      border-radius: var(--san3a-radius-md);
+      padding: 20px;
+      box-shadow: var(--san3a-shadow-sm);
+      transition: transform 0.2s ease;
+    }
+
+    @media (max-width: 768px) {
+      .timeline-card-box {
+        width: 100%;
+      }
+    }
+
+    .timeline-card-box:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--san3a-shadow-md);
+      border-color: rgba(207, 32, 39, 0.3);
+    }
+
+    .timeline-node-pin {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--san3a-red);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 0.85rem;
+      border: 4px solid var(--san3a-white);
+      box-shadow: 0 4px 12px rgba(207, 32, 39, 0.35);
+      z-index: 5;
+    }
+
+    @media (max-width: 768px) {
+      .timeline-node-pin {
+        left: 24px;
+      }
+    }
+
+    .timeline-step-caption {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--san3a-ink);
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+
+    .timeline-step-media {
+      width: 100%;
+      height: 160px;
+      border-radius: var(--san3a-radius-sm);
+      overflow: hidden;
+      background: #240D18;
+      border: 1px solid var(--san3a-border);
+    }
+
+    .timeline-step-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* BLOCK 6: THE FINAL PRODUCT */
+    .how-it-works-box {
+      background: linear-gradient(135deg, rgba(46, 196, 182, 0.08) 0%, rgba(255, 201, 60, 0.05) 100%);
+      border: 1.5px solid rgba(46, 196, 182, 0.3);
+      border-radius: var(--san3a-radius-md);
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+
+    .how-it-works-box h4 {
+      font-size: 0.9rem;
+      color: var(--san3a-teal);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .how-it-works-box p {
+      font-size: 1.05rem;
+      color: var(--san3a-ink);
+      line-height: 1.6;
+    }
+
+    .media-showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 800px) {
+      .media-showcase-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .video-frame-wrapper {
+      border-radius: var(--san3a-radius-md);
+      overflow: hidden;
+      height: 280px;
+      background: #000;
+      border: 1.5px solid var(--san3a-border);
+      position: relative;
+    }
+
+    .video-frame-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .final-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .gallery-thumb {
+      height: 180px;
+      border-radius: var(--san3a-radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--san3a-border);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-thumb:hover img {
+      transform: scale(1.05);
+    }
+
+    /* BLOCK 7: CHALLENGES & LEARNINGS */
+    .reflections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .reflection-card {
+      border-radius: var(--san3a-radius-md);
+      padding: 24px;
+      border: 1.5px solid var(--san3a-border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .reflection-card.challenge {
+      background: linear-gradient(135deg, rgba(207, 32, 39, 0.06), #fff);
+      border-color: rgba(207, 32, 39, 0.25);
+    }
+
+    .reflection-card.learned {
+      background: linear-gradient(135deg, rgba(46, 196, 182, 0.08), #fff);
+      border-color: rgba(46, 196, 182, 0.3);
+    }
+
+    .reflection-card.improve {
+      background: linear-gradient(135deg, rgba(255, 201, 60, 0.1), #fff);
+      border-color: rgba(255, 201, 60, 0.4);
+    }
+
+    .reflection-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .reflection-icon {
+      font-size: 1.4rem;
+    }
+
+    .reflection-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
+    }
+
+    .reflection-card.challenge .reflection-title { color: var(--san3a-red); }
+    .reflection-card.learned .reflection-title { color: #0E7C7B; }
+    .reflection-card.improve .reflection-title { color: #B38600; }
+
+    .reflection-text {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: #4A3540;
+    }
+
+    /* BLOCK 8: CODE & DOWNLOADS */
+    .code-editor-window {
+      background: #190B13;
+      border-radius: var(--san3a-radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      margin-bottom: 24px;
+    }
+
+    .code-window-topbar {
+      background: #2D101E;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .code-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .code-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .code-dot.red { background: #FF5F56; }
+    .code-dot.yellow { background: #FFBD2E; }
+    .code-dot.green { background: #27C93F; }
+
+    .code-filename {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .btn-copy-code {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy-code:hover {
+      background: var(--san3a-red);
+      border-color: var(--san3a-red);
+    }
+
+    .code-pre-block {
+      padding: 20px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #F8F8F2;
+      max-height: 380px;
+    }
+
+    .downloads-action-strip {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-download-file {
+      background: linear-gradient(135deg, var(--san3a-red), var(--san3a-wine));
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.9rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(207, 32, 39, 0.3);
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-download-file:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(207, 32, 39, 0.4);
+    }
+
+    .btn-external-resource {
+      background: var(--san3a-paper);
+      color: var(--san3a-ink);
+      border: 1.5px solid var(--san3a-border);
+      padding: 12px 20px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-external-resource:hover {
+      background: var(--san3a-ink);
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       PRESENTATION MODE & AUTO-SCROLL HUD FLOATING CONTROLLER
+       ========================================================================== */
+    .presentation-hud {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(36, 13, 24, 0.94);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--san3a-radius-full);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 1000;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    .hud-play-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--san3a-red), var(--san3a-wine));
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(207, 32, 39, 0.4);
+    }
+
+    .hud-play-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .hud-progress-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 140px;
+    }
+
+    .hud-progress-label {
+      font-size: 0.68rem;
+      font-family: 'Arvo', serif;
+      color: var(--san3a-sun);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .hud-progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .hud-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--san3a-red), var(--san3a-sun));
+      border-radius: 99px;
+      transition: width 0.1s linear;
+    }
+
+    .hud-speed-selector {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--san3a-radius-full);
+      padding: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .hud-speed-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 4px 10px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .hud-speed-btn.active {
+      background: var(--san3a-red);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .hud-action-btn {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+
+    .hud-action-btn:hover {
+      background: var(--san3a-wine);
+      transform: scale(1.05);
+    }
+
+    .hud-pause-banner {
+      position: absolute;
+      top: -38px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(36, 13, 24, 0.95);
+      border: 1px solid rgba(255, 201, 60, 0.4);
+      color: var(--san3a-sun);
+      padding: 4px 14px;
+      border-radius: var(--san3a-radius-full);
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: 'Arvo', serif;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .hud-pause-banner.show {
+      opacity: 1;
+    }
+
+    /* Lightbox Modal */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(14, 4, 9, 0.92);
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      display: none;
+      place-items: center;
+      padding: 30px;
+    }
+
+    .lightbox-overlay.active {
+      display: grid;
+    }
+
+    .lightbox-img-wrapper {
+      max-width: 90vw;
+      max-height: 85vh;
+      position: relative;
+    }
+
+    .lightbox-img-wrapper img {
+      max-width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: var(--san3a-radius-md);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .lightbox-close-btn {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--san3a-red);
+      color: #fff;
+      border: 2px solid #fff;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    /* Animation Keyframes */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Theme colors helpers */
+    .theme-school { background-color: var(--theme-school); color: #fff; }
+    .theme-home { background-color: var(--theme-home); color: var(--san3a-ink); }
+    .theme-transportation { background-color: var(--theme-transportation); color: var(--san3a-ink); }
+    .theme-street { background-color: var(--theme-street); color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="main-header">
+    <div class="container header-inner">
+      <a href="#" class="brand-lockup" onclick="showExhibitionView(); return false;">
+        <div class="brand-logo-slot">
+          <img src="/images/San3a-Academy-logo.png" alt="San3a Academy Logo" onerror="this.parentElement.innerHTML='💡'">
+        </div>
+        <div class="brand-titles">
+          <h1>Code &amp; Create <span>Exhibition</span></h1>
+          <div class="brand-slogan">ZERO TO MAKER • FINAL PROJECT JOURNALS</div>
+        </div>
+      </a>
+      <div class="header-actions">
+        <span class="badge-count" id="teamsCountBadge">3 Teams</span>
+        <button class="btn-hub-action" onclick="showExhibitionView()">
+          <span>🏛️ Exhibition Wall</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       VIEW 1: EXHIBITION WALL (LANDING VIEW)
+       ========================================================================= -->
+  <main id="exhibitionView">
+    <div class="container">
+
+      <!-- Exhibition Hero Banner -->
+      <section class="exhibition-hero">
+        <div class="hero-eyebrow">Graduation Showcase</div>
+        <h2>From Problem to Prototype</h2>
+        <p>Explore the final project journals built by our creators in the Code &amp; Create / SPRIX cohort. Each journal documents the complete journey from user problem to working micro:bit and hardware solutions.</p>
+      </section>
+
+      <!-- Filter Section -->
+      <section class="filter-section">
+        <div class="filter-chips">
+          <button class="filter-chip active" data-theme="ALL" onclick="filterByTheme('ALL')">All Themes</button>
+          <button class="filter-chip" data-theme="School" onclick="filterByTheme('School')">🏫 School</button>
+          <button class="filter-chip" data-theme="Home" onclick="filterByTheme('Home')">🏠 Home</button>
+          <button class="filter-chip" data-theme="Transportation" onclick="filterByTheme('Transportation')">🚌 Transportation</button>
+          <button class="filter-chip" data-theme="Street" onclick="filterByTheme('Street')">🛣️ Street</button>
+        </div>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search team, project, keywords..." oninput="handleSearch(this.value)">
+        </div>
+      </section>
+
+      <!-- Teams Card Grid -->
+      <section class="teams-grid" id="teamsGrid">
+        <!-- Rendered dynamically by JavaScript -->
+      </section>
+
+    </div>
+  </main>
+
+  <!-- =========================================================================
+       VIEW 2: JOURNAL PAGE (PER TEAM STORY CARDS)
+       ========================================================================= -->
+  <article id="journalView">
+    <div class="journal-container">
+
+      <!-- Top Return Bar -->
+      <div class="journal-topbar">
+        <button class="btn-back" onclick="showExhibitionView()">
+          <span>← Back to Exhibition</span>
+        </button>
+        <div class="journal-nav-quick">
+          <button class="btn-nav-arrow" title="Previous Team" onclick="navigateTeam(-1)">‹</button>
+          <button class="btn-nav-arrow" title="Next Team" onclick="navigateTeam(1)">›</button>
+        </div>
+      </div>
+
+      <!-- Main Journal Dynamic Blocks Container -->
+      <div id="journalBlocksRoot">
+        <!-- Injected dynamically by renderJournal() -->
+      </div>
+
+      <!-- Bottom Return Bar -->
+      <div style="text-align: center; margin-top: 40px;">
+        <button class="btn-back" style="padding: 14px 32px; font-size: 1rem;" onclick="showExhibitionView()">
+          <span>← Back to Exhibition Wall</span>
+        </button>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- =========================================================================
+       PRESENTATION MODE FLOATING HUD CONTROLLER
+       ========================================================================= -->
+  <div class="presentation-hud" id="presentationHud" style="display: none;">
+    <div class="hud-pause-banner" id="hudPauseBanner">⏸️ Paused (Auto-resumes on idle)</div>
+    
+    <button class="hud-play-btn" id="hudPlayBtn" onclick="toggleAutoScroll()" title="Play / Pause Auto-Scroll (Space)">
+      ▶
+    </button>
+
+    <div class="hud-progress-group">
+      <div class="hud-progress-label">
+        <span id="hudStatusLabel">Auto-Scroll</span>
+        <span id="hudPercentLabel">0%</span>
+      </div>
+      <div class="hud-progress-track">
+        <div class="hud-progress-bar" id="hudProgressBar"></div>
+      </div>
+    </div>
+
+    <div class="hud-speed-selector">
+      <button class="hud-speed-btn" data-speed="30" onclick="setScrollSpeed(30)">Slow</button>
+      <button class="hud-speed-btn active" data-speed="50" onclick="setScrollSpeed(50)">Med</button>
+      <button class="hud-speed-btn" data-speed="85" onclick="setScrollSpeed(85)">Fast</button>
+    </div>
+
+    <button class="hud-action-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)">
+      ⛶
+    </button>
+
+    <button class="hud-action-btn" onclick="showExhibitionView()" title="Exit to Exhibition (Esc)">
+      ✕
+    </button>
+  </div>
+
+  <!-- LIGHTBOX MODAL -->
+  <div class="lightbox-overlay" id="lightboxModal" onclick="closeLightbox()">
+    <div class="lightbox-img-wrapper" onclick="event.stopPropagation()">
+      <button class="lightbox-close-btn" onclick="closeLightbox()">&times;</button>
+      <img id="lightboxImg" src="" alt="Project Preview">
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       APPLICATION LOGIC, DATA ENGINE & AUTO-SCROLL ENGINE
+       ========================================================================= -->
+  <script>
+    /*
+      ==========================================================================
+      PRESENTATION MODE & AUTO-SCROLL CONFIGURATION
+      ==========================================================================
+    */
+    const AUTO_START        = true;    // Begin scrolling ~2s after a journal opens
+    let   SCROLL_SPEED      = 50;      // Pixels per second (tuned for 13" laptop & tablet readability)
+    const END_BEHAVIOR      = "stop";  // "stop" | "loop" | "next"
+    const RESUME_AFTER_IDLE = 8;       // Seconds of no interaction before auto-resume (0 = manual only)
+
+    /*
+      ==========================================================================
+      MOCK DATA (3 TEAMS - EMBEDDED REALISTIC SPRIX CONTENT)
+      ==========================================================================
+    */
+    const MOCK_DATA = [
+      {
+        groupNumber: "3",
+        teamName: "Safe Steps",
+        theme: "Transportation",
+        projectTitle: "The Smart Crossing Buddy",
+        pitch: "A wearable that reminds kids to stop, look, and listen before crossing.",
+        description: "A micro:bit device clipped to a school bag that reacts when a child starts crossing the road, reminding them to check both ways.",
+        members: [
+          { name: "Salma", role: "Coder" },
+          { name: "Omar", role: "Maker" },
+          { name: "Hana", role: "Tester" }
+        ],
+        teamPhoto: "", // placeholder in mock
+        problemsExplored: "Kids crossing without looking; dark streets at night; distracted walking with phones.",
+        chosenProblem: "Our user needs a way to remember to check both ways before crossing because younger kids often forget and rush into the road.",
+        user: "Younger primary-school kids walking home",
+        solutionsBrainstormed: "A flashing armband; a sound reminder; a tilt-triggered checklist on the display.",
+        ideaSketches: [],
+        chosenSolution: "A bag-clip that plays a reminder tune and shows a 'LOOK!' arrow sequence when the child starts moving forward.",
+        keyFeatures: [
+          "Shake/step detected (accelerometer) → plays reminder tune (speaker)",
+          "Button A → shows a look-left / look-right arrow sequence (display)"
+        ],
+        partsUsed: ["Accelerometer", "Speaker", "Display", "Buttons"],
+        finalDesignSketch: "",
+        buildSteps: [
+          { caption: "Sketched the bag-clip shape on paper", photo: "" },
+          { caption: "Coded the shake-to-remind tune", photo: "" },
+          { caption: "Built the cardboard clip housing", photo: "" },
+          { caption: "Mounted the micro:bit and tested on a bag", photo: "" }
+        ],
+        howItWorks: "When the accelerometer senses walking movement, the speaker plays a short tune and the display scrolls LOOK. Pressing A replays the look-left/right arrows.",
+        finalPhotos: [],
+        demoVideoUrl: "",
+        biggestChallenge: "The tune played non-stop while walking. We used a counter so it only reminds once every few steps.",
+        learned: "How to stop code repeating too often using a counter and a reset.",
+        improve: "Add a small light for night-time visibility.",
+        pythonCode: "from microbit import *\nimport music\n\nsteps = 0\nwhile True:\n    if accelerometer.was_gesture('shake'):\n        steps = steps + 1\n    if steps == 3:\n        music.play(music.BA_DING)\n        display.scroll('LOOK')\n        steps = 0",
+        codeFileUrl: "",
+        otherResources: ""
+      },
+      {
+        groupNumber: "5",
+        teamName: "Green Guardians",
+        theme: "Home",
+        projectTitle: "Thirsty Plant Alarm",
+        pitch: "Your plant tells you when it's thirsty.",
+        description: "A planter add-on that checks soil and reminds the family to water the plant.",
+        members: [
+          { name: "Ali", role: "Coder" },
+          { name: "Mariam", role: "Maker" }
+        ],
+        teamPhoto: "",
+        problemsExplored: "Family forgets to water plants; overwatering; not knowing which plant needs water.",
+        chosenProblem: "Our user needs a way to know when a plant is dry because the family forgets and the plant wilts.",
+        user: "A busy family at home",
+        solutionsBrainstormed: "A soil sensor alarm; a watering schedule display; a happy/sad plant face.",
+        ideaSketches: [],
+        chosenSolution: "A soil-moisture check that shows a sad face and beeps when the soil is dry, and a happy face when watered.",
+        keyFeatures: [
+          "Soil moisture reading (sensor) → sad face + beep when dry (display + speaker)",
+          "Touch logo → shows current status (display)"
+        ],
+        partsUsed: ["Soil moisture sensor", "Display", "Speaker", "Touch logo"],
+        finalDesignSketch: "",
+        buildSteps: [
+          { caption: "Tested the soil sensor in wet and dry soil", photo: "" },
+          { caption: "Coded the dry/wet decision", photo: "" },
+          { caption: "Built a cardboard planter stand", photo: "" }
+        ],
+        howItWorks: "The soil sensor value is checked in a loop; if it's below a threshold the micro:bit shows a sad face and beeps; touching the logo shows the current state.",
+        finalPhotos: [],
+        demoVideoUrl: "",
+        biggestChallenge: "Finding the right dry/wet number. We tested lots of values and picked a threshold.",
+        learned: "How a sensor gives a number we compare with an if statement.",
+        improve: "Add a servo to pour a little water automatically.",
+        pythonCode: "from microbit import *\nimport music\n\nwhile True:\n    if pin0.read_analog() < 300:\n        display.show(Image.SAD)\n        music.play(music.BA_DING)\n    else:\n        display.show(Image.HAPPY)",
+        codeFileUrl: "",
+        otherResources: ""
+      },
+      {
+        groupNumber: "7",
+        teamName: "Locker Lookout",
+        theme: "School",
+        projectTitle: "Locker Guard",
+        pitch: "A tiny alarm that protects your locker.",
+        description: "A micro:bit alarm that reacts if someone opens your locker.",
+        members: [
+          { name: "Youssef", role: "Coder" },
+          { name: "Nour", role: "Maker" },
+          { name: "Adam", role: "Tester" }
+        ],
+        teamPhoto: "",
+        problemsExplored: "Lockers opened by others; forgotten locker code; messy lockers.",
+        chosenProblem: "Our user needs a way to know if their locker was opened because things go missing.",
+        user: "A student with a shared locker area",
+        solutionsBrainstormed: "A tilt alarm on the door; a passcode with buttons; a light-based 'door opened' detector.",
+        ideaSketches: [],
+        chosenSolution: "A door-mounted alarm: when the door moves, it plays an alarm and shows an angry face until reset.",
+        keyFeatures: [
+          "Door movement (accelerometer) → alarm sound + angry face (speaker + display)",
+          "Buttons A+B together → reset the alarm (logic with 'and')"
+        ],
+        partsUsed: ["Accelerometer", "Speaker", "Display", "Buttons"],
+        finalDesignSketch: "",
+        buildSteps: [
+          { caption: "Prototyped the alarm trigger with shake", photo: "" },
+          { caption: "Added the A+B reset", photo: "" },
+          { caption: "Built the door-mount from cardboard", photo: "" }
+        ],
+        howItWorks: "A loop watches for movement; on movement it latches an alarm (sound + angry face); pressing A and B together resets it.",
+        finalPhotos: [],
+        demoVideoUrl: "",
+        biggestChallenge: "The alarm turned off too easily. We made it stay on until both buttons were pressed.",
+        learned: "How to use 'and' so two things must be true to reset.",
+        improve: "Add a secret button sequence instead of A+B.",
+        pythonCode: "from microbit import *\nimport music\n\narmed = True\nwhile True:\n    if accelerometer.was_gesture('shake') and armed:\n        display.show(Image.ANGRY)\n        music.play(music.BADDY)\n    if button_a.is_pressed() and button_b.is_pressed():\n        display.clear()",
+        codeFileUrl: "",
+        otherResources: ""
+      }
+    ];
+
+    /*
+      ==========================================================================
+      DATA SOURCE LOADER (SWAPPABLE TO LIVE GOOGLE SHEET CSV)
+      ==========================================================================
+      NOW: Returns embedded MOCK_DATA.
+      LATER: Replace function body with live Google Sheet CSV fetch + PapaParse.
+      Note: CSV column headers match form question titles. Trim whitespace, split
+      arrays on newlines/commas, and map Google Drive links with driveThumb(url).
+    */
+    async function loadData() {
+      return MOCK_DATA;
+
+      /*
+        // --- LIVE VERSION INSTRUCTIONS ---
+        // 1. Publish Google Sheet as CSV (File -> Share -> Publish to web -> CSV).
+        // 2. Put URL below:
+        const url = "YOUR_PUBLISHED_CSV_URL_HERE";
+        const res = await fetch(url);
+        const text = await res.text();
+        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true }).data;
+        return parsed.map(mapRowToTeam);
+      */
+    }
+
+    /*
+      ==========================================================================
+      HELPERS & SANITIZATION
+      ==========================================================================
+    */
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function driveThumb(url) {
+      if (!url) return "";
+      const match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/) || url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
+      }
+      return url;
+    }
+
+    function getThemeClass(theme) {
+      const t = String(theme || "").trim().toLowerCase();
+      if (t.includes("school")) return "theme-school";
+      if (t.includes("home")) return "theme-home";
+      if (t.includes("transport")) return "theme-transportation";
+      if (t.includes("street")) return "theme-street";
+      return "theme-school";
+    }
+
+    function getThemeColor(theme) {
+      const t = String(theme || "").trim().toLowerCase();
+      if (t.includes("school")) return "var(--theme-school)";
+      if (t.includes("home")) return "var(--theme-home)";
+      if (t.includes("transport")) return "var(--theme-transportation)";
+      if (t.includes("street")) return "var(--theme-street)";
+      return "var(--san3a-red)";
+    }
+
+    /*
+      ==========================================================================
+      APPLICATION STATE
+      ==========================================================================
+    */
+    let allTeams = [];
+    let filteredTeams = [];
+    let currentThemeFilter = "ALL";
+    let currentSearchTerm = "";
+    let currentTeamIndex = 0;
+    let isAutoScrolling = false;
+    let autoScrollRafId = null;
+    let lastScrollTime = null;
+    let idleTimer = null;
+    let autoStartTimer = null;
+
+    /*
+      ==========================================================================
+      INITIALIZATION
+      ==========================================================================
+    */
+    async function initApp() {
+      allTeams = await loadData();
+      filteredTeams = [...allTeams];
+      document.getElementById('teamsCountBadge').textContent = `${allTeams.length} Teams`;
+      renderExhibitionWall();
+      setupEventListeners();
+    }
+
+    /*
+      ==========================================================================
+      EXHIBITION WALL RENDERING & FILTERING
+      ==========================================================================
+    */
+    function renderExhibitionWall() {
+      const grid = document.getElementById('teamsGrid');
+      grid.innerHTML = "";
+
+      if (filteredTeams.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 60px; background: #fff; border-radius: var(--san3a-radius-lg); border: 1px solid var(--san3a-border);">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">🔍</div>
+            <h3 style="font-size: 1.3rem; margin-bottom: 6px;">No projects found</h3>
+            <p style="color: #666; font-size: 0.95rem;">Try changing your theme filter or search terms.</p>
+          </div>
+        `;
+        return;
+      }
+
+      filteredTeams.forEach((team) => {
+        const teamIndexInAll = allTeams.indexOf(team);
+        const card = document.createElement('article');
+        card.className = "team-card";
+        card.onclick = () => openJournal(teamIndexInAll);
+
+        const themeClass = getThemeClass(team.theme);
+        const thumbUrl = driveThumb(team.teamPhoto || (team.finalPhotos && team.finalPhotos[0]));
+
+        let mediaHtml = "";
+        if (thumbUrl) {
+          mediaHtml = `<img class="card-media-img" src="${escapeHtml(thumbUrl)}" alt="${escapeHtml(team.projectTitle)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="branded-placeholder" style="display:none;">
+            <div class="placeholder-icon">📷</div>
+            <div class="placeholder-label">${escapeHtml(team.teamName)}</div>
+            <div class="placeholder-sub">Final Prototype</div>
+          </div>`;
+        } else {
+          mediaHtml = `
+            <div class="branded-placeholder">
+              <div class="placeholder-icon">🚀</div>
+              <div class="placeholder-label">${escapeHtml(team.teamName)}</div>
+              <div class="placeholder-sub">Group ${escapeHtml(team.groupNumber)} • ${escapeHtml(team.theme)}</div>
+            </div>
+          `;
+        }
+
+        const membersList = (team.members || []).map(m => m.name).join(", ") || "Team Members";
+
+        card.innerHTML = `
+          <div class="card-media-wrapper">
+            ${mediaHtml}
+            <span class="card-group-pill">Group ${escapeHtml(team.groupNumber)}</span>
+            <span class="card-theme-badge ${themeClass}">${escapeHtml(team.theme)}</span>
+          </div>
+          <div class="card-content">
+            <div class="card-team-meta">${escapeHtml(team.teamName)}</div>
+            <h3 class="card-title">${escapeHtml(team.projectTitle)}</h3>
+            <p class="card-pitch">${escapeHtml(team.pitch || team.description)}</p>
+            <div class="card-footer">
+              <div class="card-members-preview" title="${escapeHtml(membersList)}">
+                <span>👥</span>
+                <span>${escapeHtml(membersList.length > 25 ? membersList.slice(0, 23) + '…' : membersList)}</span>
+              </div>
+              <span class="card-cta">Explore Story →</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterByTheme(theme) {
+      currentThemeFilter = theme;
+      document.querySelectorAll('.filter-chip').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
+      });
+      applyFilters();
+    }
+
+    function handleSearch(term) {
+      currentSearchTerm = (term || "").trim().toLowerCase();
+      applyFilters();
+    }
+
+    function applyFilters() {
+      filteredTeams = allTeams.filter(team => {
+        const matchesTheme = (currentThemeFilter === "ALL" || (team.theme && team.theme.toLowerCase() === currentThemeFilter.toLowerCase()));
+        const matchesSearch = !currentSearchTerm || 
+          (team.projectTitle && team.projectTitle.toLowerCase().includes(currentSearchTerm)) ||
+          (team.teamName && team.teamName.toLowerCase().includes(currentSearchTerm)) ||
+          (team.pitch && team.pitch.toLowerCase().includes(currentSearchTerm)) ||
+          (team.chosenProblem && team.chosenProblem.toLowerCase().includes(currentSearchTerm)) ||
+          (team.groupNumber && String(team.groupNumber).includes(currentSearchTerm));
+        return matchesTheme && matchesSearch;
+      });
+      renderExhibitionWall();
+    }
+
+    /*
+      ==========================================================================
+      JOURNAL STORY VIEW RENDERING
+      ==========================================================================
+    */
+    function openJournal(index) {
+      currentTeamIndex = index;
+      const team = allTeams[currentTeamIndex];
+      if (!team) return;
+
+      renderJournal(team);
+
+      document.getElementById('exhibitionView').style.display = 'none';
+      document.getElementById('journalView').style.display = 'block';
+      document.getElementById('presentationHud').style.display = 'flex';
+
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      resetAutoScrollHud();
+
+      // Check prefers-reduced-motion
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (AUTO_START && !prefersReducedMotion) {
+        clearTimeout(autoStartTimer);
+        autoStartTimer = setTimeout(() => {
+          startAutoScroll();
+        }, 2000);
+      }
+    }
+
+    function showExhibitionView() {
+      stopAutoScroll();
+      clearTimeout(autoStartTimer);
+      clearTimeout(idleTimer);
+
+      document.getElementById('journalView').style.display = 'none';
+      document.getElementById('presentationHud').style.display = 'none';
+      document.getElementById('exhibitionView').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function navigateTeam(delta) {
+      stopAutoScroll();
+      let nextIndex = currentTeamIndex + delta;
+      if (nextIndex < 0) nextIndex = allTeams.length - 1;
+      if (nextIndex >= allTeams.length) nextIndex = 0;
+      openJournal(nextIndex);
+    }
+
+    function renderJournal(team) {
+      const root = document.getElementById('journalBlocksRoot');
+      root.innerHTML = "";
+
+      const themeClass = getThemeClass(team.theme);
+
+      // BLOCK 1: HERO
+      const heroPhotoUrl = driveThumb(team.teamPhoto || (team.finalPhotos && team.finalPhotos[0]));
+      const membersPills = (team.members || []).map(m => `
+        <div class="member-pill">
+          <strong>${escapeHtml(m.name)}</strong>
+          ${m.role ? `<span class="member-role">${escapeHtml(m.role)}</span>` : ''}
+        </div>
+      `).join("");
+
+      const block1 = document.createElement('section');
+      block1.className = "journal-card hero-banner-card";
+      block1.innerHTML = `
+        <div class="hero-grid">
+          <div>
+            <div class="hero-meta-strip">
+              <span class="hero-badge-group">Group #${escapeHtml(team.groupNumber)}</span>
+              <span class="hero-theme-chip ${themeClass}">${escapeHtml(team.theme)}</span>
+            </div>
+            <div class="hero-team-label">${escapeHtml(team.teamName)}</div>
+            <h1 class="hero-project-title">${escapeHtml(team.projectTitle)}</h1>
+            ${team.pitch ? `<div class="hero-pitch-quote">“${escapeHtml(team.pitch)}”</div>` : ''}
+            ${team.description ? `<p style="font-size:0.95rem; color:#E4D0D8; line-height:1.6; margin-bottom:16px;">${escapeHtml(team.description)}</p>` : ''}
+            
+            ${membersPills ? `
+              <div style="margin-top:18px;">
+                <div style="font-family:'Arvo',serif; font-size:0.75rem; color:var(--san3a-sun); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Creators &amp; Roles</div>
+                <div class="hero-members-list">${membersPills}</div>
+              </div>
+            ` : ''}
+          </div>
+
+          <div>
+            <div class="hero-image-frame">
+              ${heroPhotoUrl ? `
+                <img src="${escapeHtml(heroPhotoUrl)}" alt="${escapeHtml(team.projectTitle)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" onclick="openLightbox('${escapeHtml(heroPhotoUrl)}')">
+                <div class="branded-placeholder" style="display:none;">
+                  <div class="placeholder-icon">📷</div>
+                  <div class="placeholder-label">${escapeHtml(team.teamName)} Showcase</div>
+                </div>
+              ` : `
+                <div class="branded-placeholder">
+                  <div class="placeholder-icon">🚀</div>
+                  <div class="placeholder-label">Final Prototype</div>
+                  <div class="placeholder-sub">${escapeHtml(team.projectTitle)}</div>
+                </div>
+              `}
+            </div>
+          </div>
+        </div>
+      `;
+      root.appendChild(block1);
+
+      // BLOCK 2: THE PROBLEM
+      if (team.chosenProblem || team.problemsExplored || team.user) {
+        const block2 = document.createElement('section');
+        block2.className = "journal-card";
+        block2.innerHTML = `
+          <div class="block-header">
+            <div class="block-number">01</div>
+            <h2 class="block-title">The Problem</h2>
+            <span class="block-tagline">Empathize &amp; Define</span>
+          </div>
+
+          ${team.chosenProblem ? `
+            <div class="problem-callout">
+              <div class="problem-callout-badge">🎯 Chosen Problem Statement</div>
+              <div class="problem-callout-text">“${escapeHtml(team.chosenProblem)}”</div>
+            </div>
+          ` : ''}
+
+          <div class="problem-meta-grid">
+            ${team.problemsExplored ? `
+              <div class="problem-sub-box">
+                <h4><span>🔍</span> Problems Explored</h4>
+                <p>${escapeHtml(team.problemsExplored)}</p>
+              </div>
+            ` : ''}
+
+            ${team.user ? `
+              <div class="problem-sub-box">
+                <h4><span>👤</span> Target User</h4>
+                <p>${escapeHtml(team.user)}</p>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        root.appendChild(block2);
+      }
+
+      // BLOCK 3: IDEATION
+      if (team.solutionsBrainstormed || (team.ideaSketches && team.ideaSketches.length > 0)) {
+        const block3 = document.createElement('section');
+        block3.className = "journal-card";
+
+        let sketchesHtml = "";
+        if (team.ideaSketches && team.ideaSketches.length > 0) {
+          sketchesHtml = `
+            <div style="margin-top:20px;">
+              <h4 style="font-size:0.88rem; color:var(--san3a-wine); margin-bottom:12px; font-family:'Montserrat',sans-serif; text-transform:uppercase;">Idea Sketches &amp; Diagrams</h4>
+              <div class="sketches-gallery">
+                ${team.ideaSketches.map((sketch, idx) => {
+                  const url = driveThumb(sketch);
+                  return `
+                    <div class="sketch-card" onclick="openLightbox('${escapeHtml(url)}')">
+                      <img src="${escapeHtml(url)}" alt="Idea Sketch ${idx+1}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                      <div class="branded-placeholder" style="display:none;">
+                        <div class="placeholder-icon">✏️</div>
+                        <div class="placeholder-label">Idea Sketch #${idx+1}</div>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }
+
+        block3.innerHTML = `
+          <div class="block-header">
+            <div class="block-number">02</div>
+            <h2 class="block-title">Ideation</h2>
+            <span class="block-tagline">Brainstorm &amp; Concept</span>
+          </div>
+
+          ${team.solutionsBrainstormed ? `
+            <div class="ideas-considered-box">
+              <h4>💡 Solutions Brainstormed</h4>
+              <p style="font-size:1rem; color:var(--san3a-ink); line-height:1.55;">${escapeHtml(team.solutionsBrainstormed)}</p>
+            </div>
+          ` : ''}
+
+          ${sketchesHtml}
+        `;
+        root.appendChild(block3);
+      }
+
+      // BLOCK 4: OUR SOLUTION
+      if (team.chosenSolution || (team.keyFeatures && team.keyFeatures.length > 0) || (team.partsUsed && team.partsUsed.length > 0) || team.finalDesignSketch) {
+        const block4 = document.createElement('section');
+        block4.className = "journal-card";
+
+        const featuresHtml = (team.keyFeatures || []).map((f, i) => `
+          <div class="feature-card">
+            <div class="feature-flow-badge">Feature ${i+1} • Logic Flow</div>
+            <div class="feature-text">${escapeHtml(f)}</div>
+          </div>
+        `).join("");
+
+        const partsHtml = (team.partsUsed || []).map(p => `
+          <span class="part-chip">${escapeHtml(p)}</span>
+        `).join("");
+
+        const sketchUrl = driveThumb(team.finalDesignSketch);
+
+        block4.innerHTML = `
+          <div class="block-header">
+            <div class="block-number">03</div>
+            <h2 class="block-title">Our Solution</h2>
+            <span class="block-tagline">System Design</span>
+          </div>
+
+          ${team.chosenSolution ? `<p class="solution-desc-lead">${escapeHtml(team.chosenSolution)}</p>` : ''}
+
+          ${featuresHtml ? `
+            <div style="font-family:'Arvo',serif; font-size:0.8rem; color:var(--san3a-wine); font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Key Features (Input → Logic → Output)</div>
+            <div class="features-grid">${featuresHtml}</div>
+          ` : ''}
+
+          ${partsHtml ? `
+            <div class="parts-container">
+              <div class="parts-label">Hardware &amp; Electronic Parts Used</div>
+              <div class="parts-chips-list">${partsHtml}</div>
+            </div>
+          ` : ''}
+
+          ${sketchUrl ? `
+            <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(36,13,24,0.08);">
+              <div class="parts-label">Final Architecture Sketch</div>
+              <div class="sketch-card" style="height:240px;" onclick="openLightbox('${escapeHtml(sketchUrl)}')">
+                <img src="${escapeHtml(sketchUrl)}" alt="Final Architecture Sketch">
+              </div>
+            </div>
+          ` : ''}
+        `;
+        root.appendChild(block4);
+      }
+
+      // BLOCK 5: HOW WE BUILT IT (STORYBOARD TIMELINE - SIGNATURE ELEMENT)
+      if (team.buildSteps && team.buildSteps.length > 0) {
+        const block5 = document.createElement('section');
+        block5.className = "journal-card";
+
+        const timelineHtml = team.buildSteps.map((step, idx) => {
+          const photoUrl = driveThumb(step.photo);
+          return `
+            <div class="timeline-step-row">
+              <div class="timeline-node-pin">${idx+1}</div>
+              <div class="timeline-card-box">
+                <div class="timeline-step-caption">${escapeHtml(step.caption)}</div>
+                <div class="timeline-step-media">
+                  ${photoUrl ? `
+                    <img src="${escapeHtml(photoUrl)}" alt="Step ${idx+1}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" onclick="openLightbox('${escapeHtml(photoUrl)}')">
+                    <div class="branded-placeholder" style="display:none;">
+                      <div class="placeholder-icon">🛠️</div>
+                      <div class="placeholder-label">Step ${idx+1} Photo</div>
+                    </div>
+                  ` : `
+                    <div class="branded-placeholder">
+                      <div class="placeholder-icon">🛠️</div>
+                      <div class="placeholder-label">Build Step ${idx+1}</div>
+                      <div class="placeholder-sub">${escapeHtml(step.caption)}</div>
+                    </div>
+                  `}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+        block5.innerHTML = `
+          <div class="block-header">
+            <div class="block-number">04</div>
+            <h2 class="block-title">How We Built It</h2>
+            <span class="block-tagline">Storyboard Timeline</span>
+          </div>
+
+          <div class="timeline-container">
+            ${timelineHtml}
+          </div>
+        `;
+        root.appendChild(block5);
+      }
+
+      // BLOCK 6: THE FINAL PRODUCT
+      if (team.howItWorks || (team.finalPhotos && team.finalPhotos.length > 0) || team.demoVideoUrl) {
+        const block6 = document.createElement('section');
+        block6.className = "journal-card";
+
+        let videoEmbedHtml = "";
+        if (team.demoVideoUrl) {
+          const videoSrc = getEmbedVideoUrl(team.demoVideoUrl);
+          videoEmbedHtml = `
+            <div class="video-frame-wrapper">
+              ${videoSrc ? `<iframe src="${escapeHtml(videoSrc)}" title="Demo Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` : `
+                <div class="branded-placeholder">
+                  <div class="placeholder-icon">▶️</div>
+                  <div class="placeholder-label">Demo Video Link</div>
+                  <a href="${escapeHtml(team.demoVideoUrl)}" target="_blank" rel="noreferrer" style="color:var(--san3a-sun); font-size:0.85rem; font-weight:700; margin-top:8px;">Watch Video ↗</a>
+                </div>
+              `}
+            </div>
+          `;
+        } else {
+          videoEmbedHtml = `
+            <div class="video-frame-wrapper">
+              <div class="branded-placeholder">
+                <div class="placeholder-icon">🎬</div>
+                <div class="placeholder-label">Demo Video</div>
+                <div class="placeholder-sub">Live prototype demonstration on exhibition table</div>
+              </div>
+            </div>
+          `;
+        }
+
+        let galleryHtml = "";
+        if (team.finalPhotos && team.finalPhotos.length > 0) {
+          galleryHtml = `
+            <div class="final-gallery-grid">
+              ${team.finalPhotos.map((p, i) => {
+                const url = driveThumb(p);
+                return `
+                  <div class="gallery-thumb" onclick="openLightbox('${escapeHtml(url)}')">
+                    <img src="${escapeHtml(url)}" alt="Product Photo ${i+1}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="branded-placeholder" style="display:none;">
+                      <div class="placeholder-icon">📸</div>
+                      <div class="placeholder-label">Photo ${i+1}</div>
+                    </div>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          `;
+        }
+
+        block6.innerHTML = `
+          <div class="block-header">
+            <div class="block-number">05</div>
+            <h2 class="block-title">The Final Product</h2>
+            <span class="block-tagline">Showcase &amp; Operation</span>
+          </div>
+
+          ${team.howItWorks ? `
+            <div class="how-it-works-box">
+              <h4><span>⚡</span> How It Works</h4>
+              <p>${escapeHtml(team.howItWorks)}</p>
+            </div>
+          ` : ''}
+
+          <div class="media-showcase-grid">
+            ${videoEmbedHtml}
+            <div>
+              ${galleryHtml ? galleryHtml : `
+                <div class="gallery-thumb" style="height: 100%;">
+                  <div class="branded-placeholder">
+                    <div class="placeholder-icon">✨</div>
+                    <div class="placeholder-label">Final Product Gallery</div>
+                    <div class="placeholder-sub">Exhibition Ready</div>
+                  </div>
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+        root.appendChild(block6);
+      }
+
+      // BLOCK 7: CHALLENGES & LEARNINGS
+      if (team.biggestChallenge || team.learned || team.improve) {
+        const block7 = document.createElement('section');
+        block7.className = "journal-card";
+        block7.innerHTML = `
+          <div class="block-header">
+            <div class="block-number">06</div>
+            <h2 class="block-title">Challenges &amp; Learnings</h2>
+            <span class="block-tagline">Reflections &amp; Next Steps</span>
+          </div>
+
+          <div class="reflections-grid">
+            ${team.biggestChallenge ? `
+              <div class="reflection-card challenge">
+                <div class="reflection-header">
+                  <span class="reflection-icon">🥊</span>
+                  <div class="reflection-title">Biggest Challenge</div>
+                </div>
+                <div class="reflection-text">${escapeHtml(team.biggestChallenge)}</div>
+              </div>
+            ` : ''}
+
+            ${team.learned ? `
+              <div class="reflection-card learned">
+                <div class="reflection-header">
+                  <span class="reflection-icon">💡</span>
+                  <div class="reflection-title">What We Learned</div>
+                </div>
+                <div class="reflection-text">${escapeHtml(team.learned)}</div>
+              </div>
+            ` : ''}
+
+            ${team.improve ? `
+              <div class="reflection-card improve">
+                <div class="reflection-header">
+                  <span class="reflection-icon">🚀</span>
+                  <div class="reflection-title">Future Upgrades</div>
+                </div>
+                <div class="reflection-text">${escapeHtml(team.improve)}</div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        root.appendChild(block7);
+      }
+
+      // BLOCK 8: CODE & DOWNLOADS
+      if (team.pythonCode || team.codeFileUrl || team.otherResources) {
+        const block8 = document.createElement('section');
+        block8.className = "journal-card";
+
+        let codeSnippet = team.pythonCode || "# No code sample provided";
+
+        block8.innerHTML = `
+          <div class="block-header">
+            <div class="block-number">07</div>
+            <h2 class="block-title">Code &amp; Downloads</h2>
+            <span class="block-tagline">micro:bit Python Firmware</span>
+          </div>
+
+          <div class="code-editor-window">
+            <div class="code-window-topbar">
+              <div class="code-dots">
+                <span class="code-dot red"></span>
+                <span class="code-dot yellow"></span>
+                <span class="code-dot green"></span>
+              </div>
+              <div class="code-filename">main.py • BBC micro:bit Python</div>
+              <button class="btn-copy-code" onclick="copyCode(this)">📋 Copy Code</button>
+            </div>
+            <pre class="code-pre-block"><code id="pythonSourceCode">${escapeHtml(codeSnippet)}</code></pre>
+          </div>
+
+          <div class="downloads-action-strip">
+            <button class="btn-download-file" onclick="downloadPythonCode('${escapeHtml(team.teamName)}')">
+              <span>💾</span>
+              <span>Download main.py</span>
+            </button>
+            ${team.codeFileUrl ? `
+              <a href="${escapeHtml(team.codeFileUrl)}" target="_blank" rel="noreferrer" class="btn-external-resource">
+                <span>📁 Project Files</span>
+              </a>
+            ` : ''}
+            ${team.otherResources ? `
+              <a href="${escapeHtml(team.otherResources)}" target="_blank" rel="noreferrer" class="btn-external-resource">
+                <span>🔗 Additional Resources</span>
+              </a>
+            ` : ''}
+          </div>
+        `;
+        root.appendChild(block8);
+      }
+    }
+
+    function getEmbedVideoUrl(url) {
+      if (!url) return "";
+      // YouTube Embed Matcher
+      const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+      if (ytMatch && ytMatch[1]) {
+        return `https://www.youtube.com/embed/${ytMatch[1]}`;
+      }
+      // Google Drive Video Embed
+      const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (driveMatch && driveMatch[1]) {
+        return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+      }
+      return "";
+    }
+
+    /*
+      ==========================================================================
+      PRESENTATION AUTO-SCROLL ENGINE
+      ==========================================================================
+    */
+    function startAutoScroll() {
+      if (isAutoScrolling) return;
+      isAutoScrolling = true;
+      lastScrollTime = performance.now();
+      updateHudControls();
+      autoScrollRafId = requestAnimationFrame(autoScrollStep);
+    }
+
+    function stopAutoScroll() {
+      isAutoScrolling = false;
+      if (autoScrollRafId) {
+        cancelAnimationFrame(autoScrollRafId);
+        autoScrollRafId = null;
+      }
+      updateHudControls();
+    }
+
+    function toggleAutoScroll() {
+      if (isAutoScrolling) {
+        stopAutoScroll();
+      } else {
+        startAutoScroll();
+      }
+    }
+
+    function autoScrollStep(currentTime) {
+      if (!isAutoScrolling) return;
+
+      const deltaMs = currentTime - lastScrollTime;
+      lastScrollTime = currentTime;
+
+      const pixelsToScroll = (SCROLL_SPEED * deltaMs) / 1000;
+      window.scrollBy({ top: pixelsToScroll, left: 0, behavior: 'instant' });
+
+      updateScrollProgress();
+
+      // Check if reached bottom
+      const totalDocHeight = document.documentElement.scrollHeight;
+      const currentScrollBottom = window.scrollY + window.innerHeight;
+
+      if (currentScrollBottom >= totalDocHeight - 4) {
+        stopAutoScroll();
+        handleScrollEnd();
+        return;
+      }
+
+      autoScrollRafId = requestAnimationFrame(autoScrollStep);
+    }
+
+    function handleScrollEnd() {
+      if (END_BEHAVIOR === "loop") {
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(() => startAutoScroll(), 1500);
+        }, 2000);
+      } else if (END_BEHAVIOR === "next") {
+        setTimeout(() => {
+          navigateTeam(1);
+        }, 2000);
+      } else {
+        // "stop"
+        const hudStatus = document.getElementById('hudStatusLabel');
+        if (hudStatus) hudStatus.textContent = "Completed 🎉";
+      }
+    }
+
+    function setScrollSpeed(speed) {
+      SCROLL_SPEED = speed;
+      document.querySelectorAll('.hud-speed-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.getAttribute('data-speed'), 10) === speed);
+      });
+    }
+
+    function updateScrollProgress() {
+      const scrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (maxScroll <= 0) return;
+
+      const pct = Math.min(100, Math.max(0, Math.round((scrollY / maxScroll) * 100)));
+      const bar = document.getElementById('hudProgressBar');
+      const label = document.getElementById('hudPercentLabel');
+      if (bar) bar.style.width = `${pct}%`;
+      if (label) label.textContent = `${pct}%`;
+    }
+
+    function updateHudControls() {
+      const playBtn = document.getElementById('hudPlayBtn');
+      const statusLabel = document.getElementById('hudStatusLabel');
+      const banner = document.getElementById('hudPauseBanner');
+
+      if (playBtn) {
+        playBtn.textContent = isAutoScrolling ? "⏸" : "▶";
+        playBtn.style.background = isAutoScrolling 
+          ? "linear-gradient(135deg, var(--san3a-wine), #240D18)" 
+          : "linear-gradient(135deg, var(--san3a-red), var(--san3a-wine))";
+      }
+      if (statusLabel) {
+        statusLabel.textContent = isAutoScrolling ? "Scrolling..." : "Paused";
+      }
+      if (banner) {
+        banner.classList.toggle('show', !isAutoScrolling && document.getElementById('journalView').style.display === 'block');
+      }
+    }
+
+    function resetAutoScrollHud() {
+      updateScrollProgress();
+      updateHudControls();
+    }
+
+    function triggerInteractionPause() {
+      if (!isAutoScrolling) return;
+      stopAutoScroll();
+
+      if (RESUME_AFTER_IDLE > 0) {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          if (document.getElementById('journalView').style.display === 'block') {
+            startAutoScroll();
+          }
+        }, RESUME_AFTER_IDLE * 1000);
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    /*
+      ==========================================================================
+      INTERACTIVE UTILITIES (LIGHTBOX, COPY CODE, DOWNLOAD)
+      ==========================================================================
+    */
+    function openLightbox(imgUrl) {
+      if (!imgUrl) return;
+      triggerInteractionPause();
+      const modal = document.getElementById('lightboxModal');
+      const img = document.getElementById('lightboxImg');
+      img.src = imgUrl;
+      modal.classList.add('active');
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('lightboxModal');
+      modal.classList.remove('active');
+    }
+
+    function copyCode(btn) {
+      triggerInteractionPause();
+      const codeEl = document.getElementById('pythonSourceCode');
+      if (!codeEl) return;
+      navigator.clipboard.writeText(codeEl.innerText).then(() => {
+        const originalText = btn.textContent;
+        btn.textContent = "✓ Copied!";
+        setTimeout(() => { btn.textContent = originalText; }, 2000);
+      });
+    }
+
+    function downloadPythonCode(teamName) {
+      triggerInteractionPause();
+      const codeEl = document.getElementById('pythonSourceCode');
+      if (!codeEl) return;
+
+      const blob = new Blob([codeEl.innerText], { type: "text/plain;charset=utf-8" });
+      const sanitizedName = (teamName || "team").replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${sanitizedName}_main.py`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    /*
+      ==========================================================================
+      EVENT LISTENERS (KEYBOARD & GESTURES)
+      ==========================================================================
+    */
+    function setupEventListeners() {
+      // Keyboard Shortcuts
+      window.addEventListener('keydown', (e) => {
+        // Only trigger if not in search input
+        if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
+
+        if (e.code === 'Space') {
+          e.preventDefault();
+          if (document.getElementById('journalView').style.display === 'block') {
+            toggleAutoScroll();
+          }
+        } else if (e.code === 'ArrowUp') {
+          e.preventDefault();
+          setScrollSpeed(Math.min(120, SCROLL_SPEED + 15));
+        } else if (e.code === 'ArrowDown') {
+          e.preventDefault();
+          setScrollSpeed(Math.max(20, SCROLL_SPEED - 15));
+        } else if (e.code === 'KeyF') {
+          e.preventDefault();
+          toggleFullscreen();
+        } else if (e.code === 'Escape') {
+          if (document.getElementById('lightboxModal').classList.contains('active')) {
+            closeLightbox();
+          } else if (document.getElementById('journalView').style.display === 'block') {
+            showExhibitionView();
+          }
+        } else if (e.code === 'ArrowLeft') {
+          if (document.getElementById('journalView').style.display === 'block') {
+            navigateTeam(-1);
+          }
+        } else if (e.code === 'ArrowRight') {
+          if (document.getElementById('journalView').style.display === 'block') {
+            navigateTeam(1);
+          }
+        }
+      });
+
+      // User interaction listeners to pause auto-scroll
+      ['wheel', 'touchstart'].forEach(evt => {
+        window.addEventListener(evt, () => {
+          if (document.getElementById('journalView').style.display === 'block' && isAutoScrolling) {
+            triggerInteractionPause();
+          }
+        }, { passive: true });
+      });
+
+      window.addEventListener('scroll', () => {
+        updateScrollProgress();
+      }, { passive: true });
+    }
+
+    // Launch Application on DOM Ready
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
