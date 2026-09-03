@@ -1,5 +1,4 @@
 # 🚀 San3a Academy Toolkit
-
 > **The ultimate internal power-suite for the San3a Academy team.**
 
 Internal tools dashboard featuring live course scheduling, collaborative utilities, and performance analytics. Designed for speed, precision, and a premium user experience.
