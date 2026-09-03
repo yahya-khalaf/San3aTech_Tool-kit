@@ -6,95 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Course Calendar</title>
     <link rel="stylesheet" href="./style.css">
-    <style>
-        /* ==========================================================================
-           ACCESS GATE
-           ========================================================================== */
-        .app-shell {
-            display: none;
-        }
-
-        .auth-gate {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(36, 13, 24, 0.96), rgba(120, 22, 41, 0.94));
-            z-index: 3000;
-            padding: 24px;
-        }
-
-        .auth-gate.hidden {
-            display: none;
-        }
-
-        .auth-panel {
-            width: min(100%, 420px);
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 24px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-            padding: 28px 24px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-
-        .auth-panel h2 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            color: #240D18;
-        }
-
-        .auth-panel p {
-            color: #3D1221;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .auth-form {
-            display: grid;
-            gap: 14px;
-        }
-
-        .auth-input {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 12px;
-            border: 1.5px solid rgba(36, 13, 24, 0.15);
-            font-size: 16px;
-            background: #FFF7F3;
-            color: #240D18;
-        }
-
-        .auth-input:focus {
-            outline: none;
-            border-color: #CF2027;
-            box-shadow: 0 0 0 4px rgba(207, 32, 39, 0.08);
-        }
-
-        .auth-button {
-            border: none;
-            border-radius: 12px;
-            padding: 12px 16px;
-            background: linear-gradient(135deg, #CF2027, #781629);
-            color: #fff;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-
-        .auth-button:hover {
-            transform: translateY(-1px);
-        }
-
-        .auth-status {
-            min-height: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #CF2027;
-        }
-    </style>
 
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript">
@@ -112,19 +23,6 @@
 
 <body>
     <noscript><div><img src="https://mc.yandex.ru/watch/112138602" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <div id="authGate" class="auth-gate">
-        <div class="auth-panel">
-            <h2>Sign In</h2>
-            <p>Enter the protected password to access the Crash Courses Calendar.</p>
-            <form class="auth-form" id="authForm">
-                <input class="auth-input" id="gatePassword" type="password" placeholder="Password" autocomplete="current-password" required>
-                <button class="auth-button" type="submit">Access Calendar</button>
-                <div class="auth-status" id="authStatus" aria-live="polite"></div>
-            </form>
-        </div>
-    </div>
-
-    <div id="appShell" class="app-shell">
     <header>
         <div class="header-left">
             <div class="logo">
@@ -148,8 +46,7 @@
                 <button class="btn btn-sm active" id="mode-online">Online</button>
                 <button class="btn btn-sm" id="mode-offline">Offline</button>
             </div>
-            <button class="btn"
-                onclick="sessionStorage.removeItem('san3a_calendar_authenticated'); window.location.href='../index.html';">Logout</button>
+            <button class="btn" onclick="window.location.href='../index.html';">Back to Dashboard</button>
         </div>
     </header>
 
@@ -187,68 +84,9 @@
             </div>
         </section>
     </main>
-    </div>
 
-    <script>
-        /* ==========================================================================
-           ACCESS CONTROL
-           ========================================================================== */
-        const PROTECTED_PASSWORD_HASH = '40d6ac2265d0a7dfee9ad07808259c9dd48f03e23584482ece151d10eba3fcda';
-        const AUTH_SESSION_KEY = 'san3a_calendar_authenticated';
-        let calendarInitialized = false;
-
-        async function hashString(value) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(value);
-            const digest = await crypto.subtle.digest('SHA-256', data);
-            return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        async function validatePassword(inputValue) {
-            const normalized = String(inputValue || '').trim();
-            if (!normalized) return false;
-            const enteredHash = await hashString(normalized);
-            return enteredHash === PROTECTED_PASSWORD_HASH;
-        }
-
-        function initializeCalendar() {
-            if (calendarInitialized) return;
-            calendarInitialized = true;
-            import('./main.js');
-        }
-
-        function unlockCalendar() {
-            document.getElementById('authGate').classList.add('hidden');
-            document.getElementById('appShell').style.display = 'block';
-            sessionStorage.setItem(AUTH_SESSION_KEY, 'true');
-            document.getElementById('authStatus').textContent = '';
-            initializeCalendar();
-        }
-
-        document.getElementById('authForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const passwordInput = document.getElementById('gatePassword');
-            const authStatus = document.getElementById('authStatus');
-            const isValid = await validatePassword(passwordInput.value);
-
-            if (isValid) {
-                unlockCalendar();
-                return;
-            }
-
-            authStatus.textContent = 'Incorrect password. Please try again.';
-            passwordInput.value = '';
-            passwordInput.focus();
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const isAuthenticated = sessionStorage.getItem(AUTH_SESSION_KEY) === 'true';
-            if (isAuthenticated) {
-                document.getElementById('authGate').classList.add('hidden');
-                document.getElementById('appShell').style.display = 'block';
-                initializeCalendar();
-            }
-        });
+    <script type="module">
+        import('./main.js');
     </script>
 </body>
 

@@ -1,8 +1,8 @@
 import Papa from 'https://cdn.skypack.dev/papaparse';
 import { InstructorAvailability } from './instructor-availability.js';
 
-const VACATIONS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQv7sjY_gVLhrhyT4SfM-TgNaXlFKFCVy8x_eNKpbJtTTkXD6YqjUAO2rXTx6MA1GsA_Q_KTT6ZyZW7/pub?gid=1665450693&single=true&output=csv';
-const SCHEDULER_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQv7sjY_gVLhrhyT4SfM-TgNaXlFKFCVy8x_eNKpbJtTTkXD6YqjUAO2rXTx6MA1GsA_Q_KTT6ZyZW7/pub?gid=688123287&single=true&output=csv';
+const VACATIONS_CSV_URL = '/api/csv/vacations';
+const SCHEDULER_CSV_URL = '/api/csv/scheduler';
 
 const DAYS_MAP = {
     'Sun': 0, 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6

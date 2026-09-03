@@ -1,6 +1,6 @@
 import Papa from 'https://cdn.skypack.dev/papaparse';
 
-const AVAILABILITY_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR-wmb6lVK0zBPMRJq9Eb2doZSRjIFDGlJiZ7KLHp3PubzShjuWTxCrLUOr8C4DuzLdIqLJBjiRzfCY/pub?gid=2136480140&single=true&output=csv';
+const AVAILABILITY_CSV_URL = '/api/csv/availability';
 
 const TIME_SLOTS = [
     "9:00 AM - 10:00AM", "10:00 AM - 11:00AM", "11:00 AM - 12:00PM",

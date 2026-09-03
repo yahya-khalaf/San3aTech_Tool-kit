@@ -1,7 +1,9 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 
-// Same shared password used to protect Team WIGs, Individual WIGs, the
-// Crash Courses Calendar, and the Student Projects Portfolio.
+// Client-side only — used for the Debugging Fundamentals course pages,
+// which don't carry sensitive data. Team WIGs, Individual WIGs, the Crash
+// Courses Calendar, and the Student Projects Portfolio are gated server-side
+// via HTTP Basic Auth at the Cloudflare Pages edge (see functions/_middleware.ts).
 const PROTECTED_PASSWORD_HASH = '40d6ac2265d0a7dfee9ad07808259c9dd48f03e23584482ece151d10eba3fcda';
 
 async function hashString(value: string): Promise<string> {

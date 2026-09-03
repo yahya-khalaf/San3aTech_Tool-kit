@@ -663,95 +663,6 @@
       .submission-card { padding: 18px; }
     }
 
-    /* ==========================================================================
-       ACCESS GATE
-       ========================================================================== */
-    .app-shell {
-      display: none;
-    }
-
-    .auth-gate {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, rgba(36, 13, 24, 0.96), rgba(120, 22, 41, 0.94));
-      z-index: 3000;
-      padding: 24px;
-    }
-
-    .auth-gate.hidden {
-      display: none;
-    }
-
-    .auth-panel {
-      width: min(100%, 420px);
-      background: rgba(255, 255, 255, 0.98);
-      border-radius: 24px;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-      padding: 28px 24px;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .auth-panel h2 {
-      font-size: 28px;
-      margin-bottom: 8px;
-      color: var(--san3a-ink);
-      font-family: 'Montserrat', sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .auth-panel p {
-      color: var(--san3a-maroon-d);
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-
-    .auth-form {
-      display: grid;
-      gap: 14px;
-    }
-
-    .auth-input {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1.5px solid rgba(36, 13, 24, 0.15);
-      font-size: 16px;
-      background: var(--san3a-paper);
-      color: var(--san3a-ink);
-    }
-
-    .auth-input:focus {
-      outline: none;
-      border-color: var(--san3a-red);
-      box-shadow: 0 0 0 4px rgba(207, 32, 39, 0.08);
-    }
-
-    .auth-button {
-      border: none;
-      border-radius: 12px;
-      padding: 12px 16px;
-      background: linear-gradient(135deg, var(--san3a-red), var(--san3a-wine));
-      color: var(--san3a-white);
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-    }
-
-    .auth-button:hover {
-      transform: translateY(-1px);
-    }
-
-    .auth-status {
-      min-height: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--san3a-red);
-    }
   </style>
 
   <!-- Yandex.Metrika counter -->
@@ -770,19 +681,6 @@
 <body>
   <noscript><div><img src="https://mc.yandex.ru/watch/112138602" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 
-  <div id="authGate" class="auth-gate">
-    <div class="auth-panel">
-      <h2>Sign In</h2>
-      <p>Enter the protected portfolio password to access student projects.</p>
-      <form class="auth-form" id="authForm">
-        <input class="auth-input" id="portfolioPassword" type="password" placeholder="Password" autocomplete="current-password" required>
-        <button class="auth-button" type="submit">Access Portfolio</button>
-        <div class="auth-status" id="authStatus" aria-live="polite"></div>
-      </form>
-    </div>
-  </div>
-
-  <div id="appShell" class="app-shell">
   <!-- Header & Brand Lockup -->
   <header>
     <div class="container">
@@ -854,13 +752,12 @@
     <span class="lightbox-close" id="lightboxClose">&times;</span>
     <img id="lightboxImg" src="" alt="Submission photo preview">
   </div>
-  </div>
 
   <script>
     /* ==========================================================================
        DATA CONTROLLER & PARSER
        ========================================================================== */
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS_yIIAOieBArTnZJsRI-EgkeYp15kzD_-NTMhCw8QNocwwOO52NIj8vY6y5BOIOzQCscxy8t5bN9iA/pub?gid=1536848838&single=true&output=csv';
+    const CSV_URL = '/api/csv/portfolio';
 
     let submissionsData = [];
     let state = {
@@ -881,76 +778,9 @@
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
 
-    /* ==========================================================================
-       ACCESS CONTROL
-       ========================================================================== */
-    const PORTFOLIO_PASSWORD_HASH = '40d6ac2265d0a7dfee9ad07808259c9dd48f03e23584482ece151d10eba3fcda';
-    const AUTH_SESSION_KEY = 'san3a_portfolio_authenticated';
-    let listenersReady = false;
-
-    async function hashString(value) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(value);
-      const digest = await crypto.subtle.digest('SHA-256', data);
-      return Array.from(new Uint8Array(digest))
-        .map(byte => byte.toString(16).padStart(2, '0'))
-        .join('');
-    }
-
-    async function validatePassword(inputValue) {
-      const normalized = String(inputValue || '').trim();
-      if (!normalized) return false;
-      const enteredHash = await hashString(normalized);
-      return enteredHash === PORTFOLIO_PASSWORD_HASH;
-    }
-
-    function initializePortfolio() {
-      if (listenersReady) return;
+    window.addEventListener('DOMContentLoaded', () => {
       setupEventListeners();
       fetchData();
-      listenersReady = true;
-    }
-
-    function unlockPortfolio() {
-      const authGate = document.getElementById('authGate');
-      const appShell = document.getElementById('appShell');
-      const authStatus = document.getElementById('authStatus');
-      authGate.classList.add('hidden');
-      appShell.style.display = 'block';
-      sessionStorage.setItem(AUTH_SESSION_KEY, 'true');
-      authStatus.textContent = '';
-      initializePortfolio();
-    }
-
-    document.getElementById('authForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const passwordInput = document.getElementById('portfolioPassword');
-      const authStatus = document.getElementById('authStatus');
-      const isValid = await validatePassword(passwordInput.value);
-
-      if (isValid) {
-        unlockPortfolio();
-        return;
-      }
-
-      authStatus.textContent = 'Incorrect password. Please try again.';
-      passwordInput.value = '';
-      passwordInput.focus();
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const isAuthenticated = sessionStorage.getItem(AUTH_SESSION_KEY) === 'true';
-      const authGate = document.getElementById('authGate');
-      const appShell = document.getElementById('appShell');
-
-      if (isAuthenticated) {
-        authGate.classList.add('hidden');
-        appShell.style.display = 'block';
-        initializePortfolio();
-      } else {
-        appShell.style.display = 'none';
-        authGate.classList.remove('hidden');
-      }
     });
 
     function setupEventListeners() {
