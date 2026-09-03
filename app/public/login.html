@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — San3a Academy Toolkit</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, rgba(36, 13, 24, 0.96), rgba(120, 22, 41, 0.94));
+      padding: 24px;
+    }
+
+    .panel {
+      width: min(100%, 420px);
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 24px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+      padding: 28px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .panel h2 {
+      font-size: 28px;
+      margin: 0 0 8px;
+      color: #240D18;
+    }
+
+    .panel p {
+      color: #3D1221;
+      font-size: 14px;
+      margin: 0 0 20px;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(36, 13, 24, 0.15);
+      font-size: 16px;
+      background: #FFF7F3;
+      color: #240D18;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #CF2027;
+      box-shadow: 0 0 0 4px rgba(207, 32, 39, 0.08);
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #CF2027, #781629);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: default;
+      transform: none;
+    }
+
+    .status {
+      min-height: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #CF2027;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="panel">
+    <h2>Sign In</h2>
+    <p>Enter the internal password to access this page.</p>
+    <form id="loginForm">
+      <input id="password" type="password" placeholder="Password" autocomplete="current-password" required autofocus>
+      <button type="submit" id="submitBtn">Sign In</button>
+      <div class="status" id="status" aria-live="polite"></div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const passwordInput = document.getElementById('password');
+    const status = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+
+    function nextUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get('next');
+      if (next && next.startsWith('/') && !next.startsWith('//')) return next;
+      return '/';
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      status.textContent = '';
+
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: passwordInput.value }),
+        });
+
+        if (response.ok) {
+          window.location.href = nextUrl();
+          return;
+        }
+
+        const data = await response.json().catch(() => ({}));
+        status.textContent = data.error || 'Incorrect password. Please try again.';
+      } catch {
+        status.textContent = 'Something went wrong. Please try again.';
+      } finally {
+        submitBtn.disabled = false;
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+    });
+  </script>
+</body>
+
+</html>

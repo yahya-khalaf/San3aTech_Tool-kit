@@ -1,83 +1,61 @@
 // Server-side gate for internal-only pages, enforced at Cloudflare's edge.
-// The credentials never reach the browser unless they're correct, unlike the
-// old client-side PasswordGate, which shipped its full content + password
-// hash to everyone regardless of login state.
+// Unauthenticated requests are redirected to /login before any protected
+// file (page, script, or /api/* data) is served — the content never
+// reaches a browser that hasn't supplied the shared password.
 //
-// Configure ACCESS_USERNAME and ACCESS_PASSWORD as environment variables on
-// the Cloudflare Pages project (Settings -> Environment variables). Mark
-// ACCESS_PASSWORD as "Encrypt" so it's stored as a secret. Redeploy after
-// changing either value for it to take effect.
+// Configure ACCESS_PASSWORD as an environment variable on the Cloudflare
+// Pages project (Settings -> Environment variables, marked "Encrypt").
+// Redeploy after changing it for the change to take effect.
+
+import { verifySessionCookie } from './_lib/session';
 
 interface Env {
-  ACCESS_USERNAME: string;
   ACCESS_PASSWORD: string;
 }
 
-const PROTECTED_PATHS = [
-  '/calendar',
-  '/tools/team-wigs.html',
-  '/tools/individual-wigs.html',
-  '/code-create/student-projects-portfolio.html',
-  '/api',
-];
+// Canonical (extensionless) protected paths. Cloudflare Pages serves the
+// same file at both "/tools/team-wigs.html" and its clean-URL form
+// "/tools/team-wigs" (redirecting between them), so requests are normalized
+// before matching — otherwise the clean-URL form slips through unguarded.
+const PROTECTED_PATHS = ['/calendar', '/tools/team-wigs', '/tools/individual-wigs', '/code-create/student-projects-portfolio', '/api'];
 
-function isProtectedPath(pathname: string): boolean {
-  return PROTECTED_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
-}
+const PUBLIC_PATHS = ['/login', '/api/login', '/api/logout'];
 
-function timingSafeEqual(a: string, b: string): boolean {
-  const enc = new TextEncoder();
-  const aBytes = enc.encode(a);
-  const bBytes = enc.encode(b);
-  const length = Math.max(aBytes.length, bBytes.length);
-  let mismatch = aBytes.length === bBytes.length ? 0 : 1;
-  for (let i = 0; i < length; i++) {
-    mismatch |= (aBytes[i] ?? 0) ^ (bBytes[i] ?? 0);
+function normalizePath(pathname: string): string {
+  let p = pathname;
+  if (p.endsWith('/index.html')) {
+    p = p.slice(0, -'index.html'.length);
+  } else if (p.endsWith('.html')) {
+    p = p.slice(0, -'.html'.length);
   }
-  return mismatch === 0;
+  if (p.length > 1 && p.endsWith('/')) {
+    p = p.slice(0, -1);
+  }
+  return p;
 }
 
-function unauthorized(): Response {
-  return new Response('Authentication required.', {
-    status: 401,
-    headers: { 'WWW-Authenticate': 'Basic realm="San3a Academy Internal", charset="UTF-8"' },
-  });
+function matchesAny(pathname: string, list: string[]): boolean {
+  return list.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
 
 export const onRequest: PagesFunction<Env> = async (context) => {
   const url = new URL(context.request.url);
-  if (!isProtectedPath(url.pathname)) {
+  const pathname = normalizePath(url.pathname);
+
+  if (matchesAny(pathname, PUBLIC_PATHS) || !matchesAny(pathname, PROTECTED_PATHS)) {
     return context.next();
   }
 
-  const { ACCESS_USERNAME, ACCESS_PASSWORD } = context.env;
-  if (!ACCESS_USERNAME || !ACCESS_PASSWORD) {
+  const { ACCESS_PASSWORD } = context.env;
+  if (!ACCESS_PASSWORD) {
     return new Response('Access is not configured for this deployment.', { status: 500 });
   }
 
-  const authHeader = context.request.headers.get('Authorization');
-  if (!authHeader || !authHeader.startsWith('Basic ')) {
-    return unauthorized();
+  const authenticated = await verifySessionCookie(context.request.headers.get('Cookie'), ACCESS_PASSWORD);
+  if (authenticated) {
+    return context.next();
   }
 
-  let decoded: string;
-  try {
-    decoded = atob(authHeader.slice('Basic '.length));
-  } catch {
-    return unauthorized();
-  }
-
-  const separatorIndex = decoded.indexOf(':');
-  if (separatorIndex === -1) {
-    return unauthorized();
-  }
-
-  const user = decoded.slice(0, separatorIndex);
-  const pass = decoded.slice(separatorIndex + 1);
-
-  if (!timingSafeEqual(user, ACCESS_USERNAME) || !timingSafeEqual(pass, ACCESS_PASSWORD)) {
-    return unauthorized();
-  }
-
-  return context.next();
+  const next = encodeURIComponent(url.pathname + url.search);
+  return Response.redirect(`${url.origin}/login?next=${next}`, 302);
 };
