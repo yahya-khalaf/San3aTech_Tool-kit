@@ -1,9 +1,7 @@
 // Proxies the internal Google Sheet "publish to web" CSV links server-side,
 // so the actual sheet URLs never appear in any file the browser downloads.
-// Without this, anyone who found the URL in the page source could read the
-// sheet directly, bypassing the site entirely (and its Basic Auth gate).
 
-interface Env {
+export interface CsvEnv {
   TEAM_WIGS_CSV_URL: string;
   INDIVIDUAL_WIGS_CSV_URL: string;
   PORTFOLIO_CSV_URL: string;
@@ -12,7 +10,7 @@ interface Env {
   AVAILABILITY_CSV_URL: string;
 }
 
-const SHEET_ENV_KEYS: Record<string, keyof Env> = {
+const SHEET_ENV_KEYS: Record<string, keyof CsvEnv> = {
   'team-wigs': 'TEAM_WIGS_CSV_URL',
   'individual-wigs': 'INDIVIDUAL_WIGS_CSV_URL',
   portfolio: 'PORTFOLIO_CSV_URL',
@@ -21,16 +19,15 @@ const SHEET_ENV_KEYS: Record<string, keyof Env> = {
   availability: 'AVAILABILITY_CSV_URL',
 };
 
-export const onRequestGet: PagesFunction<Env> = async (context) => {
-  const name = context.params.name;
-  const key = typeof name === 'string' ? SHEET_ENV_KEYS[name] : undefined;
+export async function proxyCsv(name: string, env: CsvEnv): Promise<Response> {
+  const key = SHEET_ENV_KEYS[name];
   if (!key) {
     return new Response('Unknown sheet.', { status: 404 });
   }
 
-  const sheetUrl = context.env[key];
+  const sheetUrl = env[key];
   if (!sheetUrl) {
-    return new Response(`Sheet URL not configured for "${name}". Set ${key} in the Pages project environment variables.`, {
+    return new Response(`Sheet URL not configured for "${name}". Set ${key} in the Worker's environment variables.`, {
       status: 500,
     });
   }
@@ -47,4 +44,4 @@ export const onRequestGet: PagesFunction<Env> = async (context) => {
       'Cache-Control': 'private, max-age=30',
     },
   });
-};
+}
