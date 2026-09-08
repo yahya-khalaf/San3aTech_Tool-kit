@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
   
-  <!-- PapaParse for robust Quote & Multi-line Aware CSV Parsing -->
+  <!-- PapaParse for Quote & Multi-line Aware CSV Parsing -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
   <style>
@@ -826,17 +826,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .preview-ribbon {
-      background: var(--sun);
-      color: var(--ink);
-      font-size: 11px;
-      font-weight: 800;
-      padding: 4px 12px;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
     /* Responsive Breaks */
     @media (max-width: 1024px) {
       .projects-grid { grid-template-columns: repeat(2, 1fr); }
@@ -867,9 +856,8 @@
           </div>
         </div>
         <div class="header-actions">
-          <span id="previewRibbon" class="preview-ribbon" style="display:none;">MOCK DATA PREVIEW</span>
-          <button class="btn btn-secondary" id="refreshBtn" onclick="fetchData()">🔄 Refresh</button>
-          <button class="btn" onclick="togglePresentationMode()">📺 Present</button>
+          <button class="btn btn-secondary" id="refreshBtn" onclick="fetchData()">🔄 Refresh Data</button>
+          <button class="btn" onclick="togglePresentationMode()">📺 Present Mode</button>
         </div>
       </div>
 
@@ -954,9 +942,9 @@
 
   <script>
     /* ==========================================================================
-       DATA CONTROLLER & CONFIG
+       PUBLISHED FORM RESPONSES CSV URL & FIELD MAPPINGS
        ========================================================================== */
-    const CSV_URL = ""; // Set live published CSV URL here
+    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-S8xiVVAwkh5iDSVKf-5Gaw10syE6GS-_OZWFUK0WQ4ciUtNrWGG61O0xmkvoXrpixe78UQUSK1aZ/pub?output=csv";
 
     const THEME_MAP = {
       "Environment": { color: "var(--teal)", icon: "🌱", class: "chip-env" },
@@ -965,73 +953,6 @@
       "Education": { color: "var(--maroon)", icon: "📚", class: "chip-edu" },
       "Disabilities & Accessibility": { color: "var(--plum)", icon: "♿", class: "chip-access" }
     };
-
-    // Schema mapped mock data (§10)
-    const MOCK_DATA = [
-      {
-        "group": "Group #6",
-        "project": "الجراج الذكي (Smart Garage)",
-        "members": ["شهد عادل", "فتحي زكريا", "فادى يوسف"],
-        "themes": ["Disabilities & Accessibility"],
-        "description": "A garage with two auto-doors for elderly and disabled drivers.",
-        "user": "Elderly people and people with disabilities",
-        "problem": "Opening the garage door manually is hard and risky for them.",
-        "suggested": ["Manual remote", "Ultrasonic car door", "IR side door"],
-        "selected": "Two mechanical doors: a large car door on Ultrasonic, a small side door on IR.",
-        "why": "Serves both the car and the person automatically, no manual effort.",
-        "inputs": ["Ultrasonic", "IR sensor"],
-        "outputs": ["Servo", "Servo", "Display"],
-        "extra": ["Ultrasonic", "IR", "Servo"],
-        "enclosure": "Cardboard garage with two hinged doors",
-        "steps": ["Prototype doors in cardboard", "Wire ultrasonic to P1/P2", "Add IR side door", "Tune distances", "Test with a toy car"],
-        "functionality": "Car door opens within 0.5m; side door opens when a person approaches.",
-        "challenges": "Servo power dip when both doors move together.",
-        "code": "from microbit import *\n# Smart Garage Code\nwhile True:\n    if pin1.read_digital() == 0:\n        display.show(Image.YES)",
-        "photos": ["https://drive.google.com/thumbnail?id=1K1Jtp_lEwVGHrVHd5ygwCMaHLOHLFfjd&sz=w1000"]
-      },
-      {
-        "group": "Group #1",
-        "project": "Smart Electricity Switch",
-        "members": ["محمد عبد الخالق", "عمر محمد على"],
-        "themes": ["Environment"],
-        "description": "A micro:bit that flips a real light switch to cut wasted power.",
-        "user": "Anyone in a home or office",
-        "problem": "Lights left on waste electricity.",
-        "suggested": ["Manual remote only", "Auto light sensing", "Both combined"],
-        "selected": "A servo flips the switch; a remote micro:bit sends radio commands; LDR auto-off in daylight.",
-        "why": "Covers both manual control and automatic saving.",
-        "inputs": ["LDR", "Radio / Button"],
-        "outputs": ["Servo", "Radio", "Display"],
-        "extra": ["Servo", "LDR"],
-        "enclosure": "Cardboard wall panel with a real switch",
-        "steps": ["Build wall panel", "Mount servo on switch", "Set up radio pair", "Add LDR auto mode", "Calibrate light threshold"],
-        "functionality": "Press remote to toggle; auto-off when the room is bright.",
-        "challenges": "Aligning the servo arm precisely with the switch.",
-        "code": "",
-        "photos": []
-      },
-      {
-        "group": "Group #7",
-        "project": "Braille Learning Device",
-        "members": ["تبارك محمد", "احمد اسماعيل", "عبد الرحمن عاطف"],
-        "themes": ["Education", "Disabilities & Accessibility"],
-        "description": "A device that helps blind students practise Braille independently.",
-        "user": "Blind and visually-impaired students",
-        "problem": "Learning Braille needs constant teacher help.",
-        "suggested": ["Flashcards", "Audio-only app", "Tactile buttons + feedback"],
-        "selected": "Buttons/touch inputs to enter a letter; sound + vibration feedback; score tracking.",
-        "why": "Lets students practise alone with instant feedback.",
-        "inputs": ["Button A", "Button B", "Touch logo"],
-        "outputs": ["Speaker", "Display"],
-        "extra": [],
-        "enclosure": "Cardboard console with labelled buttons",
-        "steps": ["Map buttons to Braille cells", "Add feedback sounds", "Build scoring variable", "Add difficulty levels", "User-test with a peer"],
-        "functionality": "Enter a letter → device confirms correct/incorrect and tracks a score.",
-        "challenges": "Representing 6-dot Braille with limited buttons.",
-        "code": "",
-        "photos": []
-      }
-    ];
 
     let projectsData = [];
     let filteredProjects = [];
@@ -1056,14 +977,10 @@
     });
 
     /* ==========================================================================
-       DATA PARSING & NORMALIZATION
+       CSV DATA FETCHING & PARSING
        ========================================================================== */
     function fetchData() {
-      if (!CSV_URL) {
-        document.getElementById('previewRibbon').style.display = 'inline-block';
-        processParsedData(MOCK_DATA);
-        return;
-      }
+      if (!CSV_URL) return;
 
       Papa.parse(CSV_URL, {
         download: true,
@@ -1071,37 +988,58 @@
         skipEmptyLines: true,
         complete: function(results) {
           const raw = results.data.map(row => {
+            // Trim every header key to fix leading/trailing whitespace bugs
             const cleanRow = {};
-            Object.keys(row).forEach(k => cleanRow[k.trim()] = row[k]);
-            
+            for (const k in row) {
+              if (k) cleanRow[k.trim()] = row[k];
+            }
+
+            // Coalesce team roster from 8 possible group columns
+            const teamCols = [
+              "Team members (Group 1)", "Team members (Group 2)",
+              "Team members (Group 3)", "Team members (Group 4)",
+              "Team members (Group 5)", "Team members (Group 6)",
+              "Team members (Group 7)", "Team members (Group 8)"
+            ];
+            const teamRaw = teamCols.map(c => cleanRow[c]).find(v => v && v.trim()) || "";
+            let members = teamRaw.split(",").map(s => s.trim()).filter(Boolean);
+            if (members.length === 0 && cleanRow["Who is Filling the form(You)?"]) {
+              members = [cleanRow["Who is Filling the form(You)?"].trim()];
+            }
+
+            // Parse Photos
+            const mainPhotoLinks = parseDriveLinks(cleanRow["Project Main Photo"] || "");
+            const galleryPhotoLinks = parseDriveLinks(cleanRow["Photos of it working"] || "");
+            const allPhotos = [...new Set([...mainPhotoLinks, ...galleryPhotoLinks])];
+
             return {
-              group: cleanRow['Group number'] || 'Group #1',
-              project: cleanRow['Project name'] || 'Untitled Project',
-              members: (cleanRow['Team members'] || '').split(',').map(m => m.trim()).filter(Boolean),
-              themes: (cleanRow['Theme'] || '').split(',').map(t => t.trim()).filter(Boolean),
-              description: cleanRow['Short description'] || '',
-              user: cleanRow['Target user'] || '',
-              problem: cleanRow['Problem'] || '',
-              suggested: (cleanRow['Suggested solutions'] || '').split('\n').map(s => s.trim()).filter(Boolean),
-              selected: cleanRow['Selected solution'] || '',
-              why: cleanRow['Why this solution'] || '',
-              inputs: (cleanRow['Inputs used'] || '').split(',').map(i => i.trim()).filter(Boolean),
-              outputs: (cleanRow['Outputs used'] || '').split(',').map(o => o.trim()).filter(Boolean),
-              extra: (cleanRow['Extra components'] || '').split(',').map(e => e.trim()).filter(Boolean),
-              enclosure: cleanRow['Enclosure'] || '',
-              steps: (cleanRow['Building steps'] || '').split('\n').map(s => s.trim()).filter(Boolean),
-              functionality: cleanRow['Final functionality'] || '',
-              challenges: cleanRow['Challenges'] || '',
-              code: cleanRow['Code source'] || '',
-              photos: parseDriveLinks(cleanRow['Photos'] || '')
+              group: cleanRow["Group number"] || "Group #1",
+              project: cleanRow["Idea name"] || "Untitled Project",
+              submitter: cleanRow["Who is Filling the form(You)?"] || "",
+              members: members.length > 0 ? members : ["Anonymous"],
+              themes: (cleanRow["Theme"] || "").split(",").map(t => t.trim()).filter(Boolean),
+              description: cleanRow["Short description"] || "",
+              user: cleanRow["Who is the user?"] || "",
+              problem: cleanRow["What problem does it solve?"] || "",
+              suggested: (cleanRow["Suggested solutions (ideas you explored)"] || "").split("\n").map(s => s.trim()).filter(Boolean),
+              selected: cleanRow["Your selected solution"] || "",
+              why: cleanRow["Why did you choose this solution?"] || "",
+              inputs: (cleanRow["Inputs used"] || "").split(",").map(i => i.trim()).filter(Boolean),
+              outputs: (cleanRow["Outputs used"] || "").split(",").map(o => o.trim()).filter(Boolean),
+              extra: (cleanRow["Extra components used"] || "").split(",").map(e => e.trim()).filter(Boolean),
+              microbitPy: cleanRow["We used micro:bit + Python"] || "",
+              enclosure: cleanRow["Enclosure"] || "",
+              steps: (cleanRow["Building steps"] || "").split("\n").map(s => s.trim()).filter(Boolean),
+              functionality: cleanRow["How it works (final functionality)"] || "",
+              challenges: cleanRow["Challenges & learnings"] || "",
+              code: cleanRow["Python code"] || "",
+              photos: allPhotos
             };
           });
           processParsedData(raw);
         },
         error: function(err) {
-          console.warn('CSV load failed, using mock data:', err);
-          document.getElementById('previewRibbon').style.display = 'inline-block';
-          processParsedData(MOCK_DATA);
+          console.warn('CSV load failed:', err);
         }
       });
     }
@@ -1252,7 +1190,7 @@
       content.innerHTML = `
         <!-- Section 1: Hero -->
         <section class="journal-section journal-hero" ${isArabicProject ? 'dir="rtl"' : ''}>
-          <div style="display:flex; justify-shadow:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
             <div>
               <span class="group-badge" style="font-size:12px; padding:6px 14px;">${escapeHtml(p.group)}</span>
               <div style="display:inline-flex; gap:6px; margin-left:10px;">
@@ -1436,7 +1374,7 @@
     }
 
     /* ==========================================================================
-       AUTO-SCROLL EXHIBITION PRESENTATION MODE (§6)
+       AUTO-SCROLL EXHIBITION PRESENTATION MODE
        ========================================================================== */
     function togglePresentationMode() {
       isPresenting = !isPresenting;
