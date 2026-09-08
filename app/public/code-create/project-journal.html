@@ -1,1081 +1,1626 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Code &amp; Create — Session 4: New I/O, Debugging &amp; Final-Project Launch</title>
-<style>
-  :root {
-    --ink: #240D18;
-    --maroon-d: #3D1221;
-    --maroon: #781629;
-    --red: #CF2027;
-    --paper: #FFF7F3;
-    --white: #FFFFFF;
-    --sun: #FFC93C;
-    --teal: #2EC4B6;
-    --shadow: 0 18px 40px rgba(36,13,24,.28);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; width: 100%; overflow: hidden; }
-  body { 
-    font-family: "Myriad Pro", "Segoe UI", Arial, sans-serif; 
-    background: var(--ink); 
-    color: var(--ink); 
-  }
-
-  .heading { font-family: "Big John", "Arial Black", "Helvetica Neue", Impact, sans-serif; text-transform: uppercase; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code &amp; Create — Final Project Journals</title>
   
-  #stage { position: fixed; inset: 0; }
+  <!-- San3a Typography: Montserrat (Headlines), Arvo (Sub-headlines/Chips), Inter (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
   
-  .slide { 
-    position: absolute; inset: 0; display: none; flex-direction: column; padding: 50px 76px 85px; 
-    opacity: 0; transform: translateX(40px); 
-    transition: opacity .45s ease, transform .45s cubic-bezier(.2,.7,.2,1); 
-    background: var(--paper); 
-  }
-  .slide.active { display: flex; opacity: 1; transform: translateX(0); z-index: 2; }
-  .slide.leaving { display: flex; opacity: 0; transform: translateX(-40px); z-index: 1; }
-  
-  .slide::before { 
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 14px; 
-    background: linear-gradient(90deg, var(--ink), var(--maroon-d), var(--maroon), var(--red)); 
-  }
+  <!-- PapaParse for robust Quote & Multi-line Aware CSV Parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
-  /* Persistent Brand Bar */
-  .brandbar { 
-    position: absolute; top: 22px; left: 76px; right: 76px; display: flex; align-items: center; justify-content: space-between; 
-    font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--maroon); font-weight: bold;
-  }
-  .brandbar .logo { height: 32px; display: flex; align-items: center; gap: 10px; }
-  .brandbar .logo img { height: 70px; }
-  .brandbar .logo::after { content: "CODE & CREATE"; color: inherit; font-size: 13px; letter-spacing: 1.5px; white-space: nowrap; }
-  .brandbar .logo .fallback { color: var(--red); font-size: 15px; font-weight: 900; }
-  .brandbar .right-meta { display: flex; align-items: center; gap: 12px; }
-  .brandbar .mode-tag { background: var(--teal); color: var(--ink); padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 900; }
+  <style>
+    /* ==========================================================================
+       SAN3A ACADEMY BRAND SYSTEM & TOKENS
+       ========================================================================== */
+    :root {
+      --ink: #240D18;
+      --plum: #3D1221;
+      --maroon: #781629;
+      --red: #CF2027;
+      --bg: #FFF7F3;
+      --sun: #FFC93C;
+      --teal: #2EC4B6;
+      --card: #FFFFFF;
+      --shadow-sm: 0 4px 12px rgba(36, 13, 24, 0.05);
+      --shadow-md: 0 10px 30px rgba(36, 13, 24, 0.08);
+      --shadow-lg: 0 18px 40px rgba(36, 13, 24, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+    }
 
-  /* Fixed Component Label Chip */
-  .chip { 
-    display: inline-block; background: var(--red); color: var(--white); font-size: 13px; font-weight: bold; letter-spacing: 1.5px; 
-    text-transform: uppercase; padding: 6px 16px; border-radius: 999px; margin-bottom: 12px; width: fit-content;
-    font-family: "Arvo", Georgia, serif;
-  }
-  .chip.sun { background: var(--sun); color: var(--ink); } 
-  .chip.teal { background: var(--teal); color: var(--ink); }
-  .chip.dark { background: var(--ink); color: var(--sun); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding-bottom: 60px;
+      overflow-x: hidden;
+    }
 
-  .slidebody { margin-top: 40px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
-  
-  h1.title { font-size: 58px; line-height: 1.05; color: var(--ink); }
-  h1.title .pop { color: var(--sun); }
-  .subtitle { font-size: 24px; color: #ffd9dc; margin-top: 18px; font-family: "Arvo", Georgia, serif; }
-  
-  h2 { font-size: 38px; color: var(--ink); margin-bottom: 18px; }
-  h2 .pop { color: var(--red); }
-  
-  p.lead { font-size: 22px; line-height: 1.5; color: var(--maroon-d); max-width: 920px; }
-  p.lead + p.lead { margin-top: 10px; }
-  
-  /* Lists & Steps */
-  ol.steps, ul.steps { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-  ol.steps li, ul.steps li { display: flex; gap: 14px; align-items: flex-start; font-size: 20px; color: var(--maroon-d); }
-  .num { 
-    flex: none; width: 38px; height: 38px; border-radius: 50%; background: var(--red); color: var(--white); display: flex; 
-    align-items: center; justify-content: center; font-weight: bold; font-size: 18px; 
-  }
-  .num.dark { background: var(--ink); color: var(--sun); }
-  ol.steps li b, ul.steps li b { color: var(--ink); }
+    /* Top Accent Line */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--ink), var(--plum), var(--maroon), var(--red), var(--sun));
+      z-index: 1000;
+    }
 
-  /* Cards & Grid Layouts */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 10px; }
-  .card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: var(--shadow); border-top: 6px solid var(--red); }
-  .card:nth-child(2){ border-top-color: var(--sun); } 
-  .card:nth-child(3){ border-top-color: var(--teal); } 
-  .card:nth-child(4){ border-top-color: var(--maroon); }
-  .card .ico { font-size: 30px; margin-bottom: 6px; }
-  .card h3 { font-size: 20px; color: var(--ink); margin-bottom: 4px; }
-  .card p { font-size: 16px; color: var(--maroon-d); line-height: 1.4; }
+    h1, h2, h3, h4, .brand-heading {
+      font-family: 'Montserrat', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-  /* Step Rail (Journey) */
-  .rail { display: flex; gap: 6px; align-items: center; justify-content: space-between; margin-top: 20px; }
-  .rail-step { background: #fff; padding: 14px 10px; border-radius: 12px; flex: 1; text-align: center; box-shadow: var(--shadow); border-top: 5px solid var(--red); }
-  .rail-step .num-tag { font-size: 11px; font-weight: bold; color: var(--red); margin-bottom: 4px; }
-  .rail-step h4 { font-size: 13px; color: var(--ink); text-transform: uppercase; }
-  .rail-arrow { font-size: 16px; color: var(--maroon); font-weight: bold; }
+    .sub-heading {
+      font-family: 'Arvo', Georgia, serif;
+    }
 
-  /* Two Column Layout */
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; }
-  
-  /* Code Snippets & Annotations */
-  .code-container { position: relative; }
-  .code { 
-    background: var(--ink); color: #ffeaea; border-radius: 16px; padding: 22px 26px; 
-    font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 21px; line-height: 1.5; 
-    white-space: pre; box-shadow: var(--shadow); border-left: 6px solid var(--red); 
-  }
-  .code .k { color: #ff9d6c; } 
-  .code .f { color: #7fd7ff; } 
-  .code .s { color: #b8e994; } 
-  .code .c { color: #9a8; }
-  .annotation { background: var(--sun); color: var(--ink); padding: 10px 14px; border-radius: 8px; font-weight: bold; font-size: 15px; margin-top: 10px; }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
 
-  /* Image Containers & Hardware */
-  .imgwrap { 
-    border-radius: 18px; background: #fff; box-shadow: var(--shadow); overflow: hidden; display: flex; 
-    align-items: center; justify-content: center; min-height: 280px; padding: 16px; 
-  }
-  .imgwrap img { max-width: 100%; max-height: 300px; display: block; border-radius: 10px; }
+    /* Direction Helper */
+    [dir="rtl"] {
+      text-align: right;
+      direction: rtl;
+    }
 
-  /* Signature DEMO Banner */
-  .demo-banner { background: var(--ink); color: var(--paper); padding: 18px 24px; border-radius: 14px; border-left: 8px solid var(--sun); margin-bottom: 16px; }
-  .demo-banner h3 { font-size: 22px; color: var(--sun); letter-spacing: 1px; }
+    /* ==========================================================================
+       PERSISTENT HEADER & COHORT STATS
+       ========================================================================== */
+    header {
+      background: linear-gradient(135deg, var(--ink), var(--plum));
+      color: #FFFFFF;
+      padding: 32px 0 24px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 28px;
+    }
 
-  /* Debug Solution Panel (High-Contrast Text) */
-  .debug-panel { 
-    background: #fff; 
-    border-radius: 16px; 
-    padding: 22px 24px; 
-    box-shadow: var(--shadow); 
-    border-left: 6px solid var(--maroon); 
-  }
-  .debug-panel h4 { font-size: 19px; color: var(--red); margin-bottom: 10px; font-weight: bold; }
-  .debug-panel .debug-label-bug { font-size: 16px; color: var(--maroon); font-weight: bold; margin-top: 6px; }
-  .debug-panel .debug-text-bug { font-size: 15px; color: var(--ink); margin-top: 4px; line-height: 1.45; }
-  .debug-panel .debug-label-fix { font-size: 16px; color: #16655D; font-weight: bold; margin-top: 14px; }
-  .debug-panel .debug-text-fix { font-size: 15px; color: var(--ink); margin-top: 4px; line-height: 1.45; }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
 
-  /* Section Dividers & Hero Slides (High-Contrast Off-White Text) */
-  .slide.hero, .slide.divider { 
-    align-items: center; justify-content: center; text-align: center; 
-    background: linear-gradient(135deg, var(--ink), var(--maroon-d) 55%, var(--maroon)); 
-  }
-  .slide.hero::before, .slide.divider::before { background: linear-gradient(90deg, var(--red), var(--sun)); }
-  .slide.hero .slidebody, .slide.divider .slidebody { align-items: center; }
-  .slide.hero h1.title, .slide.hero h2, .slide.divider h2 { color: var(--paper); }
-  .slide.hero .brandbar, .slide.divider .brandbar { color: #ffd9dc; }
-  .slide.hero .lead, .slide.divider .subtitle { color: var(--paper); }
-  
-  /* Animations */
-  .slide.active .anim { animation: rise .5s cubic-bezier(.2,.7,.2,1) both; }
-  .slide.active .anim:nth-child(2){ animation-delay: .07s; } 
-  .slide.active .anim:nth-child(3){ animation-delay: .14s; }
-  .slide.active .anim:nth-child(4){ animation-delay: .21s; } 
-  .slide.active .anim:nth-child(5){ animation-delay: .28s; }
-  .slide.active .anim:nth-child(6){ animation-delay: .35s; }
-  @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-  /* Navigation Controls */
-  .nav { position: fixed; bottom: 16px; left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: 16px; z-index: 30; }
-  .nav button { 
-    background: var(--red); color: var(--paper); border: none; width: 44px; height: 44px; border-radius: 50%; font-size: 22px; cursor: pointer; 
-    box-shadow: var(--shadow); transition: transform .15s, background .2s; 
-  }
-  .nav button:hover { background: var(--maroon); } 
-  .nav button:active { transform: scale(.9); }
-  .counter { color: var(--paper); font-size: 14px; letter-spacing: 1px; background: rgba(0,0,0,.5); padding: 6px 14px; border-radius: 999px; }
-  .progress { position: fixed; top: 0; left: 0; height: 6px; background: var(--sun); z-index: 40; transition: width .35s ease; }
-  .dots { position: fixed; bottom: 20px; right: 24px; display: flex; gap: 4px; z-index: 30; flex-wrap: wrap; max-width: 280px; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.35); cursor: pointer; }
-  .dot.on { background: var(--sun); }
-</style>
+    .logo-slot {
+      height: 52px;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-slot img {
+      height: 52px;
+      object-fit: contain;
+    }
+
+    .brand-text h1 {
+      font-size: 24px;
+      font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1.1;
+    }
+
+    .brand-text h1 span {
+      color: var(--red);
+    }
+
+    .brand-tagline {
+      font-size: 11px;
+      color: var(--sun);
+      letter-spacing: 2px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red);
+      color: #FFFFFF;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'Arvo', Georgia, serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background: var(--maroon);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.12);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: var(--sun);
+      color: var(--ink);
+      border-color: var(--sun);
+    }
+
+    /* Cohort Summary Bar */
+    .cohort-summary {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .summary-stats {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .summary-stats strong {
+      color: var(--sun);
+      font-size: 16px;
+    }
+
+    .theme-dist-bar {
+      display: flex;
+      height: 10px;
+      width: 220px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .theme-segment {
+      height: 100%;
+      transition: width 0.5s ease;
+    }
+
+    /* ==========================================================================
+       FILTER CONTROLS BAR
+       ========================================================================== */
+    .controls-card {
+      background: var(--card);
+      border-radius: var(--radius-md);
+      padding: 18px 24px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 28px;
+      border: 1px solid rgba(36, 13, 24, 0.06);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: minmax(160px, 1fr) 2fr minmax(200px, 1.2fr) auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-group label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--plum);
+      font-family: 'Arvo', Georgia, serif;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid rgba(36, 13, 24, 0.15);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    select:focus, input[type="text"]:focus {
+      border-color: var(--red);
+      background: var(--card);
+    }
+
+    .theme-chips-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .filter-chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+      opacity: 0.65;
+      transition: all 0.2s ease;
+      font-family: 'Arvo', Georgia, serif;
+      user-select: none;
+    }
+
+    .filter-chip.active {
+      opacity: 1;
+      transform: scale(1.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    /* Theme Chips Branding */
+    .chip-env { background: rgba(46, 196, 182, 0.18); color: #16655D; border-color: var(--teal); }
+    .chip-env.active { background: var(--teal); color: var(--ink); }
+
+    .chip-health { background: rgba(207, 32, 39, 0.15); color: var(--maroon); border-color: var(--red); }
+    .chip-health.active { background: var(--red); color: #FFFFFF; }
+
+    .chip-arts { background: rgba(255, 201, 60, 0.25); color: #8A6100; border-color: var(--sun); }
+    .chip-arts.active { background: var(--sun); color: var(--ink); }
+
+    .chip-edu { background: rgba(120, 22, 41, 0.15); color: var(--maroon); border-color: var(--maroon); }
+    .chip-edu.active { background: var(--maroon); color: #FFFFFF; }
+
+    .chip-access { background: rgba(61, 18, 33, 0.15); color: var(--plum); border-color: var(--plum); }
+    .chip-access.active { background: var(--plum); color: #FFFFFF; }
+
+    /* ==========================================================================
+       GALLERY GRID VIEW
+       ========================================================================== */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--card);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(36, 13, 24, 0.06);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-cover {
+      height: 180px;
+      width: 100%;
+      background: linear-gradient(135deg, var(--plum), var(--maroon));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-cover-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .card-top-tags {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .group-badge {
+      background: var(--ink);
+      color: var(--sun);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 1px;
+      font-family: 'Arvo', Georgia, serif;
+    }
+
+    .card-themes {
+      display: flex;
+      gap: 4px;
+    }
+
+    .card-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .card-blurb {
+      font-size: 13px;
+      color: var(--plum);
+      line-height: 1.45;
+      margin-bottom: 16px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-spec-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid rgba(36, 13, 24, 0.06);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--maroon);
+    }
+
+    .mini-pill {
+      background: var(--bg);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(36, 13, 24, 0.08);
+    }
+
+    .card-members {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #6B5B63;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ==========================================================================
+       JOURNAL DETAIL VIEW
+       ========================================================================== */
+    .journal-detail {
+      display: none;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .journal-detail.active {
+      display: block;
+    }
+
+    .btn-back-nav {
+      margin-bottom: 20px;
+    }
+
+    .journal-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .journal-section {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(36, 13, 24, 0.06);
+      scroll-margin-top: 20px;
+    }
+
+    .journal-hero {
+      border-top: 8px solid var(--red);
+    }
+
+    .journal-title-area h1 {
+      font-size: 36px;
+      color: var(--ink);
+      font-weight: 900;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      line-height: 1.15;
+    }
+
+    .roster-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .roster-pill {
+      background: var(--bg);
+      color: var(--ink);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid rgba(36, 13, 24, 0.1);
+    }
+
+    .hero-media-wrap {
+      width: 100%;
+      max-height: 420px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-top: 24px;
+      background: var(--ink);
+    }
+
+    .hero-media-wrap img {
+      width: 100%;
+      height: 100%;
+      max-height: 420px;
+      object-fit: cover;
+    }
+
+    /* Spec Checklist Panel */
+    .spec-panel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .spec-badge-card {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      border: 1.5px solid rgba(36, 13, 24, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .spec-badge-card.met {
+      border-color: var(--teal);
+      background: rgba(46, 196, 182, 0.08);
+    }
+
+    .spec-badge-card.amber {
+      border-color: var(--sun);
+      background: rgba(255, 201, 60, 0.12);
+    }
+
+    .spec-status-icon {
+      font-size: 24px;
+    }
+
+    .spec-details h4 {
+      font-size: 12px;
+      color: var(--maroon);
+      font-family: 'Arvo', Georgia, serif;
+    }
+
+    .spec-details div {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    /* Design Thinking 5-Step Flow */
+    .dt-flow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .dt-step-card {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      border-top: 5px solid var(--maroon);
+      position: relative;
+    }
+
+    .dt-step-card.emphasized {
+      border-top-color: var(--red);
+      background: #FFFFFF;
+      box-shadow: var(--shadow-md);
+      transform: scale(1.02);
+    }
+
+    .dt-step-num {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      font-family: 'Arvo', Georgia, serif;
+    }
+
+    .dt-step-card h3 {
+      font-size: 15px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .dt-step-card p {
+      font-size: 13px;
+      color: var(--plum);
+      line-height: 1.5;
+    }
+
+    /* Building Steps Timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .timeline-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--red);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .timeline-content {
+      background: var(--bg);
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      flex: 1;
+      font-size: 14px;
+      color: var(--ink);
+      border: 1px solid rgba(36, 13, 24, 0.06);
+    }
+
+    /* Code Block Area */
+    .code-box-wrap {
+      background: var(--ink);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-top: 16px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .code-box-header {
+      background: var(--plum);
+      color: var(--sun);
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Arvo', Georgia, serif;
+    }
+
+    pre.code-block {
+      color: #FFEAEA;
+      padding: 20px;
+      font-family: 'SF Mono', Consolas, Monaco, monospace;
+      font-size: 13.5px;
+      line-height: 1.5;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* Gallery Grid in Journal */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .media-thumb {
+      aspect-ratio: 4/3;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--ink);
+      cursor: pointer;
+    }
+
+    .media-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.2s;
+    }
+
+    .media-thumb:hover img {
+      transform: scale(1.05);
+    }
+
+    .journal-footer-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(36, 13, 24, 0.1);
+    }
+
+    /* ==========================================================================
+       AUTO-SCROLL EXHIBITION PRESENTATION MODE
+       ========================================================================== */
+    body.presenting {
+      background: var(--ink) !important;
+      color: #FFFFFF !important;
+    }
+
+    body.presenting header,
+    body.presenting .controls-card,
+    body.presenting .btn-back-nav,
+    body.presenting .journal-footer-nav {
+      display: none !important;
+    }
+
+    body.presenting .journal-section {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      padding: 48px;
+    }
+
+    body.presenting .journal-section h1,
+    body.presenting .journal-section h2,
+    body.presenting .journal-section h3,
+    body.presenting .dt-step-card h3 {
+      color: #FFFFFF;
+    }
+
+    body.presenting .dt-step-card,
+    body.presenting .spec-badge-card,
+    body.presenting .timeline-content {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    body.presenting .card-blurb,
+    body.presenting .dt-step-card p {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .present-overlay-controls {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(36, 13, 24, 0.92);
+      border: 1px solid rgba(255, 201, 60, 0.4);
+      padding: 10px 20px;
+      border-radius: 999px;
+      z-index: 2000;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    body.presenting .present-overlay-controls {
+      display: flex;
+    }
+
+    .present-speed-btn {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFFFFF;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .present-speed-btn.active {
+      background: var(--sun);
+      color: var(--ink);
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(36, 13, 24, 0.94);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .lightbox.active { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 24px; right: 24px;
+      color: #FFFFFF;
+      font-size: 36px;
+      cursor: pointer;
+    }
+
+    /* Animations & Utilities */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .preview-ribbon {
+      background: var(--sun);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Responsive Breaks */
+    @media (max-width: 1024px) {
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+      .controls-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .controls-grid { grid-template-columns: 1fr; }
+      .journal-section { padding: 22px; }
+      .journal-title-area h1 { font-size: 26px; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="progress" id="progress"></div>
-
-<div id="stage">
-
-  <!-- Slide 1: Title (Component 1) -->
-  <section class="slide hero">
-    <div class="brandbar"><span class="logo"><img data-sheet-name="San3a Academy Logo" alt="San3a Academy"><span class="fallback" style="display:none">SAN3A ACADEMY</span></span><span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span></div>
-    <div class="slidebody">
-      <h1 class="title anim heading">Code &amp; Create</h1>
-      <h2 class="anim heading" style="color:var(--sun); font-size:32px; margin-top:10px;">New I/O, Debugging &amp; Final-Project Launch</h2>
-      <p class="subtitle anim">Speaker · Touch · Debugging</p>
-      <p class="anim" style="color:#ffd9dc; margin-top:24px; font-size:16px; letter-spacing:1px;">ONLINE · 180 MIN · THEME: TRANSPORTATION</p>
-    </div>
-  </section>
-
-  <!-- Slide 2: Today's Mission (Component 2) -->
-  <section class="slide hero" style="background: var(--paper);">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip dark anim">TODAY'S MISSION</span>
-      <h1 class="title anim heading" style="font-size:44px; max-width:950px; text-align:center; color:var(--ink);">
-        Add sound and touch, become a <span class="pop" style="color:var(--red);">bug hunter</span>, and choose your final project.
-      </h1>
-    </div>
-  </section>
-
-  <!-- Slide 3: Agenda / Journey (Component 3) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <h2 class="anim heading">Session <span class="pop">Journey</span></h2>
-      <div class="rail anim">
-        <div class="rail-step"><div class="num-tag">01 HUNT</div><h4>Debugging</h4></div>
-        <div class="rail-arrow">→</div>
-        <div class="rail-step"><div class="num-tag">02 SOUND</div><h4>Speaker</h4></div>
-        <div class="rail-arrow">→</div>
-        <div class="rail-step"><div class="num-tag">03 TOUCH</div><h4>Touch Logo</h4></div>
-        <div class="rail-arrow">→</div>
-        <div class="rail-step"><div class="num-tag">04 CREATE</div><h4>Graded Project</h4></div>
-        <div class="rail-arrow">→</div>
-        <div class="rail-step"><div class="num-tag">05 CHOOSE</div><h4>Capstone Idea</h4></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 4: Learning Targets (Component 4) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <h2 class="anim heading">By the end of today, <span class="pop">you can:</span></h2>
-      <ul class="steps anim">
-        <li><span class="num">🔴</span><span>Distinguish syntax errors from logical errors and systematically debug code</span></li>
-        <li><span class="num">🔴</span><span>Program the speaker output and gold touch logo input</span></li>
-        <li><span class="num">🔴</span><span>Combine prior concepts (loops, conditions, variables) into one graded project</span></li>
-        <li><span class="num">🔴</span><span>Select and submit your final group capstone project proposal</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Slide 5: Section Divider 1 (Component 5) -->
-  <section class="slide divider">
-    <div class="brandbar"><span>CODE &amp; CREATE</span><span class="right-meta"><span>SESSION 04</span></span></div>
-    <div class="slidebody">
-      <p class="anim" style="color:var(--sun); font-weight:bold; letter-spacing:2px; font-size:18px;">PART 01</p>
-      <h2 class="anim heading" style="font-size:52px; margin:14px 0; color:var(--paper);">BE A BUG HUNTER</h2>
-      <p class="subtitle anim">Every coder makes bugs. Finding them is the skill.</p>
-    </div>
-  </section>
-
-  <!-- Slide 6: Concept Two Kinds of Bugs (Component 13) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip sun anim">CONCEPT</span>
-      <h2 class="anim heading">Two Types of <span class="pop">Bugs</span></h2>
-      <div class="cards">
-        <div class="card anim" style="border-top-color:var(--red);">
-          <div class="ico">⚠️</div>
-          <h3>Syntax Error</h3>
-          <p><b>Wrong writing:</b> Misspelled commands, bad indentation, or missing colons. The editor highlights the line and stops.</p>
+  <!-- Persistent Header -->
+  <header>
+    <div class="container">
+      <div class="header-top">
+        <div class="brand-lockup">
+          <div class="logo-slot">
+            <img id="san3aLogo" src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&amp;sz=w1000" alt="San3a Academy Logo">
+          </div>
+          <div class="brand-text">
+            <h1>CODE &amp; <span>CREATE</span></h1>
+            <div class="brand-tagline">ZERO TO MAKER • FINAL PROJECT JOURNALS</div>
+          </div>
         </div>
-        <div class="card anim" style="border-top-color:var(--sun);">
-          <div class="ico">🧩</div>
-          <h3>Logical Error</h3>
-          <p><b>Wrong thinking:</b> Code runs without crashing, but does the wrong thing (e.g. pressing A shows B). You must test to catch it!</p>
+        <div class="header-actions">
+          <span id="previewRibbon" class="preview-ribbon" style="display:none;">MOCK DATA PREVIEW</span>
+          <button class="btn btn-secondary" id="refreshBtn" onclick="fetchData()">🔄 Refresh</button>
+          <button class="btn" onclick="togglePresentationMode()">📺 Present</button>
+        </div>
+      </div>
+
+      <!-- Cohort Summary Glance -->
+      <div class="cohort-summary">
+        <div class="summary-stats">
+          <span>Total Projects: <strong id="statTotalProjects">—</strong></span>
+          <span>Participating Teams: <strong id="statTotalTeams">—</strong></span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.7); font-family:'Arvo', serif;">Theme Mix:</span>
+          <div class="theme-dist-bar" id="themeDistBar"></div>
         </div>
       </div>
     </div>
-  </section>
+  </header>
 
-  <!-- Slide 7: Debug Game Intro (Component 8: ACTIVITY) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip anim">ACTIVITY</span>
-      <h2 class="anim heading">Find the <span class="pop">Bug</span> 🐛</h2>
-      <div class="two">
-        <ol class="steps anim">
-          <li><span class="num">⏱</span><span><b>Time:</b> 30 MIN</span></li>
-          <li><span class="num">🎯</span><span>Spot the most bugs — you win!</span></li>
-          <li><span class="num">1</span><span>Read each buggy code block carefully</span></li>
-          <li><span class="num">2</span><span>Write down what's wrong and how to fix it</span></li>
-          <li><span class="num dark">💡</span><span>Read top-to-bottom, check every line</span></li>
-        </ol>
-        <div class="imgwrap anim">
-          <img src="https://drive.google.com/thumbnail?id=1ZSLxP9By7xkJlCRBErSrcFelB1c6MIZf&sz=w1000" alt="code bug" style="max-width:100%; max-height:320px; border-radius:12px;">
+  <main class="container">
+
+    <!-- Controls Bar -->
+    <section class="controls-card">
+      <div class="controls-grid">
+        <div class="control-group">
+          <label for="groupSelect">1. Cohort Group</label>
+          <select id="groupSelect" onchange="handleFilterChange()">
+            <option value="ALL">All Groups (#1–#8)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>2. Filter by Theme</label>
+          <div class="theme-chips-filter">
+            <span class="filter-chip chip-env" data-theme="Environment" onclick="toggleThemeFilter(this)">🌱 Environment</span>
+            <span class="filter-chip chip-health" data-theme="Health &amp; Wellbeing" onclick="toggleThemeFilter(this)">❤️ Health</span>
+            <span class="filter-chip chip-arts" data-theme="Arts &amp; Culture" onclick="toggleThemeFilter(this)">🎨 Arts</span>
+            <span class="filter-chip chip-edu" data-theme="Education" onclick="toggleThemeFilter(this)">📚 Education</span>
+            <span class="filter-chip chip-access" data-theme="Disabilities &amp; Accessibility" onclick="toggleThemeFilter(this)">♿ Accessibility</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label for="searchInput">3. Search Projects</label>
+          <input type="text" id="searchInput" placeholder="Search keywords, users, or problems..." oninput="handleFilterChange()">
+        </div>
+
+        <div class="control-group" style="text-align:right;">
+          <button class="btn" style="background:var(--ink); color:var(--sun);" onclick="togglePresentationMode()">▶ Start Exhibition</button>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Slide 8: Bug #1 - Challenge -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip teal anim">DEBUG 1 · QUESTION</span>
-      <h2 class="anim heading">Bug #1: <span class="pop">The One-Time Heart</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">from</span> microbit <span class="k">import</span> *
+    <!-- Gallery Grid View -->
+    <section id="galleryView">
+      <div id="projectsGrid" class="projects-grid"></div>
+    </section>
 
-<span class="k">if</span> button_a.is_pressed():
-    display.<span class="f">show</span>(Image.HAPPY)</div>
-        </div>
-        <div>
-          <p class="lead anim" style="font-weight:bold; color:var(--ink);">🎯 Goal: Show a happy face whenever Button A is held down.</p>
-          <p class="lead anim" style="font-size:20px; font-weight:bold; color:var(--red); margin-top:12px;">❓ What's wrong with this code? What happens when you run it?</p>
-          <div class="annotation anim" style="margin-top:16px;">🔍 Hint: Press Button A after uploading — does it keep checking continuously?</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- Project Journal Detail View -->
+    <section id="detailView" class="journal-detail">
+      <button class="btn btn-secondary btn-back-nav" onclick="showGallery()">← Back to Project Gallery</button>
+      <div id="journalContent" class="journal-stack"></div>
+    </section>
 
-  <!-- Slide 9: Bug #1 - Solution -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip dark anim">DEBUG 1 · SOLUTION</span>
-      <h2 class="anim heading">Bug #1: <span class="pop">The Fix</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">from</span> microbit <span class="k">import</span> *
+  </main>
 
-<span class="k">while</span> <span class="k">True</span>:
-    <span class="k">if</span> button_a.is_pressed():
-        display.<span class="f">show</span>(Image.HAPPY)</div>
-        </div>
-        <div class="debug-panel anim">
-          <h4>Goal: Show happy face continuously</h4>
-          <div class="debug-label-bug">⚠️ The Bug:</div>
-          <div class="debug-text-bug">Missing <code>while True:</code> loop! Python checks Button A once at startup and stops immediately.</div>
-          <div class="debug-label-fix">✅ The Fix:</div>
-          <div class="debug-text-fix">Wrap the <code>if</code> condition inside a <code>while True:</code> loop so it checks constantly!</div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- Exhibition Auto-Scroll Controls Overlay -->
+  <div class="present-overlay-controls" id="presentOverlay">
+    <button class="btn btn-secondary" onclick="prevPresentationSection()">⏮ Prev</button>
+    <button class="btn" id="presentPlayPauseBtn" onclick="togglePausePresentation()">⏸ Pause</button>
+    <button class="btn btn-secondary" onclick="nextPresentationSection()">Next ⏭</button>
+    <span style="color:var(--sun); font-size:12px; font-weight:bold;">Speed:</span>
+    <button class="present-speed-btn" onclick="setPresentSpeed(22000, this)">Slow</button>
+    <button class="present-speed-btn active" onclick="setPresentSpeed(14000, this)">Norm</button>
+    <button class="present-speed-btn" onclick="setPresentSpeed(8000, this)">Fast</button>
+    <button class="btn" style="background:var(--red); margin-left:12px;" onclick="togglePresentationMode()">❌ Exit</button>
+  </div>
 
-  <!-- Slide 10: Bug #2 - Challenge -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip teal anim">DEBUG 2 · QUESTION</span>
-      <h2 class="anim heading">Bug #2: <span class="pop">The Invisible Letter</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">from</span> microbit <span class="k">import</span> *
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightboxImg" src="" alt="Project Photo Preview">
+  </div>
 
-<span class="k">while</span> <span class="k">True</span>:
-    display.<span class="f">show</span>(Image.HEART)
-    display.<span class="f">clear</span>()</div>
-        </div>
-        <div>
-          <p class="lead anim" style="font-weight:bold; color:var(--ink);">🎯 Goal: Flash a heart continuously on the screen.</p>
-          <p class="lead anim" style="font-size:20px; font-weight:bold; color:var(--red); margin-top:12px;">❓ What will the display actually look like when run?</p>
-          <div class="annotation anim" style="margin-top:16px;">🔍 Hint: It switches between show and clear in microseconds!</div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <script>
+    /* ==========================================================================
+       DATA CONTROLLER & CONFIG
+       ========================================================================== */
+    const CSV_URL = ""; // Set live published CSV URL here
 
-  <!-- Slide 11: Bug #2 - Solution -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip dark anim">DEBUG 2 · SOLUTION</span>
-      <h2 class="anim heading">Bug #2: <span class="pop">The Fix</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">from</span> microbit <span class="k">import</span> *
+    const THEME_MAP = {
+      "Environment": { color: "var(--teal)", icon: "🌱", class: "chip-env" },
+      "Health & Wellbeing": { color: "var(--red)", icon: "❤️", class: "chip-health" },
+      "Arts & Culture": { color: "var(--sun)", icon: "🎨", class: "chip-arts" },
+      "Education": { color: "var(--maroon)", icon: "📚", class: "chip-edu" },
+      "Disabilities & Accessibility": { color: "var(--plum)", icon: "♿", class: "chip-access" }
+    };
 
-<span class="k">while</span> <span class="k">True</span>:
-    display.<span class="f">show</span>(Image.HEART)
-    <span class="f">sleep</span>(<span class="s">500</span>)
-    display.<span class="f">clear</span>()
-    <span class="f">sleep</span>(<span class="s">500</span>)</div>
-        </div>
-        <div class="debug-panel anim">
-          <h4>Goal: Flash a heart continuously</h4>
-          <div class="debug-label-bug">⚠️ The Bug:</div>
-          <div class="debug-text-bug">No <code>sleep()</code> delay! The micro:bit displays and clears the heart in microseconds.</div>
-          <div class="debug-label-fix">✅ The Fix:</div>
-          <div class="debug-text-fix">Add <code>sleep(500)</code> after <code>show()</code> and <code>clear()</code> so each state stays visible!</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    // Schema mapped mock data (§10)
+    const MOCK_DATA = [
+      {
+        "group": "Group #6",
+        "project": "الجراج الذكي (Smart Garage)",
+        "members": ["شهد عادل", "فتحي زكريا", "فادى يوسف"],
+        "themes": ["Disabilities & Accessibility"],
+        "description": "A garage with two auto-doors for elderly and disabled drivers.",
+        "user": "Elderly people and people with disabilities",
+        "problem": "Opening the garage door manually is hard and risky for them.",
+        "suggested": ["Manual remote", "Ultrasonic car door", "IR side door"],
+        "selected": "Two mechanical doors: a large car door on Ultrasonic, a small side door on IR.",
+        "why": "Serves both the car and the person automatically, no manual effort.",
+        "inputs": ["Ultrasonic", "IR sensor"],
+        "outputs": ["Servo", "Servo", "Display"],
+        "extra": ["Ultrasonic", "IR", "Servo"],
+        "enclosure": "Cardboard garage with two hinged doors",
+        "steps": ["Prototype doors in cardboard", "Wire ultrasonic to P1/P2", "Add IR side door", "Tune distances", "Test with a toy car"],
+        "functionality": "Car door opens within 0.5m; side door opens when a person approaches.",
+        "challenges": "Servo power dip when both doors move together.",
+        "code": "from microbit import *\n# Smart Garage Code\nwhile True:\n    if pin1.read_digital() == 0:\n        display.show(Image.YES)",
+        "photos": ["https://drive.google.com/thumbnail?id=1K1Jtp_lEwVGHrVHd5ygwCMaHLOHLFfjd&sz=w1000"]
+      },
+      {
+        "group": "Group #1",
+        "project": "Smart Electricity Switch",
+        "members": ["محمد عبد الخالق", "عمر محمد على"],
+        "themes": ["Environment"],
+        "description": "A micro:bit that flips a real light switch to cut wasted power.",
+        "user": "Anyone in a home or office",
+        "problem": "Lights left on waste electricity.",
+        "suggested": ["Manual remote only", "Auto light sensing", "Both combined"],
+        "selected": "A servo flips the switch; a remote micro:bit sends radio commands; LDR auto-off in daylight.",
+        "why": "Covers both manual control and automatic saving.",
+        "inputs": ["LDR", "Radio / Button"],
+        "outputs": ["Servo", "Radio", "Display"],
+        "extra": ["Servo", "LDR"],
+        "enclosure": "Cardboard wall panel with a real switch",
+        "steps": ["Build wall panel", "Mount servo on switch", "Set up radio pair", "Add LDR auto mode", "Calibrate light threshold"],
+        "functionality": "Press remote to toggle; auto-off when the room is bright.",
+        "challenges": "Aligning the servo arm precisely with the switch.",
+        "code": "",
+        "photos": []
+      },
+      {
+        "group": "Group #7",
+        "project": "Braille Learning Device",
+        "members": ["تبارك محمد", "احمد اسماعيل", "عبد الرحمن عاطف"],
+        "themes": ["Education", "Disabilities & Accessibility"],
+        "description": "A device that helps blind students practise Braille independently.",
+        "user": "Blind and visually-impaired students",
+        "problem": "Learning Braille needs constant teacher help.",
+        "suggested": ["Flashcards", "Audio-only app", "Tactile buttons + feedback"],
+        "selected": "Buttons/touch inputs to enter a letter; sound + vibration feedback; score tracking.",
+        "why": "Lets students practise alone with instant feedback.",
+        "inputs": ["Button A", "Button B", "Touch logo"],
+        "outputs": ["Speaker", "Display"],
+        "extra": [],
+        "enclosure": "Cardboard console with labelled buttons",
+        "steps": ["Map buttons to Braille cells", "Add feedback sounds", "Build scoring variable", "Add difficulty levels", "User-test with a peer"],
+        "functionality": "Enter a letter → device confirms correct/incorrect and tracks a score.",
+        "challenges": "Representing 6-dot Braille with limited buttons.",
+        "code": "",
+        "photos": []
+      }
+    ];
 
-  <!-- Slide 12: Bug #3 - Challenge -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip teal anim">DEBUG 3 · QUESTION</span>
-      <h2 class="anim heading">Bug #3: <span class="pop">The Silent Speaker</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code">music.<span class="f">play</span>(music.POWER_UP)
-display.<span class="f">show</span>(Image.HAPPY)</div>
-        </div>
-        <div>
-          <p class="lead anim" style="font-weight:bold; color:var(--ink);">🎯 Goal: Play a startup tune and show a smiley face.</p>
-          <p class="lead anim" style="font-size:20px; font-weight:bold; color:var(--red); margin-top:12px;">❓ Will this code run? What error will the editor show?</p>
-          <div class="annotation anim" style="margin-top:16px;">🔍 Hint: Look at the top of the file — where are the imports?</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    let projectsData = [];
+    let filteredProjects = [];
+    let activeProjectIndex = -1;
+    let selectedThemes = new Set();
 
-  <!-- Slide 13: Bug #3 - Solution -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip dark anim">DEBUG 3 · SOLUTION</span>
-      <h2 class="anim heading">Bug #3: <span class="pop">The Fix</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">from</span> microbit <span class="k">import</span> *
-<span class="k">import</span> music
+    // Exhibition Presentation State
+    let isPresenting = false;
+    let isPaused = false;
+    let presentSpeed = 14000;
+    let autoScrollInterval = null;
+    let currentSectionIndex = 0;
 
-music.<span class="f">play</span>(music.POWER_UP)
-display.<span class="f">show</span>(Image.HAPPY)</div>
-        </div>
-        <div class="debug-panel anim">
-          <h4>Goal: Play tune and show smiley</h4>
-          <div class="debug-label-bug">⚠️ The Bug:</div>
-          <div class="debug-text-bug">Missing <code>import music</code> and <code>from microbit import *</code> libraries at the top!</div>
-          <div class="debug-label-fix">✅ The Fix:</div>
-          <div class="debug-text-fix">Always import the <code>microbit</code> and <code>music</code> modules before calling their functions.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 14: Bug #4 - Challenge -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip teal anim">DEBUG 4 · QUESTION</span>
-      <h2 class="anim heading">Bug #4: <span class="pop">Capital Letters</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">from</span> microbit <span class="k">import</span> *
-
-<span class="k">while</span> <span class="k">True</span>:
-    <span class="k">if</span> button_a.is_pressed() AND button_b.is_pressed():
-        display.<span class="f">show</span>(Image.HAPPY)</div>
-        </div>
-        <div>
-          <p class="lead anim" style="font-weight:bold; color:var(--ink);">🎯 Goal: Smile when both Buttons A and B are pressed together.</p>
-          <p class="lead anim" style="font-size:20px; font-weight:bold; color:var(--red); margin-top:12px;">❓ Syntax error or logic error? What happens when you run this?</p>
-          <div class="annotation anim" style="margin-top:16px;">🔍 Hint: Pay close attention to Python's capitalization rules!</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 15: Bug #4 - Solution -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip dark anim">DEBUG 4 · SOLUTION</span>
-      <h2 class="anim heading">Bug #4: <span class="pop">The Fix</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">from</span> microbit <span class="k">import</span> *
-
-<span class="k">while</span> <span class="k">True</span>:
-    <span class="k">if</span> button_a.is_pressed() <span class="k">and</span> button_b.is_pressed():
-        display.<span class="f">show</span>(Image.HAPPY)</div>
-        </div>
-        <div class="debug-panel anim">
-          <h4>Goal: Smile on A + B pressed</h4>
-          <div class="debug-label-bug">⚠️ The Bug:</div>
-          <div class="debug-text-bug">Syntax Error! Capitalized <code>AND</code> is invalid in Python.</div>
-          <div class="debug-label-fix">✅ The Fix:</div>
-          <div class="debug-text-fix">Python logic keywords are strictly lowercase — change <code>AND</code> to <code>and</code>.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 16: Bug #5 - Challenge -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip teal anim">DEBUG 5 · QUESTION</span>
-      <h2 class="anim heading">Bug #5: <span class="pop">The Swap Trap</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">from</span> microbit <span class="k">import</span> *
-
-<span class="k">while</span> <span class="k">True</span>:
-    <span class="k">if</span> button_a.is_pressed():
-        display.<span class="f">show</span>(Image.SAD)
-    <span class="k">if</span> button_b.is_pressed():
-        display.<span class="f">show</span>(Image.HAPPY)</div>
-        </div>
-        <div>
-          <p class="lead anim" style="font-weight:bold; color:var(--ink);">🎯 Goal: Pressing A shows Happy 😊, pressing B shows Sad 😢.</p>
-          <p class="lead anim" style="font-size:20px; font-weight:bold; color:var(--red); margin-top:12px;">❓ This code runs without errors... what's wrong?</p>
-          <div class="annotation anim" style="margin-top:16px;">🔍 Hint: Check which image is paired with which button press!</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 17: Bug #5 - Solution -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&sz=w1000" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip dark anim">DEBUG 5 · SOLUTION</span>
-      <h2 class="anim heading">Bug #5: <span class="pop">The Fix</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">from</span> microbit <span class="k">import</span> *
-
-<span class="k">while</span> <span class="k">True</span>:
-    <span class="k">if</span> button_a.is_pressed():
-        display.<span class="f">show</span>(Image.HAPPY)
-    <span class="k">if</span> button_b.is_pressed():
-        display.<span class="f">show</span>(Image.SAD)</div>
-        </div>
-        <div class="debug-panel anim">
-          <h4>Goal: Press A = Happy, Press B = Sad</h4>
-          <div class="debug-label-bug">⚠️ The Bug:</div>
-          <div class="debug-text-bug">Logical Error! Button A displays <code>SAD</code> and Button B displays <code>HAPPY</code>.</div>
-          <div class="debug-label-fix">✅ The Fix:</div>
-          <div class="debug-text-fix">Swap the images so Button A displays <code>Image.HAPPY</code> and Button B displays <code>Image.SAD</code>.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 18: Section Divider 2 (Component 5) -->
-  <section class="slide divider">
-    <div class="brandbar"><span>CODE &amp; CREATE</span><span class="right-meta"><span>SESSION 04</span></span></div>
-    <div class="slidebody">
-      <p class="anim" style="color:var(--sun); font-weight:bold; letter-spacing:2px; font-size:18px;">PART 02</p>
-      <h2 class="anim heading" style="font-size:52px; margin:14px 0; color:var(--paper);">NEW OUTPUT: SOUND</h2>
-      <p class="subtitle anim">Make the micro:bit speak</p>
-    </div>
-  </section>
-
-  <!-- Slide 19: Meet Speaker (Component 16) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip dark anim">HARDWARE</span>
-      <h2 class="anim heading">SPEAKER = <span class="pop">OUTPUT</span></h2>
-      <div class="two">
-        <div class="imgwrap anim">
-          <img src="https://drive.google.com/thumbnail?id=1ux4COkXbfKbfh-FIbpo1TY_3nT_MbicX&sz=w1000" alt="micro:bit Speaker" style="max-width:100%; max-height:320px; border-radius:12px;">
-        </div>
-        <ul class="steps anim">
-          <li><span class="num">🔊</span><span>Built-in speaker on micro:bit V2</span></li>
-          <li><span class="num">OUT</span><span><b>music</b> library — built-in tunes &amp; custom notes</span></li>
-          <li><span class="num">OUT</span><span><b>speech</b> library — make it talk!</span></li>
-          <li><span class="num dark">⚡</span><span>Note format: <code>"C4:4"</code> = note C, octave 4, duration 4</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 20: Speaker Code (Component 17) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip dark anim">PYTHON</span>
-      <h2 class="anim heading">Playing <span class="pop">Sounds</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">import</span> music
-
-music.<span class="f">play</span>(music.POWER_UP)
-music.<span class="f">play</span>([<span class="s">"C4:4"</span>, <span class="s">"E4:4"</span>, <span class="s">"G4:4"</span>])</div>
-        </div>
-        <div>
-          <div class="annotation anim">⬅ Built-in sound effects (POWER_UP, BA_DING, JUMP)</div>
-          <div class="annotation anim" style="background:var(--teal); color:#fff; margin-top:14px;">⬅ Compose your own notes using note strings!</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 21: TRY IT Make Sound (Component 10) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip sun anim">TRY IT</span>
-      <h2 class="anim heading">Make Sound!</h2>
-      <ol class="steps anim">
-        <li><span class="num">⏱</span><span><b>Time:</b> 10 MIN</span></li>
-        <li><span class="num">1</span><span>Play a built-in tune using <code>music.play(music.NYAN)</code></span></li>
-        <li><span class="num">2</span><span>Compose 3 custom notes of your own</span></li>
-        <li><span class="num dark">★</span><span><b>Bonus:</b> Play a sound when Button A is pressed!</span></li>
-      </ol>
-      <p class="lead anim" style="font-size:16px; color:var(--maroon); margin-top:10px;">Online rule: Unmute or share screen audio so we can hear!</p>
-    </div>
-  </section>
-
-  <!-- Slide 22: Section Divider 3 (Component 5) -->
-  <section class="slide divider">
-    <div class="brandbar"><span>CODE &amp; CREATE</span><span class="right-meta"><span>SESSION 04</span></span></div>
-    <div class="slidebody">
-      <p class="anim" style="color:var(--sun); font-weight:bold; letter-spacing:2px; font-size:18px;">PART 03</p>
-      <h2 class="anim heading" style="font-size:52px; margin:14px 0; color:var(--paper);">NEW INPUT: TOUCH</h2>
-      <p class="subtitle anim">A hidden button on the board</p>
-    </div>
-  </section>
-
-  <!-- Slide 23: Meet Touch Logo (Component 16) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip dark anim">HARDWARE</span>
-      <h2 class="anim heading">TOUCH LOGO = <span class="pop">INPUT</span></h2>
-      <div class="two">
-        <div class="imgwrap anim">
-          <img src="https://drive.google.com/thumbnail?id=1F47eXfQVK7160iLydS_b9l8D_kjxG3lV&sz=w1000" alt="micro:bit Touch Logo" style="max-width:100%; max-height:320px; border-radius:12px;">
-        </div>
-        <ul class="steps anim">
-          <li><span class="num">👆</span><span>"The gold logo is a built-in touch button"</span></li>
-          <li><span class="num">IN</span><span><b>pin_logo.is_touched()</b> — checks if being touched</span></li>
-          <li><span class="num dark">💡</span><span>Works like a capacitive sensor — detects your finger!</span></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 24: Touch Code (Component 17) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip dark anim">PYTHON</span>
-      <h2 class="anim heading">Touch Logo <span class="pop">Logic</span></h2>
-      <div class="two">
-        <div class="code-container anim">
-          <div class="code"><span class="k">while</span> <span class="k">True</span>:
-    <span class="k">if</span> pin_logo.is_touched():
-        music.<span class="f">play</span>(music.BA_DING)
-        display.<span class="f">show</span>(Image.HAPPY)</div>
-        </div>
-        <div>
-          <div class="annotation anim">⬅ Checks if finger touches the gold logo</div>
-          <div class="annotation anim" style="background:var(--teal); color:#fff; margin-top:14px;">⬅ Combines touch input with sound + screen output!</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 25: TRY IT Touch + Sound (Component 10) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip sun anim">TRY IT</span>
-      <h2 class="anim heading">Touch + Sound!</h2>
-      <ol class="steps anim">
-        <li><span class="num">⏱</span><span><b>Time:</b> 8 MIN</span></li>
-        <li><span class="num">1</span><span>Touch the logo → play sound &amp; show image</span></li>
-        <li><span class="num dark">★</span><span><b>Bonus:</b> Play a different sound for Button A vs. Touch Logo!</span></li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- Slide 26: BREAK (Component 12) -->
-  <section class="slide hero" style="background: var(--paper);">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip teal anim">BREAK</span>
-      <h1 class="title anim heading" style="font-size:52px; text-align:center; color:var(--ink);">10-MINUTE BREAK</h1>
-      <p class="subtitle anim" style="color:var(--maroon-d); margin-top:16px;">Recharge! Next: Your first graded individual project assessment.</p>
-    </div>
-  </section>
-
-  <!-- Slide 27: Section Divider 4 (Component 5) -->
-  <section class="slide divider">
-    <div class="brandbar"><span>CODE &amp; CREATE</span><span class="right-meta"><span>SESSION 04</span></span></div>
-    <div class="slidebody">
-      <p class="anim" style="color:var(--sun); font-weight:bold; letter-spacing:2px; font-size:18px;">PART 04</p>
-      <h2 class="anim heading" style="font-size:52px; margin:14px 0; color:var(--paper);">YOUR GRADED PROJECT</h2>
-      <p class="subtitle anim">Transportation · Individual Assessment 1</p>
-    </div>
-  </section>
-
-  <!-- Slide 28: Project Challenge Assessed (Component 19) -->
-  <section class="slide hero" style="background: var(--paper);">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip teal anim">BUILD · INDIVIDUAL ASSESSMENT</span>
-      <h1 class="title anim heading" style="font-size:42px; text-align:center; color:var(--ink);">TRANSPORTATION PROJECT</h1>
-      <p class="lead anim" style="text-align:center; margin-top:16px;">
-        Solve a Transportation problem by integrating everything learned (inputs, logic, outputs). Evaluated against the Skills Rubric!
-      </p>
-    </div>
-  </section>
-
-  <!-- Slide 29: Pick Challenge (Component 20: DT Step Define) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip anim">DEFINE</span>
-      <h2 class="anim heading">1. Select Transportation Problem</h2>
-      <ol class="steps anim">
-        <li><span class="num">1</span><span>Open the Challenge Wall Dashboard in a new browser tab</span></li>
-        <li><span class="num">2</span><span>Filter by your Group and the <b>Transportation</b> category</span></li>
-        <li><span class="num">3</span><span>Pick the specific challenge card you want to solve</span></li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- Slide 30: Empathize Define Ideate (Component 20) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip anim">IDEATE</span>
-      <h2 class="anim heading">2. Plan Your System</h2>
-      <div class="cards">
-        <div class="card anim"><div class="ico">📥</div><h3>Inputs</h3><p>Buttons A/B, Shake/Tilt, Touch Logo</p></div>
-        <div class="card anim"><div class="ico">🧠</div><h3>Logic</h3><p>If conditions, operators, variables, counter</p></div>
-        <div class="card anim"><div class="ico">💡</div><h3>Outputs</h3><p>LED Display icons/scroll, Speaker audio</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 31: Build Project (Component 22) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip teal anim">BUILD</span>
-      <h2 class="anim heading">3. Code &amp; Debug</h2>
-      <ol class="steps anim">
-        <li><span class="num">⏱</span><span><b>Time:</b> 30 MIN</span></li>
-        <li><span class="num">1</span><span>Write pseudocode plan first</span></li>
-        <li><span class="num">2</span><span>Code feature-by-feature and test systematically</span></li>
-        <li><span class="num">3</span><span>Debug syntax and logical errors as you build</span></li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- Slide 32: Success Checklist Assessed (Component 24) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip sun anim">CHECK · RUBRIC CRITERIA</span>
-      <h2 class="anim heading">Individual Assessment Checklist</h2>
-      <ul class="steps anim">
-        <li><span class="num dark">✓</span><span>Solves the chosen Transportation problem?</span></li>
-        <li><span class="num dark">✓</span><span>Uses ≥2 features learned in the course?</span></li>
-        <li><span class="num dark">✓</span><span>Combines input + logic + output seamlessly?</span></li>
-        <li><span class="num dark">✓</span><span>Runs cleanly without bugs?</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Slide 33: Share & Reflect (Component 25) -->
-  <section class="slide hero" style="background: var(--paper);">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip anim">SHARE</span>
-      <h1 class="title anim heading" style="font-size:42px; text-align:center; color:var(--ink);">SHOW YOUR PROJECT</h1>
-      <p class="lead anim" style="text-align:center; margin-top:16px;">
-        Share screen to demo: List inputs &amp; outputs combined, share your Bug of the Day, and name which concept stuck with you most!
-      </p>
-    </div>
-  </section>
-
-  <!-- Slide 34: Section Divider 5 (Component 5) -->
-  <section class="slide divider">
-    <div class="brandbar"><span>CODE &amp; CREATE</span><span class="right-meta"><span>SESSION 04</span></span></div>
-    <div class="slidebody">
-      <p class="anim" style="color:var(--sun); font-weight:bold; letter-spacing:2px; font-size:18px;">PART 05</p>
-      <h2 class="anim heading" style="font-size:52px; margin:14px 0; color:var(--paper);">FINAL CAPSTONE LAUNCH</h2>
-      <p class="subtitle anim">Propose your group's graduation project</p>
-    </div>
-  </section>
-
-  <!-- Slide 35: Homework (Component 8: ACTIVITY) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <span class="chip teal anim">ACTIVITY · GROUP HOMEWORK</span>
-      <h2 class="anim heading">Final Project <span class="pop">Ideas Form</span></h2>
-      <ol class="steps anim">
-        <li><span class="num">1</span><span>Meet with your assigned capstone group</span></li>
-        <li><span class="num">2</span><span>Discuss &amp; select your target problem, theme, and proposed features</span></li>
-        <li><span class="num">3</span><span>Submit the <b>Final Project Ideas Form</b> before Session 5</span></li>
-        <li><span class="num dark">📌</span><span>This locks your group's problem, theme, proposed features, and requested extra hardware parts!</span></li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- Slide 36: Learning Recap (Component 27) -->
-  <section class="slide">
-    <div class="brandbar">
-      <span class="logo">
-        <img src="https://drive.google.com/uc?export=view&id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8" alt="San3a Academy" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-        <span class="fallback" style="display:none">SAN3A ACADEMY</span>
-      </span>
-      <span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span>
-    </div>
-    <div class="slidebody">
-      <h2 class="anim heading">Session 4 <span class="pop">Recap</span></h2>
-      <div class="cards">
-        <div class="card anim"><div class="ico">💻</div><h3>Python</h3><p>Debugging syntax/logical errors, integrating full toolkit</p></div>
-        <div class="card anim"><div class="ico">🔌</div><h3>Micro:bit</h3><p>Speaker output &amp; Touch Logo input</p></div>
-        <div class="card anim"><div class="ico">🧠</div><h3>Computational Thinking</h3><p>Systematic debugging &amp; testing</p></div>
-        <div class="card anim"><div class="ico">🛠️</div><h3>Mindset</h3><p>Perseverance &amp; collaboration</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 37: Next Session (Component 28) -->
-  <section class="slide hero">
-    <div class="brandbar"><span class="tag">Code &amp; Create</span><span class="right-meta"><span>SESSION 04</span><span class="mode-tag">ONLINE</span></span></div>
-    <div class="slidebody">
-      <p class="anim" style="color:var(--sun); font-weight:bold; letter-spacing:2px; font-size:18px;">NEXT SESSION</p>
-      <h1 class="title anim heading" style="font-size:46px; margin:14px 0; color:#fff;">GROUP CAPSTONE &amp; CARDBOARD</h1>
-      <p class="subtitle anim">Build your final prototype for real in cardboard and present to the class!</p>
-      <p class="anim" style="color:#ffd9dc; margin-top:20px; font-size:16px;">Offline Capstone Build · Bring your locked idea from the form!</p>
-    </div>
-  </section>
-
-</div>
-
-<div class="dots" id="dots"></div>
-<div class="nav">
-  <button id="prev" aria-label="Previous">‹</button>
-  <span class="counter" id="counter">1 / 37</span>
-  <button id="next" aria-label="Next">›</button>
-</div>
-
-<script>
-  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSPA0TQrPXuY9WjFwdK1FwdxM9tCTjJK3LY-0cxiJTwQCblNozER8heaaKYL523--_ts-Y5pkBI-pE0/pub?gid=0&single=true&output=csv';
-  function parseCsvRow(row) { const cells = []; const pattern = /(?:^|,)(?:"((?:[^"]|"")*)"|([^,]*))/g; let match; while ((match = pattern.exec(row))) cells.push((match[1] ?? match[2]).replace(/""/g, '"').trim()); return cells; }
-  function imageUrl(url) { const match = url.match(/\/file\/d\/([^/]+)/); return match ? `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000` : url; }
-  async function loadSheetImages() { try { const response = await fetch(SHEET_CSV_URL); if (!response.ok) throw new Error(`Image sheet returned ${response.status}`); const rows = (await response.text()).trim().split(/\r?\n/).slice(1); const imageMap = Object.fromEntries(rows.map(parseCsvRow).filter(row => row.length >= 2).map(([name, url]) => [name, imageUrl(url)])); const aliases = { 'San3a Academy': 'San3a Academy Logo' }; document.querySelectorAll('img[alt]').forEach(img => { const name = aliases[img.alt] || img.alt; if (imageMap[name]) img.src = imageMap[name]; }); } catch (error) { console.warn('Could not load image sheet:', error); } }
-  document.querySelectorAll('.brandbar').forEach(bar => {
-    if (bar.querySelector('.logo')) return;
-    const logo = document.createElement('span');
-    logo.className = 'logo';
-    logo.innerHTML = '<img alt="San3a Academy"><span class="fallback" style="display:none">SAN3A ACADEMY</span>';
-    bar.insertBefore(logo, bar.firstElementChild);
-  });
-  loadSheetImages();
-
-  const slides = [...document.querySelectorAll('.slide')];
-  const dotsWrap = document.getElementById('dots');
-  const counter = document.getElementById('counter');
-  const progress = document.getElementById('progress');
-  let i = 0;
-
-  slides.forEach((_, idx) => { 
-    const d = document.createElement('div'); 
-    d.className = 'dot' + (idx === 0 ? ' on' : ''); 
-    d.onclick = () => go(idx); 
-    dotsWrap.appendChild(d); 
-  });
-  
-  const dots = [...document.querySelectorAll('.dot')];
-
-  function render() {
-    slides.forEach((s, idx) => { 
-      s.classList.remove('active', 'leaving'); 
-      if (idx === i) s.classList.add('active'); 
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchData();
+      setupKeyboardListeners();
+      
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('present') === '1') {
+        setTimeout(togglePresentationMode, 600);
+      }
     });
-    dots.forEach((d, idx) => d.classList.toggle('on', idx === i));
-    counter.textContent = (i + 1) + ' / ' + slides.length;
-    progress.style.width = ((i + 1) / slides.length * 100) + '%';
-  }
 
-  function go(n) { 
-    if (n < 0 || n >= slides.length || n === i) return; 
-    const cur = slides[i]; 
-    cur.classList.add('leaving'); 
-    cur.classList.remove('active'); 
-    i = n; 
-    render(); 
-  }
+    /* ==========================================================================
+       DATA PARSING & NORMALIZATION
+       ========================================================================== */
+    function fetchData() {
+      if (!CSV_URL) {
+        document.getElementById('previewRibbon').style.display = 'inline-block';
+        processParsedData(MOCK_DATA);
+        return;
+      }
 
-  document.getElementById('next').onclick = () => go(i + 1);
-  document.getElementById('prev').onclick = () => go(i - 1);
-  
-  document.addEventListener('keydown', e => { 
-    if (e.key === 'ArrowRight' || e.key === ' ') go(i + 1); 
-    if (e.key === 'ArrowLeft') go(i - 1); 
-  });
+      Papa.parse(CSV_URL, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          const raw = results.data.map(row => {
+            const cleanRow = {};
+            Object.keys(row).forEach(k => cleanRow[k.trim()] = row[k]);
+            
+            return {
+              group: cleanRow['Group number'] || 'Group #1',
+              project: cleanRow['Project name'] || 'Untitled Project',
+              members: (cleanRow['Team members'] || '').split(',').map(m => m.trim()).filter(Boolean),
+              themes: (cleanRow['Theme'] || '').split(',').map(t => t.trim()).filter(Boolean),
+              description: cleanRow['Short description'] || '',
+              user: cleanRow['Target user'] || '',
+              problem: cleanRow['Problem'] || '',
+              suggested: (cleanRow['Suggested solutions'] || '').split('\n').map(s => s.trim()).filter(Boolean),
+              selected: cleanRow['Selected solution'] || '',
+              why: cleanRow['Why this solution'] || '',
+              inputs: (cleanRow['Inputs used'] || '').split(',').map(i => i.trim()).filter(Boolean),
+              outputs: (cleanRow['Outputs used'] || '').split(',').map(o => o.trim()).filter(Boolean),
+              extra: (cleanRow['Extra components'] || '').split(',').map(e => e.trim()).filter(Boolean),
+              enclosure: cleanRow['Enclosure'] || '',
+              steps: (cleanRow['Building steps'] || '').split('\n').map(s => s.trim()).filter(Boolean),
+              functionality: cleanRow['Final functionality'] || '',
+              challenges: cleanRow['Challenges'] || '',
+              code: cleanRow['Code source'] || '',
+              photos: parseDriveLinks(cleanRow['Photos'] || '')
+            };
+          });
+          processParsedData(raw);
+        },
+        error: function(err) {
+          console.warn('CSV load failed, using mock data:', err);
+          document.getElementById('previewRibbon').style.display = 'inline-block';
+          processParsedData(MOCK_DATA);
+        }
+      });
+    }
 
-  let sx = null;
-  document.addEventListener('touchstart', e => sx = e.touches[0].clientX);
-  document.addEventListener('touchend', e => { 
-    if (sx === null) return; 
-    const dx = e.changedTouches[0].clientX - sx; 
-    if (dx < -50) go(i + 1); 
-    if (dx > 50) go(i - 1); 
-    sx = null; 
-  });
+    function processParsedData(data) {
+      projectsData = data;
+      populateGroupDropdown();
+      updateCohortSummary();
+      handleFilterChange();
+    }
 
-  render();
-</script>
+    function parseDriveLinks(rawStr) {
+      if (!rawStr) return [];
+      const idSet = new Set();
+      const regex = /(?:id=|\/d\/|\/file\/d\/)([a-zA-Z0-9_-]{20,})/g;
+      let match;
+      while ((match = regex.exec(rawStr)) !== null) {
+        if (match[1]) idSet.add(`https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`);
+      }
+      return Array.from(idSet);
+    }
 
+    /* ==========================================================================
+       FILTERS & SUMMARY CONTROLLER
+       ========================================================================== */
+    function populateGroupDropdown() {
+      const groups = [...new Set(projectsData.map(p => p.group))].sort();
+      const select = document.getElementById('groupSelect');
+      select.innerHTML = '<option value="ALL">All Groups (#1–#8)</option>';
+      groups.forEach(g => {
+        select.innerHTML += `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`;
+      });
+    }
+
+    function toggleThemeFilter(chip) {
+      const theme = chip.getAttribute('data-theme');
+      if (selectedThemes.has(theme)) {
+        selectedThemes.delete(theme);
+        chip.classList.remove('active');
+      } else {
+        selectedThemes.add(theme);
+        chip.classList.add('active');
+      }
+      handleFilterChange();
+    }
+
+    function handleFilterChange() {
+      const groupVal = document.getElementById('groupSelect').value;
+      const searchVal = document.getElementById('searchInput').value.toLowerCase().trim();
+
+      filteredProjects = projectsData.filter(p => {
+        const matchGroup = groupVal === 'ALL' || p.group === groupVal;
+        const matchTheme = selectedThemes.size === 0 || p.themes.some(t => selectedThemes.has(t));
+        const matchSearch = !searchVal || 
+          p.project.toLowerCase().includes(searchVal) ||
+          p.user.toLowerCase().includes(searchVal) ||
+          p.problem.toLowerCase().includes(searchVal) ||
+          p.members.some(m => m.toLowerCase().includes(searchVal));
+
+        return matchGroup && matchTheme && matchSearch;
+      });
+
+      renderGallery();
+    }
+
+    function updateCohortSummary() {
+      document.getElementById('statTotalProjects').innerText = projectsData.length;
+      document.getElementById('statTotalTeams').innerText = new Set(projectsData.map(p => p.group + p.project)).size;
+
+      // Theme distribution bar
+      const themeCounts = {};
+      Object.keys(THEME_MAP).forEach(t => themeCounts[t] = 0);
+      projectsData.forEach(p => p.themes.forEach(t => { if (themeCounts[t] !== undefined) themeCounts[t]++; }));
+      
+      const totalThemeRefs = Object.values(themeCounts).reduce((a, b) => a + b, 0) || 1;
+      const bar = document.getElementById('themeDistBar');
+      bar.innerHTML = Object.entries(themeCounts).map(([theme, count]) => {
+        const pct = (count / totalThemeRefs) * 100;
+        return `<div class="theme-segment" style="width:${pct}%; background:${THEME_MAP[theme].color}" title="${theme}: ${count}"></div>`;
+      }).join('');
+    }
+
+    /* ==========================================================================
+       VIEW RENDERERS (GALLERY & DETAIL)
+       ========================================================================== */
+    function renderGallery() {
+      showGalleryView();
+      const grid = document.getElementById('projectsGrid');
+      
+      if (filteredProjects.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:60px 20px; background:var(--card); border-radius:var(--radius-md);">
+            <h3>No Project Journals Found</h3>
+            <p style="color:var(--plum); margin-top:6px;">Try adjusting your group, theme, or search filters.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filteredProjects.map((p, idx) => {
+        const coverImg = p.photos.length > 0 ? `<img src="${p.photos[0]}" alt="${escapeHtml(p.project)}" loading="lazy">` : `<div class="card-cover-placeholder">🛠️</div>`;
+        const isRtl = isArabic(p.project);
+
+        return `
+          <article class="project-card" onclick="openJournal(${idx})">
+            <div class="card-cover">
+              ${coverImg}
+              <div class="card-top-tags">
+                <span class="group-badge">${escapeHtml(p.group)}</span>
+                <div class="card-themes">
+                  ${p.themes.map(t => `<span class="filter-chip ${THEME_MAP[t]?.class || ''} active" style="font-size:9px; padding:3px 8px;">${THEME_MAP[t]?.icon || '💡'}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body" ${isRtl ? 'dir="rtl"' : ''}>
+              <h2 class="card-title">${escapeHtml(p.project)}</h2>
+              <p class="card-blurb">${escapeHtml(p.description || p.problem)}</p>
+              
+              <div class="card-spec-row">
+                <span class="mini-pill">📥 ${p.inputs.length} Inputs</span>
+                <span class="mini-pill">💡 ${p.outputs.length} Outputs</span>
+                ${p.enclosure ? `<span class="mini-pill">📦 Cardboard</span>` : ''}
+              </div>
+
+              <div class="card-members">
+                👥 ${p.members.map(m => escapeHtml(m)).join(', ')}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function openJournal(filteredIdx) {
+      activeProjectIndex = filteredIdx;
+      const p = filteredProjects[filteredIdx];
+      if (!p) return;
+
+      hideGalleryView();
+      const content = document.getElementById('journalContent');
+      const isArabicProject = isArabic(p.project + p.description);
+
+      // Verify Inputs / Outputs (>=2 rule)
+      const inputsMet = p.inputs.length >= 2;
+      const outputsMet = p.outputs.length >= 2;
+
+      content.innerHTML = `
+        <!-- Section 1: Hero -->
+        <section class="journal-section journal-hero" ${isArabicProject ? 'dir="rtl"' : ''}>
+          <div style="display:flex; justify-shadow:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+            <div>
+              <span class="group-badge" style="font-size:12px; padding:6px 14px;">${escapeHtml(p.group)}</span>
+              <div style="display:inline-flex; gap:6px; margin-left:10px;">
+                ${p.themes.map(t => `<span class="filter-chip ${THEME_MAP[t]?.class || ''} active">${THEME_MAP[t]?.icon || ''} ${escapeHtml(t)}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+
+          <div class="journal-title-area">
+            <h1>${escapeHtml(p.project)}</h1>
+            <p class="sub-heading" style="font-size:18px; color:var(--maroon);">${escapeHtml(p.description)}</p>
+          </div>
+
+          <div class="roster-pills">
+            ${p.members.map(m => `<span class="roster-pill">👤 ${escapeHtml(m)}</span>`).join('')}
+          </div>
+
+          ${p.photos.length > 0 ? `
+            <div class="hero-media-wrap">
+              <img src="${p.photos[0]}" alt="${escapeHtml(p.project)}" onclick="openLightbox('${p.photos[0]}')">
+            </div>
+          ` : ''}
+        </section>
+
+        <!-- Section 2: Requirements Spec Panel -->
+        <section class="journal-section">
+          <h2 class="brand-heading" style="font-size:20px; color:var(--ink);">Verifiable Requirements Spec</h2>
+          <div class="spec-panel-grid">
+            <div class="spec-badge-card ${inputsMet ? 'met' : 'amber'}">
+              <div class="spec-status-icon">${inputsMet ? '✅' : '⚠️'}</div>
+              <div class="spec-details">
+                <h4>INPUTS (${p.inputs.length}/2)</h4>
+                <div>${escapeHtml(p.inputs.join(', ') || 'None')}</div>
+              </div>
+            </div>
+
+            <div class="spec-badge-card ${outputsMet ? 'met' : 'amber'}">
+              <div class="spec-status-icon">${outputsMet ? '✅' : '⚠️'}</div>
+              <div class="spec-details">
+                <h4>OUTPUTS (${p.outputs.length}/2)</h4>
+                <div>${escapeHtml(p.outputs.join(', ') || 'None')}</div>
+              </div>
+            </div>
+
+            <div class="spec-badge-card met">
+              <div class="spec-status-icon">✅</div>
+              <div class="spec-details">
+                <h4>CORE HARDWARE</h4>
+                <div>micro:bit V2 + Python</div>
+              </div>
+            </div>
+
+            <div class="spec-badge-card ${p.enclosure ? 'met' : 'amber'}">
+              <div class="spec-status-icon">${p.enclosure ? '📦' : '⚠️'}</div>
+              <div class="spec-details">
+                <h4>ENCLOSURE</h4>
+                <div>${escapeHtml(p.enclosure || 'Pending Cardboard Build')}</div>
+              </div>
+            </div>
+          </div>
+
+          ${p.extra.length > 0 ? `
+            <div style="margin-top:16px; font-size:13px; font-weight:700; color:var(--plum);">
+              ⚡ Extra Components Used: ${p.extra.map(e => getComponentBadge(e)).join(' ')}
+            </div>
+          ` : ''}
+        </section>
+
+        <!-- Section 3: Design Thinking 5-Step Flow -->
+        <section class="journal-section" ${isArabic(p.user + p.problem) ? 'dir="rtl"' : ''}>
+          <h2 class="brand-heading" style="font-size:20px; color:var(--ink);">Design-Thinking Process</h2>
+          <div class="dt-flow-grid">
+            <div class="dt-step-card">
+              <div class="dt-step-num">STEP 1 • USER</div>
+              <h3>👤 Target User</h3>
+              <p>${escapeHtml(p.user || 'N/A')}</p>
+            </div>
+
+            <div class="dt-step-card">
+              <div class="dt-step-num">STEP 2 • PROBLEM</div>
+              <h3>❓ Problem Statement</h3>
+              <p>${escapeHtml(p.problem || 'N/A')}</p>
+            </div>
+
+            <div class="dt-step-card">
+              <div class="dt-step-num">STEP 3 • IDEATE</div>
+              <h3>💡 Ideas Explored</h3>
+              <p>${p.suggested.map(s => `• ${escapeHtml(s)}`).join('<br>') || 'N/A'}</p>
+            </div>
+
+            <div class="dt-step-card emphasized">
+              <div class="dt-step-num">STEP 4 • PROTOTYPE</div>
+              <h3>✅ Selected Solution</h3>
+              <p><strong>${escapeHtml(p.selected || 'N/A')}</strong></p>
+            </div>
+
+            <div class="dt-step-card">
+              <div class="dt-step-num">STEP 5 • RATIONALE</div>
+              <h3>🎯 Why Chosen</h3>
+              <p>${escapeHtml(p.why || 'N/A')}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 4: How It Works -->
+        ${p.functionality ? `
+          <section class="journal-section" ${isArabic(p.functionality) ? 'dir="rtl"' : ''}>
+            <h2 class="brand-heading" style="font-size:20px; color:var(--ink);">How It Works</h2>
+            <p style="font-size:16px; color:var(--plum); line-height:1.6; margin-top:10px;">
+              ${escapeHtml(p.functionality)}
+            </p>
+          </section>
+        ` : ''}
+
+        <!-- Section 5: Building Timeline -->
+        ${p.steps.length > 0 ? `
+          <section class="journal-section" ${isArabic(p.steps.join(' ')) ? 'dir="rtl"' : ''}>
+            <h2 class="brand-heading" style="font-size:20px; color:var(--ink);">Maker Building Timeline</h2>
+            <div class="timeline">
+              ${p.steps.map((step, idx) => `
+                <div class="timeline-item">
+                  <div class="timeline-num">${idx + 1}</div>
+                  <div class="timeline-content">${escapeHtml(step)}</div>
+                </div>
+              `).join('')}
+            </div>
+          </section>
+        ` : ''}
+
+        <!-- Section 6: Photo & Video Media Gallery -->
+        ${p.photos.length > 0 ? `
+          <section class="journal-section">
+            <h2 class="brand-heading" style="font-size:20px; color:var(--ink);">Media &amp; Prototype Photos</h2>
+            <div class="media-grid">
+              ${p.photos.map(url => `
+                <div class="media-thumb" onclick="openLightbox('${url}')">
+                  <img src="${url}" alt="Project Photo" loading="lazy">
+                </div>
+              `).join('')}
+            </div>
+          </section>
+        ` : ''}
+
+        <!-- Section 7: Code Source & Viewer -->
+        <section class="journal-section">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+            <h2 class="brand-heading" style="font-size:20px; color:var(--ink);">Python Source Code</h2>
+            ${p.code.startsWith('http') ? `<a href="${p.code}" target="_blank" class="btn btn-secondary">💾 Download .HEX / Code</a>` : ''}
+          </div>
+
+          <div class="code-box-wrap">
+            <div class="code-box-header">
+              <span>main.py (micro:bit V2)</span>
+              <button class="btn-secondary" style="padding:2px 8px; font-size:11px;" onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre class="code-block"><code>${p.code.startsWith('http') ? '# Source code is attached as an external link above.\n# Click "Download" to fetch the .hex file.' : escapeHtml(p.code || '# No Python code block pasted for this project yet.')}</code></pre>
+          </div>
+        </section>
+
+        <!-- Section 8: Challenges & Reflection -->
+        ${p.challenges ? `
+          <section class="journal-section" ${isArabic(p.challenges) ? 'dir="rtl"' : ''}>
+            <h2 class="brand-heading" style="font-size:20px; color:var(--ink);">Challenges &amp; Debugging Fixes</h2>
+            <p style="font-size:15px; color:var(--plum); line-height:1.6; margin-top:10px;">
+              🛠️ ${escapeHtml(p.challenges)}
+            </p>
+          </section>
+        ` : ''}
+      `;
+
+      // Render Journal Footer Nav
+      content.innerHTML += `
+        <div class="journal-footer-nav">
+          <button class="btn btn-secondary" onclick="navigateProject(-1)">← Previous Project</button>
+          <button class="btn" onclick="showGallery()">Back to Gallery Grid</button>
+          <button class="btn btn-secondary" onclick="navigateProject(1)">Next Project →</button>
+        </div>
+      `;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* ==========================================================================
+       AUTO-SCROLL EXHIBITION PRESENTATION MODE (§6)
+       ========================================================================== */
+    function togglePresentationMode() {
+      isPresenting = !isPresenting;
+      
+      if (isPresenting) {
+        document.body.classList.add('presenting');
+        if (activeProjectIndex === -1 && filteredProjects.length > 0) {
+          openJournal(0);
+        }
+        
+        // Fullscreen request if permitted
+        if (document.documentElement.requestFullscreen) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        }
+
+        startAutoScrollEngine();
+      } else {
+        document.body.classList.remove('presenting');
+        stopAutoScrollEngine();
+        if (document.exitFullscreen && document.fullscreenElement) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    }
+
+    function startAutoScrollEngine() {
+      stopAutoScrollEngine();
+      isPaused = false;
+      document.getElementById('presentPlayPauseBtn').innerText = '⏸ Pause';
+
+      currentSectionIndex = 0;
+      scrollToCurrentSection();
+
+      autoScrollInterval = setInterval(() => {
+        if (isPaused) return;
+        nextPresentationSection();
+      }, presentSpeed);
+    }
+
+    function stopAutoScrollEngine() {
+      if (autoScrollInterval) {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+      }
+    }
+
+    function togglePausePresentation() {
+      isPaused = !isPaused;
+      document.getElementById('presentPlayPauseBtn').innerText = isPaused ? '▶ Resume' : '⏸ Pause';
+    }
+
+    function setPresentSpeed(speedMs, btn) {
+      presentSpeed = speedMs;
+      document.querySelectorAll('.present-speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (isPresenting && !isPaused) startAutoScrollEngine();
+    }
+
+    function nextPresentationSection() {
+      const sections = document.querySelectorAll('#journalContent .journal-section');
+      if (!sections.length) return;
+
+      currentSectionIndex++;
+      if (currentSectionIndex >= sections.length) {
+        // End of project journal → Move to next project team
+        navigateProject(1);
+        currentSectionIndex = 0;
+      } else {
+        scrollToCurrentSection();
+      }
+    }
+
+    function prevPresentationSection() {
+      const sections = document.querySelectorAll('#journalContent .journal-section');
+      if (!sections.length) return;
+
+      currentSectionIndex--;
+      if (currentSectionIndex < 0) {
+        navigateProject(-1);
+        currentSectionIndex = 0;
+      } else {
+        scrollToCurrentSection();
+      }
+    }
+
+    function scrollToCurrentSection() {
+      const sections = document.querySelectorAll('#journalContent .journal-section');
+      if (sections[currentSectionIndex]) {
+        sections[currentSectionIndex].scrollIntoView({
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+          block: 'center'
+        });
+      }
+    }
+
+    function navigateProject(dir) {
+      if (filteredProjects.length === 0) return;
+      let nextIdx = activeProjectIndex + dir;
+      if (nextIdx < 0) nextIdx = filteredProjects.length - 1;
+      if (nextIdx >= filteredProjects.length) nextIdx = 0;
+      
+      openJournal(nextIdx);
+      currentSectionIndex = 0;
+      if (isPresenting) scrollToCurrentSection();
+    }
+
+    function setupKeyboardListeners() {
+      document.addEventListener('keydown', (e) => {
+        if (!isPresenting) return;
+        
+        if (e.code === 'Space') {
+          e.preventDefault();
+          togglePausePresentation();
+        } else if (e.code === 'ArrowRight') {
+          nextPresentationSection();
+        } else if (e.code === 'ArrowLeft') {
+          prevPresentationSection();
+        } else if (e.code === 'Escape') {
+          togglePresentationMode();
+        }
+      });
+    }
+
+    /* ==========================================================================
+       UTILITIES & HELPERS
+       ========================================================================== */
+    function showGalleryView() {
+      document.getElementById('galleryView').style.display = 'block';
+      document.getElementById('detailView').classList.remove('active');
+      activeProjectIndex = -1;
+    }
+
+    function hideGalleryView() {
+      document.getElementById('galleryView').style.display = 'none';
+      document.getElementById('detailView').classList.add('active');
+    }
+
+    function showGallery() {
+      if (isPresenting) togglePresentationMode();
+      showGalleryView();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function isArabic(str) {
+      return /[\u0600-\u06FF]/.test(str || '');
+    }
+
+    function getComponentBadge(compStr) {
+      const c = compStr.toLowerCase();
+      if (c.includes('servo')) return '⚙️ Servo';
+      if (c.includes('soil')) return '🌱 Soil Sensor';
+      if (c.includes('ldr') || c.includes('light')) return '💡 LDR';
+      if (c.includes('ultrasonic') || c.includes('distance')) return '📏 Ultrasonic';
+      if (c.includes('ir') || c.includes('infrared')) return '👁️ IR Sensor';
+      return `🔌 ${escapeHtml(compStr)}`;
+    }
+
+    function openLightbox(url) {
+      document.getElementById('lightboxImg').src = url;
+      document.getElementById('lightbox').classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    function copyCode(btn) {
+      const code = btn.parentElement.nextElementSibling.innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const orig = btn.innerText;
+        btn.innerText = '✓ Copied!';
+        setTimeout(() => btn.innerText = orig, 2000);
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
 </body>
 </html>
