@@ -1,4 +1,4 @@
-import { ArrowLeft, BookOpen, Bug } from 'lucide-react';
+import { ArrowLeft, BookOpen, BriefcaseBusiness, Bug } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
 type CourseCompanionAction = {
@@ -27,6 +27,7 @@ type Course = {
   accent: string;
   icon: typeof BookOpen;
   tools: CourseTool[];
+  externalHref?: string;
 };
 
 const courses: Course[] = [
@@ -116,6 +117,16 @@ const courses: Course[] = [
         internal: true
       }
     ]
+  },
+  {
+    id: 'employability-onboarding',
+    title: 'Employability Onboarding',
+    level: 'Employability skills',
+    description: 'Build the practical skills, confidence, and direction needed to take your next step toward employment.',
+    accent: 'from-[#781629] to-[#CF2027]',
+    icon: BriefcaseBusiness,
+    tools: [],
+    externalHref: '/api/employability-onboarding'
   }
 ];
 
@@ -332,12 +343,21 @@ export default function CoursesHub() {
                       <span className="text-sm font-semibold text-gray-500">{course.tools.length} tools</span>
                     </div>
 
-                    <Link
-                      to={`/courses/${course.id}`}
-                      className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark"
-                    >
-                      View course tools
-                    </Link>
+                    {course.externalHref ? (
+                      <a
+                        href={course.externalHref}
+                        className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark"
+                      >
+                        Start onboarding
+                      </a>
+                    ) : (
+                      <Link
+                        to={`/courses/${course.id}`}
+                        className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark"
+                      >
+                        View course tools
+                      </Link>
+                    )}
                   </div>
                 </div>
               );

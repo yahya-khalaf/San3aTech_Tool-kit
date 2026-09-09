@@ -4,9 +4,10 @@
 // here rather than in a `functions/` directory (that's a Pages-only
 // convention and is never executed under a plain Worker deployment).
 //
-// Configure ACCESS_PASSWORD and the *_CSV_URL variables under this Worker's
-// Settings -> Variables and Secrets in the Cloudflare dashboard (mark
-// ACCESS_PASSWORD "Encrypt"). Redeploy after changing any of them.
+// Configure ACCESS_PASSWORD, EMPLOYABILITY_ONBOARDING_URL, and the *_CSV_URL
+// variables under this Worker's Settings -> Variables and Secrets in the
+// Cloudflare dashboard (mark ACCESS_PASSWORD "Encrypt"). Redeploy after
+// changing any of them.
 
 import { verifySessionCookie, createSessionCookie, clearSessionCookie, timingSafeEqual } from './session';
 import { proxyCsv, type CsvEnv } from './csv';
@@ -14,6 +15,7 @@ import { proxyCsv, type CsvEnv } from './csv';
 interface Env extends CsvEnv {
   ASSETS: Fetcher;
   ACCESS_PASSWORD: string;
+  EMPLOYABILITY_ONBOARDING_URL: string;
 }
 
 // Canonical (extensionless) protected paths. The assets binding serves the
@@ -72,6 +74,14 @@ function handleLogout(): Response {
   return json({ ok: true }, 200, { 'Set-Cookie': clearSessionCookie() });
 }
 
+function handleEmployabilityOnboarding(env: Env): Response {
+  if (!env.EMPLOYABILITY_ONBOARDING_URL) {
+    return new Response('Employability onboarding is not configured for this deployment.', { status: 500 });
+  }
+
+  return Response.redirect(env.EMPLOYABILITY_ONBOARDING_URL, 302);
+}
+
 export default {
   async fetch(request, env): Promise<Response> {
     const url = new URL(request.url);
@@ -82,6 +92,9 @@ export default {
     }
     if (pathname === '/api/logout' && request.method === 'POST') {
       return handleLogout();
+    }
+    if (pathname === '/api/employability-onboarding' && request.method === 'GET') {
+      return handleEmployabilityOnboarding(env);
     }
 
     const isPublic = matchesAny(pathname, PUBLIC_PATHS);
