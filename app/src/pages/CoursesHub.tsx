@@ -1,6 +1,16 @@
 import { ArrowLeft, BookOpen, BriefcaseBusiness, Bug } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
+declare global {
+  interface Window {
+    __SAN3A_CONFIG__?: {
+      EMPLOYABILITY_ONBOARDING_URL?: string;
+    };
+  }
+}
+
+const employabilityOnboardingUrl = window.__SAN3A_CONFIG__?.EMPLOYABILITY_ONBOARDING_URL;
+
 type CourseCompanionAction = {
   name: string;
   description: string;
@@ -127,7 +137,7 @@ const courses: Course[] = [
     accent: 'from-[#781629] to-[#CF2027]',
     icon: BriefcaseBusiness,
     tools: [],
-    externalHref: '/employability-onboarding',
+    externalHref: employabilityOnboardingUrl,
     toolSummary: 'External onboarding'
   }
 ];
@@ -354,7 +364,7 @@ export default function CoursesHub() {
                         rel="noreferrer"
                         className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark"
                       >
-                        Start onboarding
+                        External onboarding
                       </a>
                     ) : (
                       <Link

@@ -3,6 +3,9 @@
   "name": "san3atech-tool-kit",
   "compatibility_date": "2026-08-31",
   "main": "worker/index.ts",
+  "vars": {
+    "EMPLOYABILITY_ONBOARDING_URL": "https://san3a-academy-employability.yahya-khalaf54.workers.dev/"
+  },
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

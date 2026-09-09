@@ -4,7 +4,7 @@
 // here rather than in a `functions/` directory (that's a Pages-only
 // convention and is never executed under a plain Worker deployment).
 //
-// Configure ACCESS_PASSWORD, EMPLOYABILITY_ONBOARDING_URL, and the *_CSV_URL
+// Configure ACCESS_PASSWORD and the *_CSV_URL
 // variables under this Worker's Settings -> Variables and Secrets in the
 // Cloudflare dashboard (mark ACCESS_PASSWORD "Encrypt"). Redeploy after
 // changing any of them.
@@ -74,12 +74,27 @@ function handleLogout(): Response {
   return json({ ok: true }, 200, { 'Set-Cookie': clearSessionCookie() });
 }
 
-function handleEmployabilityOnboarding(env: Env): Response {
-  if (!env.EMPLOYABILITY_ONBOARDING_URL) {
-    return new Response('Employability onboarding is not configured for this deployment.', { status: 500 });
+async function serveAsset(request: Request, env: Env): Promise<Response> {
+  const response = await env.ASSETS.fetch(request);
+  const contentType = response.headers.get('Content-Type') ?? '';
+
+  if (!contentType.includes('text/html')) {
+    return response;
   }
 
-  return Response.redirect(env.EMPLOYABILITY_ONBOARDING_URL, 302);
+  const html = await response.text();
+  const runtimeConfig = `window.__SAN3A_CONFIG__ = ${JSON.stringify({
+    EMPLOYABILITY_ONBOARDING_URL: env.EMPLOYABILITY_ONBOARDING_URL ?? ''
+  })};`;
+  const headers = new Headers(response.headers);
+  headers.delete('Content-Length');
+  headers.delete('ETag');
+
+  return new Response(html.replace('<!-- RUNTIME_CONFIG -->', `<script>${runtimeConfig}</script>`), {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
 }
 
 export default {
@@ -93,10 +108,6 @@ export default {
     if (pathname === '/api/logout' && request.method === 'POST') {
       return handleLogout();
     }
-    if (pathname === '/employability-onboarding' && request.method === 'GET') {
-      return handleEmployabilityOnboarding(env);
-    }
-
     const isPublic = matchesAny(pathname, PUBLIC_PATHS);
     const isProtected = matchesAny(pathname, PROTECTED_PATHS);
 
@@ -116,6 +127,6 @@ export default {
       return proxyCsv(name, env);
     }
 
-    return env.ASSETS.fetch(request);
+    return serveAsset(request, env);
   },
 } satisfies ExportedHandler<Env>;
