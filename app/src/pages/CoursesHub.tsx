@@ -28,6 +28,7 @@ type Course = {
   icon: typeof BookOpen;
   tools: CourseTool[];
   externalHref?: string;
+  toolSummary?: string;
 };
 
 const courses: Course[] = [
@@ -126,7 +127,8 @@ const courses: Course[] = [
     accent: 'from-[#781629] to-[#CF2027]',
     icon: BriefcaseBusiness,
     tools: [],
-    externalHref: '/api/employability-onboarding'
+    externalHref: '/employability-onboarding',
+    toolSummary: 'External onboarding'
   }
 ];
 
@@ -340,12 +342,16 @@ export default function CoursesHub() {
                     <p className="text-sm leading-6 text-gray-600 mb-5">{course.description}</p>
 
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm font-semibold text-gray-500">{course.tools.length} tools</span>
+                      <span className="text-sm font-semibold text-gray-500">
+                        {course.toolSummary ?? `${course.tools.length} tools`}
+                      </span>
                     </div>
 
                     {course.externalHref ? (
                       <a
                         href={course.externalHref}
+                        target="_blank"
+                        rel="noreferrer"
                         className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark"
                       >
                         Start onboarding

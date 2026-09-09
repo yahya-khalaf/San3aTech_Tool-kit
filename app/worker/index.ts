@@ -93,7 +93,7 @@ export default {
     if (pathname === '/api/logout' && request.method === 'POST') {
       return handleLogout();
     }
-    if (pathname === '/api/employability-onboarding' && request.method === 'GET') {
+    if (pathname === '/employability-onboarding' && request.method === 'GET') {
       return handleEmployabilityOnboarding(env);
     }
 
