@@ -21,9 +21,9 @@ interface Env extends CsvEnv {
 // Canonical (extensionless) protected paths. The assets binding serves the
 // same file at both "/tools/team-wigs.html" and its clean-URL form
 // "/tools/team-wigs", so requests are normalized before matching.
-const PROTECTED_PATHS = ['/calendar', '/tools/team-wigs', '/tools/individual-wigs', '/code-create/student-projects-portfolio', '/api'];
+const PROTECTED_PATHS = ['/calendar', '/tools/team-wigs', '/tools/individual-wigs', '/api'];
 
-const PUBLIC_PATHS = ['/login', '/api/login', '/api/logout'];
+const PUBLIC_PATHS = ['/login', '/api/login', '/api/logout', '/api/csv/portfolio'];
 
 function normalizePath(pathname: string): string {
   let p = pathname;
