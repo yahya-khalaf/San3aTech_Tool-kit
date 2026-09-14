@@ -8,6 +8,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        inlineWorkboxRuntime: true
+      },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'San3a Academy Toolkit',
@@ -27,6 +30,17 @@ export default defineConfig({
           }
         ]
       }
-    })
+    }),
+    {
+      name: 'onboarding-rewrite',
+      configureServer(server) {
+        server.middlewares.use((req, _res, next) => {
+          if (req.url && (req.url === '/onboarding' || req.url.startsWith('/onboarding?'))) {
+            req.url = req.url.replace('/onboarding', '/onboarding/index.html');
+          }
+          next();
+        });
+      }
+    }
   ],
 })

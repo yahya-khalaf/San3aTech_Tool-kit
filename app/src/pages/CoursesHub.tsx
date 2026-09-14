@@ -9,8 +9,6 @@ declare global {
   }
 }
 
-const employabilityOnboardingUrl = window.__SAN3A_CONFIG__?.EMPLOYABILITY_ONBOARDING_URL;
-
 type CourseCompanionAction = {
   name: string;
   description: string;
@@ -130,15 +128,23 @@ const courses: Course[] = [
     ]
   },
   {
-    id: 'employability-onboarding',
-    title: 'Employability Onboarding',
-    level: 'Employability skills',
-    description: 'Build the practical skills, confidence, and direction needed to take your next step toward employment.',
+    id: 'employability',
+    title: 'Employability',
+    level: 'Employability & Onboarding',
+    description: 'Build practical skills, complete cohort onboarding, and access learner orientation tools.',
     accent: 'from-[#781629] to-[#CF2027]',
     icon: BriefcaseBusiness,
-    tools: [],
-    externalHref: employabilityOnboardingUrl,
-    toolSummary: 'External onboarding'
+    tools: [
+      {
+        name: 'Pre-Course Onboarding',
+        description: 'Staff link generator and attendee onboarding portal guiding learners through surveys, Discord, kit setup, and course schedules.',
+        status: 'Ready',
+        href: '/employability/pre-course.html',
+        internal: false,
+        tag: 'Onboarding & Cohort Prep',
+        features: ['Attendee Link Generator', 'Step-by-Step Progress Tracking', 'Discord & Survey Sync', 'Kit & Setup Guides']
+      }
+    ]
   }
 ];
 
@@ -184,7 +190,7 @@ function ToolAction({ tool }: { tool: CourseTool }) {
 
 export default function CoursesHub() {
   const { courseId } = useParams();
-  const selectedCourse = courses.find((course) => course.id === courseId);
+  const selectedCourse = courses.find((course) => course.id === courseId || (courseId === 'employability-onboarding' && course.id === 'employability'));
 
   if (selectedCourse) {
     const CourseIcon = selectedCourse.icon;

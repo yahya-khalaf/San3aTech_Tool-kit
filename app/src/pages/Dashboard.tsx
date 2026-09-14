@@ -8,6 +8,7 @@ import {
   CalendarDays,
   BookOpen,
   Bug,
+  BriefcaseBusiness,
   ArrowUpRight
 } from 'lucide-react';
 
@@ -23,6 +24,12 @@ const courseCards = [
     description: 'Troubleshooting wizard, flowchart explorer, and the developer flow editor.',
     icon: Bug,
     to: '/courses/debugging'
+  },
+  {
+    name: 'Employability',
+    description: 'Pre-course onboarding workflows, cohort preparation, and learner orientation tools.',
+    icon: BriefcaseBusiness,
+    to: '/courses/employability'
   }
 ];
 
@@ -108,7 +115,7 @@ export default function Dashboard() {
                 View all <ArrowUpRight size={14} />
               </Link>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {courseCards.map((course) => {
                 const Icon = course.icon;
                 return (

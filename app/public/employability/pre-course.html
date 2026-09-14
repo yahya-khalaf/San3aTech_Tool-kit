@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>San3a Academy - Pre-Course</title>
+  <style>
+    :root {
+      --i: #240d18;
+      --m: #781629;
+      --r: #cf2027;
+      --p: #fff7f3;
+      --sun: #ffc93c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      border-top: 14px solid var(--r);
+      background: var(--p);
+      color: var(--i);
+      font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .w {
+      max-width: 760px;
+      margin: auto;
+      padding: 28px 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--m);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid #ead9d6;
+      padding-bottom: 18px;
+    }
+
+    header span {
+      background: #2ec4b6;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 99px;
+      font-size: 0.7rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      line-height: 1.1;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e7d4d0;
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+
+    input,
+    select,
+    button,
+    a {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #d6c2bf;
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    button,
+    a {
+      background: var(--r);
+      color: #fff;
+      border: 0;
+      font-weight: 800;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .step {
+      padding: 17px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .step h2 {
+      margin: 0;
+    }
+
+    .step p {
+      margin: 6px 0;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .row a {
+      margin: 0;
+      flex: 1;
+    }
+
+    .step button {
+      width: auto;
+      margin: 0 0 0 auto;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      border-radius: 6px;
+    }
+
+    .done h2,
+    .done p,
+    .done a {
+      text-decoration: line-through;
+      opacity: 0.55;
+    }
+
+    .done button {
+      background: #781629;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .notice-card {
+      background: #fff;
+      border: 1px solid #e7d4d0;
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .notice-card h2 {
+      color: var(--m);
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <main class="w">
+    <header>
+      SAN3A ACADEMY <span>PRE-COURSE</span>
+    </header>
+
+    <h1>Everything to do before your course.</h1>
+
+    <section id="staff" class="card">
+      <h2>Create attendee link</h2>
+      <select id="c">
+        <option value="">Choose a course</option>
+      </select>
+      <input id="r" placeholder="Round">
+      <input id="s" placeholder="Schedule link" type="url">
+      <button id="make">Create link</button>
+      <input id="out" class="hidden" readonly>
+    </section>
+
+    <section id="learner-notice" class="notice-card hidden">
+      <h2>San3a Academy Onboarding</h2>
+      <p>Please access this page using the personalized onboarding link provided in your course invitation email.</p>
+    </section>
+
+    <section id="att" class="card hidden">
+      <p id="intro"></p>
+      <div id="steps"></div>
+      <button id="finish" class="hidden">Finish</button>
+    </section>
+
+    <section id="thanks" class="card hidden">
+      <h1>Thank you!</h1>
+      <p>You have completed all your pre-course requirements. Keep an eye on Discord for updates.</p>
+    </section>
+  </main>
+
+  <script>
+    const DEFAULT_DATA = {
+      C: {
+        "physica-ai": "Physical AI for Beginners",
+        esp32: "ESP32 Hybrid Course",
+        "iot-explorers": "IoT Explorers Bootcamp"
+      },
+      p: "https://forms.gle/A1dnvCoEBc4X7q2d6",
+      d: "https://discord.gg/CcNAasJN4",
+      s: {
+        "physica-ai": "https://forms.gle/VTrmZbxc2ptfahwD9",
+        esp32: "https://forms.gle/3UrLWTDeTE6HTvMT7",
+        "iot-explorers": "https://forms.gle/Qy4XAi4MRZnaDRTH8"
+      },
+      laptop: "https://docs.google.com/document/d/1_XWsdEeVYVl1uu7e-oMrSMDstDrw_LequzNFE6F3SOU/edit?usp=sharing",
+      video: "https://drive.google.com/file/d/1LOxpHa_hdLkGTN3Yr4UyFORZ4-5aId2I/view?usp=sharing"
+    };
+
+    const X = (window.__SAN3A_CONFIG__ && window.__SAN3A_CONFIG__.ONBOARDING_DATA) || DEFAULT_DATA;
+
+    const $ = q => document.querySelector(q);
+    const ok = u => {
+      try {
+        return /^https?:$/.test(new URL(u).protocol);
+      } catch {
+        return false;
+      }
+    };
+    const en = o => btoa(JSON.stringify(o)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const de = q => {
+      try {
+        return JSON.parse(atob(q.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - q.length % 4) % 4)));
+      } catch {
+        return {};
+      }
+    };
+
+    Object.entries(X.C).forEach(([k, v]) => $('#c').add(new Option(v, k)));
+
+    make.onclick = () => {
+      const c = $('#c').value, r = $('#r').value, s = $('#s').value;
+      if (!c || !r || !ok(s)) return alert('Complete all fields.');
+      const u = new URL(location.href);
+      u.search = 'd=' + en({ c, r, s });
+      out.value = u.href;
+      out.classList.remove('hidden');
+      out.select();
+    };
+
+    const urlParams = new URLSearchParams(location.search);
+    const dParam = urlParams.get('d');
+    const isStaffExplicit = urlParams.get('staff') === '1' || !location.pathname.startsWith('/onboarding');
+    const d = de(dParam || '');
+
+    if (X.C[d.c] && d.r && ok(d.s)) {
+      staff.classList.add('hidden');
+      learnerNotice = $('#learner-notice');
+      if (learnerNotice) learnerNotice.classList.add('hidden');
+      att.classList.remove('hidden');
+      intro.innerHTML = 'Welcome to <b>' + X.C[d.c] + '</b> — ' + d.r + '. Complete these steps before your first session.';
+
+      const a = [
+        {
+          title: 'Tell us about yourself',
+          links: [{ text: 'Open link', url: X.p }]
+        },
+        {
+          title: 'Complete the course survey',
+          links: [{ text: 'Open link', url: X.s[d.c] }]
+        },
+        {
+          title: 'Access your course portal',
+          desc: 'Once you fill the pre course survey you can access the course portal "check your inbox"'
+        },
+        {
+          title: 'Join our Discord community',
+          links: [{ text: 'Open link', url: X.d }]
+        },
+        {
+          title: 'Your kit and participation setup',
+          desc: 'Sign the receipt form for your electronic kit, return it after the course, bring laptop offline, and use a quiet space with camera and mic online.'
+        },
+        ...(d.c === 'physica-ai' ? [{
+          title: 'Prepare your setup',
+          desc: 'This course requires specific laptop requirements and pre-course preparation. The pre-session preparation, including required installations and downloads, may take up to 2 hours. Please ensure you complete all preparations before the first session.',
+          links: [
+            { text: 'Laptop requirements (Doc)', url: X.laptop },
+            { text: 'Preparation video', url: X.video }
+          ]
+        }] : []),
+        {
+          title: 'Save your course schedule',
+          links: [{ text: 'Open link', url: d.s }]
+        }
+      ];
+
+      steps.innerHTML = a.map((v, i) => {
+        const validLinks = (v.links || []).filter(l => ok(l.url));
+        const linksHtml = validLinks.map(l => '<a target="_blank" href="' + l.url + '">' + l.text + '</a>').join('');
+        return (
+          '<article class="step" data-i="' + i + '">' +
+            '<h2>' + v.title + '</h2>' +
+            (v.desc ? '<p>' + v.desc + '</p>' : '') +
+            '<div class="row">' +
+              linksHtml +
+              '<button>Mark as done</button>' +
+            '</div>' +
+          '</article>'
+        );
+      }).join('');
+
+      const q = [...steps.querySelectorAll('.step')];
+      const key = 'san3a-' + location.search;
+      const old = JSON.parse(localStorage.getItem(key) || '[]');
+
+      const check = () => {
+        finish.classList.toggle('hidden', !q.every(z => z.classList.contains('done')));
+        localStorage.setItem(key, JSON.stringify(q.map(z => z.classList.contains('done'))));
+      };
+
+      q.forEach((z, i) => {
+        if (old[i]) z.classList.add('done');
+        z.querySelector('button').onclick = () => {
+          z.classList.toggle('done');
+          z.querySelector('button').textContent = z.classList.contains('done') ? 'Marked as done' : 'Mark as done';
+          check();
+        };
+        if (old[i]) z.querySelector('button').textContent = 'Marked as done';
+      });
+
+      check();
+
+      finish.onclick = () => {
+        att.classList.add('hidden');
+        thanks.classList.remove('hidden');
+        localStorage.removeItem(key);
+      };
+    } else if (location.pathname.startsWith('/onboarding') && !isStaffExplicit) {
+      staff.classList.add('hidden');
+      learnerNotice = $('#learner-notice');
+      if (learnerNotice) learnerNotice.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

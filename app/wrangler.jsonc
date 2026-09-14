@@ -4,7 +4,15 @@
   "compatibility_date": "2026-08-31",
   "main": "worker/index.ts",
   "vars": {
-    "EMPLOYABILITY_ONBOARDING_URL": "https://san3a-academy-employability.yahya-khalaf54.workers.dev/"
+    "EMPLOYABILITY_ONBOARDING_URL": "https://san3a-academy-employability.yahya-khalaf54.workers.dev/",
+    "PERSONAL_INFO_URL": "https://forms.gle/A1dnvCoEBc4X7q2d6",
+    "DISCORD_INVITE_URL": "https://discord.gg/CcNAasJN4",
+    "DISCORD_GUIDELINES_URL": "https://example.com/discord-guidelines",
+    "PHYSICA_AI_SURVEY_URL": "https://forms.gle/VTrmZbxc2ptfahwD9",
+    "PHYSICA_AI_LAPTOP_URL": "https://docs.google.com/document/d/1_XWsdEeVYVl1uu7e-oMrSMDstDrw_LequzNFE6F3SOU/edit?usp=sharing",
+    "PHYSICA_AI_VIDEO_URL": "https://drive.google.com/file/d/1LOxpHa_hdLkGTN3Yr4UyFORZ4-5aId2I/view?usp=sharing",
+    "ESP32_SURVEY_URL": "https://forms.gle/3UrLWTDeTE6HTvMT7",
+    "IOT_EXPLORERS_SURVEY_URL": "https://forms.gle/Qy4XAi4MRZnaDRTH8"
   },
   "assets": {
     "directory": "./dist",
