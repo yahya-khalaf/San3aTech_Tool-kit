@@ -109,7 +109,7 @@ async function serveAsset(request: Request, env: Env): Promise<Response> {
       "iot-explorers": "IoT Explorers Bootcamp"
     },
     p: env.PERSONAL_INFO_URL || "https://forms.gle/A1dnvCoEBc4X7q2d6",
-    d: env.DISCORD_INVITE_URL || "https://discord.gg/CcNAasJN4",
+    d: env.DISCORD_INVITE_URL || "https://discord.gg/ZDYnw4Zkb",
     s: {
       "physica-ai": env.PHYSICA_AI_SURVEY_URL || "https://forms.gle/VTrmZbxc2ptfahwD9",
       esp32: env.ESP32_SURVEY_URL || "https://forms.gle/3UrLWTDeTE6HTvMT7",
