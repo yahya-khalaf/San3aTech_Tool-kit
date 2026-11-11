@@ -341,7 +341,7 @@ export default function CoursesHub() {
             <h3 className="text-2xl font-montserrat font-bold text-gray-900">Course library</h3>
             <p className="text-gray-600 max-w-2xl">
               Each course groups the tools built specifically for its curriculum. General-purpose tools
-              (QR codes, whiteboard, WIGs, etc.) live under General Tools in the sidebar instead.
+              (QR codes, whiteboard, calendar, etc.) live under General Tools in the sidebar instead.
             </p>
           </div>
 

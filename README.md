@@ -25,7 +25,7 @@ The whole site is one **Cloudflare Worker** with static assets. There is no sepa
 ### General tools
 - **Online Whiteboard**: `/whiteboard/`. Shared live board for online sessions. See [Whiteboard](#whiteboard).
 - **Crash Courses Calendar**: `/calendar/`. Live schedule from Google Sheets with vacation/clash shifting. Password protected.
-- **Team & Individual WIGs**: `/tools/team-wigs.html`, `/tools/individual-wigs.html`. Password protected.
+- **Retired, unlisted**: Team & Individual WIGs (`/tools/team-wigs.html`, `/tools/individual-wigs.html`). The pages are kept and still password protected, but removed from all navigation.
 - **QR Generator** and **Video to GIF**: `/tools/qr-generator.html`, `/tools/video-to-gif.html`. Run in the browser.
 
 ---
@@ -98,7 +98,7 @@ Set these in the Cloudflare dashboard under the Worker's **Settings → Variable
 | Variable | Purpose |
 | :--- | :--- |
 | `ACCESS_PASSWORD` (secret) | Shared password for the protected pages. Changing it signs everyone out. |
-| `TEAM_WIGS_CSV_URL`, `INDIVIDUAL_WIGS_CSV_URL` | Published Google Sheet CSV links for the WIGs dashboards |
+| `TEAM_WIGS_CSV_URL`, `INDIVIDUAL_WIGS_CSV_URL` | Sheets for the retired WIGs dashboards (optional) |
 | `PORTFOLIO_CSV_URL` | Student projects portfolio sheet |
 | `VACATIONS_CSV_URL`, `SCHEDULER_CSV_URL`, `AVAILABILITY_CSV_URL` | Calendar sheets |
 
@@ -132,12 +132,12 @@ The kit is a separate Vite app made by the San3a team, kept as-is in `app/tools-
 
 **To update the kit:**
 1. Change the code in `app/tools-src/PCB Design and Manufacturing/san3a-pcb-fabrication-kit/`.
-2. From `app/`, run `npm run build:pcb`. It installs the kit's dependencies if needed and builds it with relative paths into `app/public/employability/pcb-design-and-manufacturing/`.
+2. From `app/`, run `npm run build:pcb`. It installs the kit's dependencies if needed and builds it with `BASE_PATH=/employability/pcb-design-and-manufacturing/` into `app/public/employability/pcb-design-and-manufacturing/`.
 3. Commit the source changes **and** the regenerated files in `public/employability/pcb-design-and-manufacturing/`, then deploy as usual.
 
 Notes:
 - Never put the kit's source or `node_modules` under `app/public/`. Everything there is uploaded, and Cloudflare rejects large deploys (max 20,000 files, 25 MiB per file).
-- The kit uses `#` routes (`#/guide`, `#/gerber`), so it works under any folder.
+- The kit is built for its exact URL folder. If you move it, change `BASE_PATH` in `app/scripts/build-pcb-kit.mjs` and the card link in `CoursesHub.tsx`.
 - The Mods files keep their original names, some with spaces. Don't rename them.
 - The card on the Employability page is defined in `app/src/pages/CoursesHub.tsx`.
 

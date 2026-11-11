@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 import {
   QrCode,
   Video,
-  BarChart3,
-  Users,
   PenTool,
   CalendarDays,
   BookOpen,
@@ -46,20 +44,6 @@ const generalTools = [
     description: 'Convert video clips to optimized GIFs.',
     icon: Video,
     href: '/tools/video-to-gif.html',
-    external: true
-  },
-  {
-    name: 'Team WIGs',
-    description: 'Track team-wide goals and progress leaderboards.',
-    icon: BarChart3,
-    href: '/tools/team-wigs.html',
-    external: true
-  },
-  {
-    name: 'Individual WIGs',
-    description: 'Monitor individual performance and goals.',
-    icon: Users,
-    href: '/tools/individual-wigs.html',
     external: true
   },
   {

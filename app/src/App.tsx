@@ -13,8 +13,6 @@ import {
   GraduationCap,
   QrCode,
   Video,
-  BarChart3,
-  Users,
   PenTool,
   CalendarDays,
   Menu,
@@ -148,8 +146,6 @@ function App() {
                 <div className="space-y-1">
                   <ExternalNavLink href="/tools/qr-generator.html" icon={<QrCode size={20} />} label="QR Generator" />
                   <ExternalNavLink href="/tools/video-to-gif.html" icon={<Video size={20} />} label="Video to GIF" />
-                  <ExternalNavLink href="/tools/team-wigs.html" icon={<BarChart3 size={20} />} label="Team WIGs" />
-                  <ExternalNavLink href="/tools/individual-wigs.html" icon={<Users size={20} />} label="Individual WIGs" />
                   <ExternalNavLink href="/whiteboard/index.html" icon={<PenTool size={20} />} label="Online Whiteboard" newTab />
                   <ExternalNavLink href="/calendar/index.html" icon={<CalendarDays size={20} />} label="Crash Courses Calendar" />
                 </div>

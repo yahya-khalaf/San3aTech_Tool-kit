@@ -31,8 +31,11 @@ if (!existsSync(resolve(kitDir, 'node_modules'))) {
 }
 
 run(['run', 'build', '--', '--outDir', outDir, '--emptyOutDir'], {
-  // Relative asset paths: the kit uses # routes, so it works under any folder.
-  BASE_PATH: './',
+  // Must be the absolute URL folder the kit is served from (the kit's README:
+  // "Set BASE_PATH=/your-path/ when building for a sub-path"). A relative
+  // base ('./') breaks the Gerber page's "Open in Mods", which resolves the
+  // Mods path against the site root.
+  BASE_PATH: '/employability/pcb-design-and-manufacturing/',
 });
 
 console.log(`\nPCB kit built into ${outDir}`);
