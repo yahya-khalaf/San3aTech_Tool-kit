@@ -64,7 +64,7 @@ const generalTools = [
   },
   {
     name: 'Online Whiteboard',
-    description: 'Real-time collaborative drawing for meetings.',
+    description: 'Live shared board for online sessions.',
     icon: PenTool,
     href: '/whiteboard/index.html',
     external: true,
@@ -97,7 +97,7 @@ export default function Dashboard() {
             style={{ background: 'linear-gradient(135deg, #CF2027 0%, #781629 55%, #240D18 100%)' }}
           >
             <div className="relative z-10">
-              <h2 className="text-2xl md:text-3xl font-montserrat font-bold">Welcome to San3a Toolkit</h2>
+              <h2 className="text-2xl md:text-3xl font-montserrat font-bold">Welcome to San3a Academy Toolkit</h2>
               <p className="mt-2 text-white/90">Access every course tool and general utility in one place.</p>
               <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-white/70">Zero to Maker</p>
             </div>

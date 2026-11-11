@@ -1,0 +1,265 @@
+/*
+ * San3a Academy skin for the mods mill 2D PCB program.
+ * Presentation only. Loaded after js/mods.js so it follows the CSS mods injects.
+ * Colours are set through inline styles in mods.js, so they are matched by value
+ * with [style*=...] and overridden with !important, leaving highlight states intact.
+ */
+:root {
+    --mods-bg: var(--s3-paper);
+    --mods-text: var(--s3-ink);
+    --mods-link: var(--s3-wine);
+    --mods-canvas: var(--s3-white);
+    --mods-divint: var(--s3-white);
+    --mods-grid-dot: rgba(36, 13, 24, 0.22);
+    --mods-prompt: var(--s3-text-muted);
+    --san3a-control: var(--s3-sand);
+    --san3a-line: #A8929B;
+    color: var(--s3-ink);
+}
+
+[data-theme="dark"] {
+    --mods-bg: var(--s3-ink);
+    --mods-text: var(--s3-white);
+    --mods-link: var(--s3-sun);
+    --mods-canvas: var(--s3-ink);
+    --mods-divint: var(--s3-maroon);
+    --mods-grid-dot: rgba(255, 255, 255, 0.2);
+    --mods-prompt: #D8C7CD;
+    --san3a-control: var(--s3-wine);
+    --san3a-line: rgba(255, 255, 255, 0.18);
+    color: var(--s3-white);
+}
+
+body,
+.mods-topbar-prompt,
+.mods-tooltip,
+.mods-status-lcd {
+    font-family: var(--s3-font-mono);
+}
+
+body {
+    color: var(--mods-text);
+}
+
+/* Top bar, always on Ink like the app header */
+.mods-topbar,
+[data-theme="dark"] .mods-topbar {
+    background: var(--s3-ink);
+    color: var(--s3-white);
+    font-family: var(--s3-font-body);
+    border-bottom: 3px solid var(--s3-red);
+}
+
+.mods-topbar button.mods-topbar-btn,
+.mods-topbar a.mods-topbar-btn,
+.mods-topbar a.mods-topbar-btn:link,
+.mods-topbar a.mods-topbar-btn:visited,
+.mods-topbar a.mods-topbar-btn:hover,
+.mods-topbar a.mods-topbar-btn:active {
+    font-family: var(--s3-font-headline);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.mods-topbar .mods-topbar-btn:hover,
+[data-theme="dark"] .mods-topbar .mods-topbar-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.mods-topbar .mods-topbar-divider,
+[data-theme="dark"] .mods-topbar .mods-topbar-divider {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.mods-topbar button.mods-topbar-btn.mods-action-btn.mods-danger,
+.mods-topbar button.mods-topbar-btn.mods-action-btn.mods-danger.visible,
+.mods-topbar-indicator {
+    color: var(--s3-sun) !important;
+}
+
+/* San3a home link, centred in the bar */
+.san3a-home {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    z-index: 9001;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 47px;
+    padding: 0 8px;
+    transform: translateX(-50%);
+    color: var(--s3-white) !important;
+    font-family: var(--s3-font-headline);
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.san3a-home img {
+    height: 36px;
+    width: auto;
+}
+
+@media (max-width: 760px) {
+    .san3a-home span {
+        display: none;
+    }
+}
+
+/* Sidebars */
+.mods-sidebar {
+    background: var(--mods-bg);
+    color: var(--mods-text);
+    font-family: var(--s3-font-body);
+    box-shadow: var(--s3-shadow-lg);
+}
+
+.mods-sidebar a,
+.mods-sidebar-close {
+    color: var(--mods-text);
+}
+
+.mods-sidebar-heading {
+    font-family: var(--s3-font-headline);
+}
+
+.mods-sidebar-item:hover,
+.mods-sidebar-action:hover {
+    background: var(--s3-blush);
+    color: var(--s3-ink);
+}
+
+.mods-sidebar-filter:focus {
+    border-color: var(--s3-red);
+}
+
+/* Module chrome */
+[style*="rgb(255, 89, 191)"] {
+    background-color: var(--s3-red) !important;
+    color: var(--s3-white) !important;
+    font-weight: 700;
+}
+
+[style*="background-color: rgb(200, 200, 200)"] {
+    background-color: var(--san3a-control) !important;
+    color: var(--mods-text);
+}
+
+[style*="rgb(255, 225, 54)"] {
+    background-color: var(--s3-sun) !important;
+    color: var(--s3-ink) !important;
+}
+
+[style*="rgb(255, 163, 25)"] {
+    background-color: var(--s3-teal) !important;
+    color: var(--s3-ink) !important;
+}
+
+[data-id] {
+    color: var(--mods-text);
+}
+
+/* Note module and unit switches (inches and millimetres stay distinct) */
+[style*="rgb(212, 225, 87)"] {
+    background-color: var(--s3-blush) !important;
+    color: var(--s3-ink) !important;
+}
+
+[style*="rgb(91, 141, 239)"] {
+    background: var(--s3-wine) !important;
+}
+
+[style*="rgb(76, 175, 80)"] {
+    background: var(--s3-teal) !important;
+}
+
+/* Links between modules. Selected and in-progress links keep their mods colours. */
+#links g > path[stroke="rgb(43, 202, 255)"] {
+    stroke: var(--s3-wine);
+}
+
+[data-theme="dark"] #links g > path[stroke="rgb(43, 202, 255)"] {
+    stroke: var(--s3-sun);
+}
+
+/* Controls */
+button:not(.mods-sidebar-close):not(.mods-topbar-btn),
+[data-theme="dark"] button:not(.mods-sidebar-close):not(.mods-topbar-btn) {
+    background-color: var(--s3-ink);
+    color: var(--s3-white);
+    border-radius: var(--s3-radius-sm);
+    box-shadow: 0 3px var(--s3-wine);
+}
+
+button:not(.mods-sidebar-close):not(.mods-topbar-btn):hover,
+button:not(.mods-sidebar-close):not(.mods-topbar-btn):active,
+[data-theme="dark"] button:not(.mods-sidebar-close):not(.mods-topbar-btn):hover,
+[data-theme="dark"] button:not(.mods-sidebar-close):not(.mods-topbar-btn):active {
+    background-color: var(--s3-red);
+    box-shadow: 0 3px var(--s3-wine);
+}
+
+[data-theme="dark"] button:not(.mods-sidebar-close):not(.mods-topbar-btn) {
+    background-color: var(--s3-wine);
+    box-shadow: 0 3px var(--s3-ink);
+}
+
+button:disabled {
+    background-color: var(--s3-sand) !important;
+    color: var(--s3-text-muted) !important;
+    box-shadow: none !important;
+}
+
+input,
+select,
+.mods-status-lcd {
+    border-color: var(--san3a-line);
+    border-radius: 4px;
+}
+
+.mods-status-lcd {
+    background: var(--mods-bg);
+    color: var(--mods-text);
+}
+
+input[type=text]:focus,
+select:hover {
+    border-color: var(--s3-red);
+}
+
+input[type=radio],
+[data-theme="dark"] input[type=radio] {
+    background-color: var(--san3a-line);
+}
+
+input[type=radio]:checked,
+[data-theme="dark"] input[type=radio]:checked {
+    background-color: var(--s3-red);
+}
+
+input:checked + .slider {
+    background-color: var(--s3-red);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--s3-red);
+}
+
+:focus-visible,
+.mods-topbar-btn:focus-visible,
+.mods-sidebar-close:focus-visible,
+.mods-sidebar-item:focus-visible,
+.mods-sidebar-action:focus-visible {
+    outline: 3px solid var(--s3-teal);
+    outline-offset: 1px;
+}
+
+/* Code editor accents */
+#mods-editor-dialog .mods-editor-toolbar button.mods-btn-primary,
+[data-theme="dark"] #mods-editor-dialog .mods-editor-toolbar button.mods-btn-primary {
+    background: var(--s3-red);
+    border-color: var(--s3-red);
+    color: var(--s3-white);
+}

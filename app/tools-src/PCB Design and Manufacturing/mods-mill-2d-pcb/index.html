@@ -1,0 +1,21 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Mill 2D PCB (G-code)</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <script>
+    var t = localStorage.getItem('mods-theme')
+    if (t) document.documentElement.dataset.theme = t
+    // open the G-code "mill 2D PCB" program by default
+    var q = new URLSearchParams(location.search)
+    if (!q.has('program')) {
+      q.set('program', 'programs/machines/G-code/mill 2D PCB')
+      history.replaceState(null, '', '?' + q.toString())
+    }
+  </script>
+</head>
+<body>
+  <script src="js/mods.js"></script>
+</body>
+</html>

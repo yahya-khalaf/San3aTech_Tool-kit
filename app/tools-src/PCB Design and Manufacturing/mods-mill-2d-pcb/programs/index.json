@@ -1,0 +1,7 @@
+[
+  {
+    "name": "mill 2D PCB",
+    "category": "machines/G-code",
+    "path": "programs/machines/G-code/mill%202D%20PCB"
+  }
+]

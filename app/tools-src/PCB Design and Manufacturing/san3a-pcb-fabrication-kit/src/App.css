@@ -1,0 +1,91 @@
+/* The brand fonts and tokens are loaded from public/brand/san3a-brand.css. */
+
+.s3-theme :focus-visible {
+  outline: 3px solid var(--s3-teal) !important;
+  outline-offset: 2px;
+  /* Teal alone is only 2.05:1 on Paper, so an Ink ring keeps focus visible. */
+  box-shadow: 0 0 0 2px var(--s3-ink);
+}
+
+.dark .s3-theme :focus-visible {
+  box-shadow: none;
+}
+
+.s3-site-header :focus-visible,
+.s3-on-dark :focus-visible {
+  box-shadow: none;
+}
+
+.s3-nav-link {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 0.875rem;
+  border-radius: var(--s3-radius-sm);
+  color: #D8C7CD;
+  font-family: var(--s3-font-headline);
+  font-size: var(--s3-text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background-color var(--s3-duration) var(--s3-ease), color var(--s3-duration) var(--s3-ease);
+}
+
+.s3-nav-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--s3-white);
+}
+
+.s3-nav-link.is-active {
+  background: var(--s3-white);
+  color: var(--s3-ink);
+}
+
+.s3-landing section[id] {
+  scroll-margin-top: 16px;
+}
+
+.s3-step-number {
+  font-family: var(--s3-font-headline);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--s3-red);
+}
+
+.dark .s3-step-number {
+  color: var(--s3-sun);
+}
+
+.dark .s3-eyebrow {
+  color: var(--s3-sun);
+}
+
+.s3-text-link {
+  color: var(--s3-wine);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.s3-text-link:hover {
+  color: var(--s3-red);
+}
+
+.dark .s3-text-link,
+.s3-on-dark .s3-text-link {
+  color: var(--s3-sun);
+}
+
+.dark .s3-text-link:hover,
+.s3-on-dark .s3-text-link:hover {
+  color: var(--s3-white);
+}
+
+.s3-pcb-frame {
+  background: var(--s3-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .s3-nav-link {
+    transition: none;
+  }
+}

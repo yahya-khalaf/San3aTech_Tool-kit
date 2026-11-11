@@ -143,6 +143,15 @@ const courses: Course[] = [
         internal: false,
         tag: 'Onboarding & Cohort Prep',
         features: ['Attendee Link Generator', 'Step-by-Step Progress Tracking', 'Discord & Survey Sync', 'Kit & Setup Guides']
+      },
+      {
+        name: 'PCB Design and Manufacturing',
+        description: 'PCB fabrication kit for the Fab Lab Egypt machines: convert KiCad Gerber and drill files to 1000 DPI PNGs, then generate milling G-code in Mods, with a step-by-step student guide.',
+        status: 'Ready',
+        href: '/employability/pcb-design-and-manufacturing/index.html',
+        internal: false,
+        tag: 'PCB Design & Fabrication',
+        features: ['Gerber to PNG (1000 DPI)', 'PNG to G-code (Mods)', 'KiCad Student Guide', 'Works Offline']
       }
     ]
   }

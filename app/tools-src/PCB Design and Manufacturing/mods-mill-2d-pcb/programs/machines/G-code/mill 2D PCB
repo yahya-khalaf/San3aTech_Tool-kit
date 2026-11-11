@@ -1,0 +1,308 @@
+{
+  "version": 2,
+  "modules": {
+    "0.47383876715576023": {
+      "top": "797.0675981262666",
+      "left": "2562.336822495758",
+      "params": {},
+      "module": "modules/image/distance transform.js"
+    },
+    "0.07944144280928633": {
+      "top": "1121.8478407825592",
+      "left": "3693.1821539409793",
+      "params": {},
+      "module": "modules/image/edge detect.js"
+    },
+    "0.8903773266711255": {
+      "top": "1270.0068311022287",
+      "left": "4181.297398899564",
+      "params": {},
+      "module": "modules/image/orient edges.js"
+    },
+    "0.3135579179893032": {
+      "top": "952.7877470415415",
+      "left": "3157.4972504521434",
+      "params": {
+        "offset": {
+          "value": "15.5999688"
+        }
+      },
+      "module": "modules/image/offset.js"
+    },
+    "0.6488303557466412": {
+      "top": "678.5840332552707",
+      "left": "2041.953125324129",
+      "params": {
+        "threshold": {
+          "value": "0.5"
+        }
+      },
+      "module": "modules/image/threshold.js"
+    },
+    "0.749132408760488": {
+      "top": "1562.5221874301637",
+      "left": "3704.1219853585008",
+      "params": {
+        "error": {
+          "value": "1"
+        },
+        "sort": {
+          "checked": true
+        }
+      },
+      "module": "modules/image/vectorize.js"
+    },
+    "0.4793941661670936": {
+      "top": "1697.4550500720711",
+      "left": "3245.8714495019485",
+      "params": {},
+      "module": "modules/file/save.js"
+    },
+    "0.4592074909554409": {
+      "top": "489.7310342095036",
+      "left": "817.6092391643551",
+      "params": {
+        "dpi": {
+          "value": "500"
+        },
+        "unitstext": {
+          "value": ""
+        },
+        "fill": {
+          "checked": true
+        }
+      },
+      "module": "modules/convert/svg/image.js"
+    },
+    "0.608045696421487": {
+      "top": "1137.0509927192334",
+      "left": "1610.4970079922098",
+      "params": {},
+      "module": "modules/processes/mill raster/2D.js"
+    },
+    "0.8018489687859153": {
+      "top": "1434.9298767919413",
+      "left": "3029.6270690304486",
+      "params": {
+        "switch": {
+          "checked": true
+        }
+      },
+      "module": "modules/ui/switch.js"
+    },
+    "0.1970821212694227": {
+      "top": "254.90009336542744",
+      "left": "289.50837026559293",
+      "params": {
+        "size": {
+          "value": "400"
+        },
+        "text": {
+          "value": "G-Code Mill 2D PCB"
+        }
+      },
+      "module": "modules/ui/label simple.js"
+    },
+    "0.8650805658939553": {
+      "top": "953.5924170115873",
+      "left": "264.77264061721235",
+      "params": {},
+      "module": "modules/read/png.js"
+    },
+    "0.49202738148831227": {
+      "top": "577.7550432044432",
+      "left": "1561.865655200802",
+      "params": {
+        "width_mm": {
+          "value": "0"
+        },
+        "width_in": {
+          "value": "0"
+        },
+        "length_mm": {
+          "value": "0"
+        },
+        "length_in": {
+          "value": "0"
+        },
+        "E": {
+          "checked": true
+        },
+        "W": {
+          "checked": true
+        }
+      },
+      "module": "modules/image/tabs.js"
+    },
+    "0.4983010755806615": {
+      "top": "1198.3911995757835",
+      "left": "866.9561907441021",
+      "params": {},
+      "module": "modules/defaults/PCB defaults.js"
+    },
+    "0.36020256178778576": {
+      "top": "1596.2800619636228",
+      "left": "1129.849737398086",
+      "params": {
+        "tip_dia": {
+          "value": "0.0039"
+        },
+        "angle": {
+          "value": "30"
+        },
+        "offset_number": {
+          "value": "4"
+        },
+        "offset_stepover": {
+          "value": "0.5"
+        },
+        "speed": {
+          "value": "4"
+        },
+        "cut_width": {
+          "value": "0.0060"
+        },
+        "cut_depth": {
+          "value": "0.0040"
+        }
+      },
+      "module": "modules/defaults/vbit calculator.js"
+    },
+    "0.01382071743564961": {
+      "top": "1356.6450504944182",
+      "left": "1183.38862898737",
+      "params": {
+        "width": {
+          "value": "237px"
+        },
+        "height": {
+          "value": "52px"
+        },
+        "text": {
+          "value": "use \"set PCB defaults\" for typical endmill presets or use \"V-bit calculator\" for custom vbits"
+        }
+      },
+      "module": "modules/ui/note.js"
+    },
+    "0.30606865676281036": {
+      "top": "441.5886495111524",
+      "left": "268.47722683224265",
+      "params": {
+        "file": {
+          "value": ""
+        }
+      },
+      "module": "modules/read/svg.js"
+    },
+    "0.6738434887127991": {
+      "top": "1348.275931137293",
+      "left": "2615.385337057954",
+      "params": {
+        "cutspeed": {
+          "value": "2.5"
+        },
+        "plungespeed": {
+          "value": "2.5"
+        },
+        "jogheight": {
+          "value": "2"
+        },
+        "finishheight": {
+          "value": "20"
+        },
+        "spindlespeed": {
+          "value": "11000"
+        },
+        "dwell": {
+          "value": "0"
+        },
+        "tool": {
+          "value": "0"
+        },
+        "coolanton": {
+          "checked": false
+        },
+        "coolantoff": {
+          "checked": true
+        },
+        "formatInch": {
+          "checked": false
+        },
+        "formatMm": {
+          "checked": true
+        }
+      },
+      "module": "modules/path/formats/g-code.js"
+    },
+    "0.41935480290573124": {
+      "top": "1482.8822494019664",
+      "left": "2129.851800581781",
+      "params": {
+        "stock_x_input": {
+          "value": "100.000"
+        },
+        "stock_x_in": {
+          "value": "3.937"
+        },
+        "stock_y_input": {
+          "value": "80.010"
+        },
+        "stock_y_in": {
+          "value": "3.150"
+        },
+        "stock_z_input": {
+          "value": "1.600"
+        },
+        "stock_z_in": {
+          "value": "0.063"
+        },
+        "tool_dia_input": {
+          "value": "0.406"
+        },
+        "tool_dia_in": {
+          "value": "0.016"
+        },
+        "tool_type_select": {
+          "value": "flat"
+        },
+        "tool_angle_input": {
+          "value": "30"
+        },
+        "tool_tip_input": {
+          "value": "0.102"
+        },
+        "tool_tip_in": {
+          "value": "0.004"
+        },
+        "material_select": {
+          "value": "PCB"
+        }
+      },
+      "module": "modules/path/view/simulate%20toolpath.js"
+    }
+  },
+  "links": [
+    "{\"source\":\"{\\\"id\\\":\\\"0.07944144280928633\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"image\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.8903773266711255\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"image\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.47383876715576023\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"distances\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.3135579179893032\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"distances\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.3135579179893032\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"image\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.07944144280928633\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"image\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.6488303557466412\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"image\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.47383876715576023\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"image\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.8903773266711255\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"image\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.749132408760488\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"image\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.608045696421487\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"offset\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.3135579179893032\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"offset\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.749132408760488\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"path\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.608045696421487\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"path\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.4592074909554409\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"imageInfo\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.608045696421487\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"imageInfo\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.8018489687859153\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"out\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.4793941661670936\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"file\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.8650805658939553\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"imageInfo\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.608045696421487\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"imageInfo\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.8650805658939553\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"image\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.49202738148831227\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"image\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.4592074909554409\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"image\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.49202738148831227\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"image\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.8650805658939553\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"imageInfo\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.49202738148831227\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"imageInfo\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.4592074909554409\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"imageInfo\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.49202738148831227\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"imageInfo\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.49202738148831227\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"image\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.6488303557466412\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"image\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.4983010755806615\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"settings\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.608045696421487\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"settings\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.4983010755806615\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"settings\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.49202738148831227\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"settings\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.36020256178778576\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"settings\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.608045696421487\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"settings\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.30606865676281036\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"SVG\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.4592074909554409\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"SVG\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.6738434887127991\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"file\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.8018489687859153\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"in\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.608045696421487\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"toolpath\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.41935480290573124\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"toolpath\\\"}\"}",
+    "{\"source\":\"{\\\"id\\\":\\\"0.41935480290573124\\\",\\\"type\\\":\\\"outputs\\\",\\\"name\\\":\\\"toolpath\\\"}\",\"dest\":\"{\\\"id\\\":\\\"0.6738434887127991\\\",\\\"type\\\":\\\"inputs\\\",\\\"name\\\":\\\"path\\\"}\"}"
+  ]
+}

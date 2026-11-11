@@ -11,9 +11,13 @@
 
 import { verifySessionCookie, createSessionCookie, clearSessionCookie, timingSafeEqual } from './session';
 import { proxyCsv, type CsvEnv } from './csv';
+import type { WhiteboardRoom } from './whiteboard';
+
+export { WhiteboardRoom } from './whiteboard';
 
 interface Env extends CsvEnv {
   ASSETS: Fetcher;
+  WHITEBOARD: DurableObjectNamespace<WhiteboardRoom>;
   ACCESS_PASSWORD: string;
   EMPLOYABILITY_ONBOARDING_URL?: string;
   PERSONAL_INFO_URL?: string;
@@ -35,6 +39,8 @@ const PUBLIC_PATHS = [
   '/api/login',
   '/api/logout',
   '/api/csv/portfolio',
+  '/api/whiteboard',
+  '/whiteboard',
   '/onboarding',
   '/employability',
   '/tools/employability-onboarding',
@@ -93,6 +99,35 @@ function handleLogout(): Response {
   return json({ ok: true }, 200, { 'Set-Cookie': clearSessionCookie() });
 }
 
+const WHITEBOARD_ROOM_RE = /^[a-z0-9]{6,32}$/;
+
+function randomString(length: number, alphabet: string): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(length));
+  let out = '';
+  for (const b of bytes) out += alphabet[b % alphabet.length];
+  return out;
+}
+
+async function createWhiteboard(env: Env): Promise<Response> {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const room = randomString(12, 'abcdefghijklmnopqrstuvwxyz0123456789');
+    const key = randomString(32, 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+    const stub = env.WHITEBOARD.get(env.WHITEBOARD.idFromName(room));
+    if (await stub.init(key)) {
+      return json({ room, key }, 201, { 'Cache-Control': 'no-store' });
+    }
+  }
+  return json({ error: 'Could not create a board, please try again.' }, 500);
+}
+
+function connectWhiteboard(request: Request, env: Env, room: string): Promise<Response> | Response {
+  if (request.headers.get('Upgrade') !== 'websocket') {
+    return json({ error: 'Expected a WebSocket upgrade.' }, 426);
+  }
+  const stub = env.WHITEBOARD.get(env.WHITEBOARD.idFromName(room));
+  return stub.fetch(request);
+}
+
 async function serveAsset(request: Request, env: Env): Promise<Response> {
   const response = await env.ASSETS.fetch(request);
   const contentType = response.headers.get('Content-Type') ?? '';
@@ -144,6 +179,15 @@ export default {
     }
     if (pathname === '/api/logout' && request.method === 'POST') {
       return handleLogout();
+    }
+
+    if (pathname === '/api/whiteboard' && request.method === 'POST') {
+      return createWhiteboard(env);
+    }
+    const wbMatch = pathname.match(/^\/api\/whiteboard\/([^/]+)\/ws$/);
+    if (wbMatch) {
+      if (!WHITEBOARD_ROOM_RE.test(wbMatch[1])) return json({ error: 'Invalid board id.' }, 400);
+      return connectWhiteboard(request, env, wbMatch[1]);
     }
 
     if (pathname === '/onboarding' || pathname === '/employability/onboarding') {

@@ -1,0 +1,97 @@
+[
+  {
+    "name": "image",
+    "category": "convert/svg",
+    "path": "modules/convert/svg/image.js"
+  },
+  {
+    "name": "PCB defaults",
+    "category": "defaults",
+    "path": "modules/defaults/PCB%20defaults.js"
+  },
+  {
+    "name": "vbit calculator",
+    "category": "defaults",
+    "path": "modules/defaults/vbit%20calculator.js"
+  },
+  {
+    "name": "save",
+    "category": "file",
+    "path": "modules/file/save.js"
+  },
+  {
+    "name": "distance transform",
+    "category": "image",
+    "path": "modules/image/distance%20transform.js"
+  },
+  {
+    "name": "edge detect",
+    "category": "image",
+    "path": "modules/image/edge%20detect.js"
+  },
+  {
+    "name": "offset",
+    "category": "image",
+    "path": "modules/image/offset.js"
+  },
+  {
+    "name": "orient edges",
+    "category": "image",
+    "path": "modules/image/orient%20edges.js"
+  },
+  {
+    "name": "tabs",
+    "category": "image",
+    "path": "modules/image/tabs.js"
+  },
+  {
+    "name": "threshold",
+    "category": "image",
+    "path": "modules/image/threshold.js"
+  },
+  {
+    "name": "vectorize",
+    "category": "image",
+    "path": "modules/image/vectorize.js"
+  },
+  {
+    "name": "g-code",
+    "category": "path/formats",
+    "path": "modules/path/formats/g-code.js"
+  },
+  {
+    "name": "simulate toolpath",
+    "category": "path/view",
+    "path": "modules/path/view/simulate%20toolpath.js"
+  },
+  {
+    "name": "2D",
+    "category": "processes/mill raster",
+    "path": "modules/processes/mill%20raster/2D.js"
+  },
+  {
+    "name": "png",
+    "category": "read",
+    "path": "modules/read/png.js"
+  },
+  {
+    "name": "svg",
+    "category": "read",
+    "path": "modules/read/svg.js"
+  },
+  {
+    "name": "label simple",
+    "category": "ui",
+    "path": "modules/ui/label%20simple.js"
+  },
+  {
+    "name": "note",
+    "category": "ui",
+    "path": "modules/ui/note.js"
+  },
+  {
+    "name": "switch",
+    "category": "ui",
+    "path": "modules/ui/switch.js"
+  }
+]

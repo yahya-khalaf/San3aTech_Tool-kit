@@ -1,0 +1,269 @@
+/* ==========================================================================
+   San3a Academy brand stylesheet
+   Portable tokens and components. Link it from any page:
+
+     <link rel="stylesheet" href="san3a-brand.css">
+
+   Tokens are global. Base typography applies only inside .s3-theme, and every
+   component is prefixed s3-, so this file is safe to add to an existing site.
+
+   Licensed typefaces are Big John (headlines), Myriad Pro (body) and GE SS
+   (Arabic). Montserrat, Inter and Cairo are their free web substitutes.
+   ========================================================================== */
+
+/* PCB fabrication kit copy: fonts load from local files instead of Google Fonts,
+   so the kit works offline. Cairo is left out because the kit has no Arabic text. */
+@import url("fonts/fonts.css");
+
+/* 1. TOKENS
+   ========================================================================== */
+:root {
+  /* Core palette */
+  --s3-ink: #240D18;
+  --s3-maroon: #3D1221;
+  --s3-wine: #781629;
+  --s3-red: #CF2027;
+  --s3-red-hover: #B01A21;
+
+  /* Surfaces */
+  --s3-paper: #FFF7F3;
+  --s3-blush: #F9DFE1;
+  --s3-sand: #E7D4D0;
+  --s3-white: #FFFFFF;
+
+  /* Accents: use sparingly, never as a replacement for red */
+  --s3-sun: #FFC93C;
+  --s3-teal: #2EC4B6;
+
+  /* Semantic roles (light surfaces) */
+  --s3-bg: var(--s3-paper);
+  --s3-surface: var(--s3-white);
+  --s3-text: var(--s3-ink);
+  --s3-text-muted: #6B5761;
+  --s3-border: var(--s3-sand);
+  --s3-accent: var(--s3-red);
+  --s3-on-accent: var(--s3-white);
+
+  /* Gradients */
+  --s3-gradient-brand: linear-gradient(135deg, var(--s3-ink) 0%, var(--s3-maroon) 55%, var(--s3-wine) 100%);
+  --s3-gradient-heat: linear-gradient(135deg, var(--s3-wine) 0%, var(--s3-red) 100%);
+  --s3-gradient-signal: linear-gradient(90deg, var(--s3-ink), var(--s3-wine), var(--s3-red), var(--s3-sun));
+
+  /* Type families */
+  --s3-font-headline: "Big John", "Montserrat", "Segoe UI", sans-serif;
+  --s3-font-subhead: "Arvo", Georgia, serif;
+  --s3-font-body: "Myriad Pro", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --s3-font-arabic: "GE SS", "Cairo", "Tahoma", sans-serif;
+  --s3-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Type scale */
+  --s3-text-xs: 0.75rem;
+  --s3-text-sm: 0.875rem;
+  --s3-text-md: 1rem;
+  --s3-text-lg: 1.25rem;
+  --s3-text-xl: 1.5rem;
+  --s3-text-2xl: 2rem;
+  --s3-text-3xl: clamp(2.25rem, 4.5vw, 3rem);
+  --s3-text-display: clamp(3rem, 9vw, 6.5rem);
+
+  /* Spacing, on a 4px base */
+  --s3-space-1: 0.25rem;
+  --s3-space-2: 0.5rem;
+  --s3-space-3: 0.75rem;
+  --s3-space-4: 1rem;
+  --s3-space-6: 1.5rem;
+  --s3-space-8: 2rem;
+  --s3-space-12: 3rem;
+  --s3-space-16: 4rem;
+  --s3-space-24: 6rem;
+
+  /* Shape */
+  --s3-radius-sm: 8px;
+  --s3-radius-md: 16px;
+  --s3-radius-lg: 24px;
+  --s3-radius-pill: 999px;
+
+  /* Elevation, tinted with ink rather than black */
+  --s3-shadow-sm: 0 4px 12px rgba(36, 13, 24, 0.05);
+  --s3-shadow-md: 0 10px 30px rgba(36, 13, 24, 0.08);
+  --s3-shadow-lg: 0 18px 40px rgba(36, 13, 24, 0.15);
+
+  /* Motion */
+  --s3-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --s3-duration: 180ms;
+}
+
+/* 2. THEME SCOPES
+   Add .s3-theme to <body> or any container. Add .s3-on-dark for dark surfaces.
+   ========================================================================== */
+.s3-theme {
+  background: var(--s3-bg);
+  color: var(--s3-text);
+  font-family: var(--s3-font-body);
+  font-size: var(--s3-text-md);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.s3-theme h1,
+.s3-theme h2 {
+  font-family: var(--s3-font-headline);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: inherit;
+}
+
+.s3-theme h3 {
+  font-family: var(--s3-font-subhead);
+  font-weight: 700;
+  line-height: 1.3;
+  color: inherit;
+}
+
+.s3-on-dark {
+  --s3-bg: var(--s3-ink);
+  --s3-surface: var(--s3-maroon);
+  --s3-text: var(--s3-white);
+  --s3-text-muted: #D8C7CD;
+  --s3-border: rgba(255, 255, 255, 0.18);
+  background: var(--s3-bg);
+  color: var(--s3-text);
+}
+
+.s3-ar,
+[dir="rtl"].s3-theme {
+  font-family: var(--s3-font-arabic);
+  direction: rtl;
+  line-height: 1.9;
+}
+
+/* 3. COMPONENTS
+   ========================================================================== */
+.s3-eyebrow {
+  font-family: var(--s3-font-headline);
+  font-size: var(--s3-text-xs);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--s3-accent);
+}
+
+.s3-on-dark .s3-eyebrow,
+.s3-eyebrow.s3-on-dark {
+  background: none;
+  color: var(--s3-sun);
+}
+
+.s3-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s3-space-2);
+  min-height: 44px;
+  padding: 0.625rem 1.25rem;
+  border: 2px solid transparent;
+  border-radius: var(--s3-radius-sm);
+  font-family: var(--s3-font-headline);
+  font-size: var(--s3-text-sm);
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--s3-duration) var(--s3-ease),
+    border-color var(--s3-duration) var(--s3-ease),
+    color var(--s3-duration) var(--s3-ease),
+    transform var(--s3-duration) var(--s3-ease);
+}
+
+.s3-btn:active { transform: translateY(1px); }
+
+.s3-btn--primary { background: var(--s3-red); color: var(--s3-white); }
+.s3-btn--primary:hover { background: var(--s3-red-hover); }
+
+.s3-btn--secondary { background: var(--s3-ink); color: var(--s3-white); }
+.s3-btn--secondary:hover { background: var(--s3-wine); }
+
+.s3-btn--ghost { background: transparent; border-color: currentColor; color: var(--s3-text); }
+.s3-btn--ghost:hover { background: var(--s3-blush); color: var(--s3-ink); }
+.s3-on-dark .s3-btn--ghost:hover { background: var(--s3-white); color: var(--s3-ink); }
+
+.s3-btn--sun { background: var(--s3-sun); color: var(--s3-ink); }
+.s3-btn--sun:hover { background: #F5B90F; }
+
+.s3-card {
+  padding: var(--s3-space-6);
+  background: var(--s3-surface);
+  border: 1px solid var(--s3-border);
+  border-radius: var(--s3-radius-md);
+  box-shadow: var(--s3-shadow-sm);
+}
+
+.s3-card--raised { box-shadow: var(--s3-shadow-md); border-color: transparent; }
+
+.s3-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.7rem;
+  border-radius: var(--s3-radius-pill);
+  background: var(--s3-blush);
+  color: var(--s3-wine);
+  font-family: var(--s3-font-headline);
+  font-size: var(--s3-text-xs);
+  font-weight: 700;
+}
+
+.s3-badge--red { background: var(--s3-red); color: var(--s3-white); }
+.s3-badge--sun { background: var(--s3-sun); color: var(--s3-ink); }
+.s3-badge--teal { background: var(--s3-teal); color: var(--s3-ink); }
+.s3-badge--ink { background: var(--s3-ink); color: var(--s3-white); }
+
+.s3-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #A8929B;
+  border-radius: var(--s3-radius-sm);
+  background: var(--s3-white);
+  color: var(--s3-ink);
+  font: inherit;
+}
+
+.s3-signal-bar {
+  display: block;
+  height: 6px;
+  border: 0;
+  background: var(--s3-gradient-signal);
+}
+
+.s3-theme :focus-visible,
+.s3-btn:focus-visible,
+.s3-input:focus-visible {
+  outline: 3px solid var(--s3-teal);
+  outline-offset: 2px;
+}
+
+/* 4. LOGO HELPERS
+   Paths are relative to this file. Set --s3-logo-width to resize.
+   ========================================================================== */
+.s3-logo,
+.s3-symbol {
+  display: inline-block;
+  width: var(--s3-logo-width, 180px);
+  background: center / contain no-repeat;
+  /* Keep the element's accessible name in aria-label; show no text. */
+  font-size: 0;
+}
+
+.s3-logo { aspect-ratio: 2286 / 1274; background-image: url("logos/svg/san3a-primary-red.svg"); }
+.s3-logo--white { background-image: url("logos/svg/san3a-primary-white.svg"); }
+.s3-logo--ink { background-image: url("logos/svg/san3a-primary-ink.svg"); }
+
+.s3-symbol { aspect-ratio: 818 / 1274; background-image: url("logos/svg/san3a-symbol-red.svg"); }
+.s3-symbol--white { background-image: url("logos/svg/san3a-symbol-white.svg"); }
+.s3-symbol--ink { background-image: url("logos/svg/san3a-symbol-ink.svg"); }
+
+@media (prefers-reduced-motion: reduce) {
+  .s3-btn { transition: none; }
+  .s3-btn:active { transform: none; }
+}

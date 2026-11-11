@@ -1,279 +1,360 @@
-const canvas = document.getElementById('whiteboard');
-const ctx = canvas.getContext('2d');
-const toolbar = document.getElementById('toolbar');
-const colorPicker = document.getElementById('color-picker');
-const sizeSlider = document.getElementById('size-slider');
-const sizePreview = document.getElementById('size-preview');
+// Canvas engine: renders the board from a list of operations and turns
+// pointer input into new operations. Networking lives in realtime.js, which
+// talks to this file through window.Board and provides window.Sync.
+//
+// Operation format (shared with the server):
+//   { id, t: 'pen'|'eraser', c: '#rrggbb', s: size, p: [x,y, x,y, ...] }
+//   { id, t: 'rect'|'circle'|'line'|'arrow', c, s, p: [x1,y1,x2,y2] }
+//   { id, t: 'clear' }
+// plus q = server sequence number (Infinity while not yet confirmed).
+(() => {
+    'use strict';
 
-// State
-let isDrawing = false;
-let currentTool = 'pen';
-let currentColor = '#3b82f6';
-let currentSize = 5;
-let startX, startY;
-let snapshot;
-let undoStack = [];
-const MAX_UNDO = 20;
+    const W = 1920;
+    const H = 1080;
+    const FREEHAND = new Set(['pen', 'eraser']);
+    const LIVE_SEND_MS = 33;
 
-const LOGICAL_WIDTH = 1920;
-const LOGICAL_HEIGHT = 1080;
-
-// Initialize
-function initCanvas() {
-    canvas.width = LOGICAL_WIDTH;
-    canvas.height = LOGICAL_HEIGHT;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-
-    // Load from local storage if exists
-    const urlParams = new URLSearchParams(window.location.search);
-    const rid = urlParams.get('room') || 'local';
-    const savedState = localStorage.getItem(`whiteboard_state_${rid}`);
-
-    if (savedState) {
-        const img = new Image();
-        img.onload = () => {
-            ctx.drawImage(img, 0, 0);
-            saveState(false); // Push to undo stack but don't re-persist
-        };
-        img.src = savedState;
-    } else {
-        saveState(); // Save initial empty state
+    const stage = document.getElementById('board-stage');
+    const baseCanvas = document.getElementById('board-base');
+    const liveCanvas = document.getElementById('board-live');
+    const base = baseCanvas.getContext('2d');
+    const live = liveCanvas.getContext('2d');
+    for (const c of [baseCanvas, liveCanvas]) {
+        c.width = W;
+        c.height = H;
     }
-}
 
-// Remove window resize content clearing - CSS handles the visual resize now
-window.addEventListener('resize', () => {
-    // No longer resizing canvas internal buffer, just re-ensuring line styles
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-});
+    const BG = getComputedStyle(document.documentElement).getPropertyValue('--canvas-bg').trim() || '#240D18';
 
-// Coordinate Mapping Utility
-function getCoords(e) {
-    const rect = canvas.getBoundingClientRect();
-    const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
-    const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+    let ops = [];                  // committed (q = seq) followed by pending (q = Infinity)
+    const remoteLive = new Map();  // other people's in-progress strokes, by id
+    let mine = null;               // my in-progress stroke
+    let activePointer = null;
+    let unsentPoints = [];
+    let liveTimer = 0;
+    let canDraw = false;
 
-    return {
-        x: (clientX - rect.left) * (canvas.width / rect.width),
-        y: (clientY - rect.top) * (canvas.height / rect.height)
-    };
-}
+    let tool = 'pen';
+    let color = '#ffffff';
+    let size = 5;
 
-// Event Listeners for Tools
-document.querySelectorAll('.tool-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        if (btn.id.startsWith('tool-')) {
-            document.querySelector('.tool-btn.active')?.classList.remove('active');
-            btn.classList.add('active');
-            currentTool = btn.id.replace('tool-', '');
+    const send = (msg) => window.Sync && window.Sync.send(msg);
+    const byQ = (a, b) => (a.q === b.q ? 0 : a.q < b.q ? -1 : 1);
+
+    function uid() {
+        const bytes = crypto.getRandomValues(new Uint8Array(12));
+        return Array.from(bytes, (b) => (b % 36).toString(36)).join('');
+    }
+
+    function strip(op) {
+        const { q, ...rest } = op;
+        return rest;
+    }
+
+    // ---------- Rendering ----------
+
+    function drawFreehand(ctx, p, s) {
+        if (p.length < 2) return;
+        if (p.length <= 4) {
+            ctx.beginPath();
+            ctx.arc(p[0], p[1], s / 2, 0, Math.PI * 2);
+            ctx.fill();
+            if (p.length === 2) return;
         }
-    });
-});
-
-colorPicker.addEventListener('input', (e) => {
-    currentColor = e.target.value;
-});
-
-sizeSlider.addEventListener('input', (e) => {
-    currentSize = e.target.value;
-    sizePreview.textContent = `${currentSize}px`;
-});
-
-// Drawing Logic
-const startDraw = (e) => {
-    isDrawing = true;
-    const coords = getCoords(e);
-    startX = coords.x;
-    startY = coords.y;
-
-    ctx.beginPath();
-    ctx.lineWidth = currentSize;
-    ctx.strokeStyle = currentTool === 'eraser' ? '#1e293b' : currentColor;
-    ctx.fillStyle = currentColor;
-
-    // For shapes, we need a snapshot of the canvas to "preview" them
-    snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-    if (currentTool === 'pen' || currentTool === 'eraser') {
-        ctx.moveTo(startX, startY);
-    }
-
-    // Emit start event for real-time (implemented in realtime.js)
-    if (window.broadcastDraw) {
-        window.broadcastDraw('start', { x: startX, y: startY, tool: currentTool, color: currentColor, size: currentSize });
-    }
-};
-
-const draw = (e) => {
-    if (!isDrawing) return;
-
-    const coords = getCoords(e);
-    const x = coords.x;
-    const y = coords.y;
-
-    if (currentTool === 'pen' || currentTool === 'eraser') {
-        ctx.lineTo(x, y);
-        ctx.stroke();
-
-        if (window.broadcastDraw) {
-            window.broadcastDraw('draw', { x, y });
-        }
-    } else {
-        // Shapes: restore snapshot and redraw the shape
-        ctx.putImageData(snapshot, 0, 0);
-        drawShape(currentTool, startX, startY, x, y);
-    }
-};
-
-const stopDraw = (e) => {
-    if (!isDrawing) return;
-    isDrawing = false;
-
-    const coords = e.type && e.type.includes('touch') ? getCoords(e.changedTouches[0]) : getCoords(e);
-    const x = coords.x;
-    const y = coords.y;
-
-    if (currentTool !== 'pen' && currentTool !== 'eraser') {
-        drawShape(currentTool, startX, startY, x, y);
-        if (window.broadcastDraw) {
-            window.broadcastDraw('shape', { tool: currentTool, x1: startX, y1: startY, x2: x, y2: y });
-        }
-    } else {
-        if (window.broadcastDraw) {
-            window.broadcastDraw('stop', {});
-        }
-    }
-
-    saveState();
-};
-
-function drawShape(tool, x1, y1, x2, y2) {
-    ctx.beginPath();
-    ctx.lineWidth = currentSize;
-    ctx.strokeStyle = currentColor;
-
-    if (tool === 'rect') {
-        ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
-    } else if (tool === 'circle') {
-        let radius = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-        ctx.arc(x1, y1, radius, 0, 2 * Math.PI);
-        ctx.stroke();
-    } else if (tool === 'line') {
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-    }
-}
-
-// State Management
-function saveState(shouldPersist = true) {
-    if (undoStack.length >= MAX_UNDO) undoStack.shift();
-    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-
-    if (shouldPersist) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const rid = urlParams.get('room') || 'local';
-        localStorage.setItem(`whiteboard_state_${rid}`, canvas.toDataURL());
-    }
-}
-
-function undo() {
-    if (undoStack.length > 1) {
-        undoStack.pop(); // Remove current state
-        const prevState = undoStack[undoStack.length - 1];
-        ctx.putImageData(prevState, 0, 0);
-
-        if (window.broadcastDraw) {
-            window.broadcastDraw('undo', {});
-        }
-    }
-}
-
-function clearBoard(remote = false) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    saveState();
-
-    if (!remote) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const rid = urlParams.get('room') || 'local';
-        localStorage.removeItem(`whiteboard_state_${rid}`);
-    }
-
-    if (!remote && window.broadcastDraw) {
-        window.broadcastDraw('clear', {});
-    }
-}
-
-// UI Buttons
-document.getElementById('clear-board').addEventListener('click', () => {
-    if (confirm('Are you sure you want to clear the entire board?')) {
-        clearBoard();
-    }
-});
-
-document.getElementById('undo-btn').addEventListener('click', undo);
-
-document.getElementById('download-btn').addEventListener('click', () => {
-    const link = document.createElement('a');
-    link.download = `whiteboard-${Date.now()}.jpg`;
-
-    // Draw background before saving
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-    const tempCtx = tempCanvas.getContext('2d');
-    tempCtx.fillStyle = '#1e293b';
-    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-    tempCtx.drawImage(canvas, 0, 0);
-
-    link.href = tempCanvas.toDataURL('image/jpeg', 0.9);
-    link.click();
-});
-
-// Event Listeners
-canvas.addEventListener('mousedown', startDraw);
-canvas.addEventListener('mousemove', draw);
-window.addEventListener('mouseup', stopDraw);
-
-canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDraw(e); }, { passive: false });
-canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
-window.addEventListener('touchend', stopDraw);
-
-initCanvas();
-
-// Global methods for realtime side
-window.remoteDraw = {
-    start: (data) => {
         ctx.beginPath();
-        ctx.lineWidth = data.size;
-        ctx.strokeStyle = data.tool === 'eraser' ? '#1e293b' : data.color;
-        ctx.moveTo(data.x, data.y);
-    },
-    draw: (data) => {
-        ctx.lineTo(data.x, data.y);
-        ctx.stroke();
-    },
-    shape: (data) => {
-        ctx.strokeStyle = data.color || currentColor;
-        ctx.lineWidth = data.size || currentSize;
-        drawShape(data.tool, data.x1, data.y1, data.x2, data.y2);
-    },
-    clear: () => clearBoard(true),
-    undo: () => {
-        if (undoStack.length > 1) {
-            undoStack.pop();
-            ctx.putImageData(undoStack[undoStack.length - 1], 0, 0);
+        ctx.moveTo(p[0], p[1]);
+        for (let i = 2; i < p.length - 2; i += 2) {
+            const mx = (p[i] + p[i + 2]) / 2;
+            const my = (p[i + 1] + p[i + 3]) / 2;
+            ctx.quadraticCurveTo(p[i], p[i + 1], mx, my);
         }
-    },
-    loadState: (dataUrl) => {
-        const img = new Image();
-        img.onload = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
-            saveState();
-        };
-        img.src = dataUrl;
+        ctx.lineTo(p[p.length - 2], p[p.length - 1]);
+        ctx.stroke();
     }
-};
+
+    function drawShape(ctx, t, p, s) {
+        const [x1, y1, x2, y2] = p;
+        ctx.beginPath();
+        if (t === 'rect') {
+            ctx.rect(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x2 - x1), Math.abs(y2 - y1));
+        } else if (t === 'circle') {
+            ctx.arc(x1, y1, Math.hypot(x2 - x1, y2 - y1), 0, Math.PI * 2);
+        } else {
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            if (t === 'arrow' && (x1 !== x2 || y1 !== y2)) {
+                const a = Math.atan2(y2 - y1, x2 - x1);
+                const h = Math.max(14, s * 3);
+                ctx.moveTo(x2, y2);
+                ctx.lineTo(x2 - h * Math.cos(a - Math.PI / 7), y2 - h * Math.sin(a - Math.PI / 7));
+                ctx.moveTo(x2, y2);
+                ctx.lineTo(x2 - h * Math.cos(a + Math.PI / 7), y2 - h * Math.sin(a + Math.PI / 7));
+            }
+        }
+        ctx.stroke();
+    }
+
+    function drawOp(ctx, op, preview) {
+        if (op.t === 'clear') {
+            ctx.clearRect(0, 0, W, H);
+            return;
+        }
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = op.s;
+        if (op.t === 'eraser') {
+            if (preview) {
+                // The live layer can't cut holes in the base layer; paint background instead.
+                ctx.strokeStyle = ctx.fillStyle = BG;
+            } else {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.strokeStyle = ctx.fillStyle = '#000';
+            }
+        } else {
+            ctx.strokeStyle = ctx.fillStyle = op.c;
+        }
+        if (FREEHAND.has(op.t)) drawFreehand(ctx, op.p, op.s);
+        else drawShape(ctx, op.t, op.p, op.s);
+        ctx.restore();
+    }
+
+    function redraw() {
+        // Anything before the latest confirmed clear is invisible; drop it.
+        for (let i = ops.length - 1; i > 0; i--) {
+            if (ops[i].t === 'clear' && ops[i].q !== Infinity) {
+                ops = ops.slice(i);
+                break;
+            }
+        }
+        base.clearRect(0, 0, W, H);
+        for (const op of ops) drawOp(base, op, false);
+    }
+
+    let liveFrame = 0;
+    function scheduleLive() {
+        if (liveFrame) return;
+        liveFrame = requestAnimationFrame(() => {
+            liveFrame = 0;
+            live.clearRect(0, 0, W, H);
+            for (const op of remoteLive.values()) drawOp(live, op, true);
+            if (mine) drawOp(live, mine, true);
+        });
+    }
+
+    function isSortedAt(i) {
+        const q = ops[i].q;
+        return (i === 0 || ops[i - 1].q <= q) && (i === ops.length - 1 || ops[i + 1].q >= q);
+    }
+
+    // ---------- Local input ----------
+
+    function toBoard(e) {
+        const r = liveCanvas.getBoundingClientRect();
+        return [
+            Math.round(((e.clientX - r.left) * W) / r.width * 10) / 10,
+            Math.round(((e.clientY - r.top) * H) / r.height * 10) / 10,
+        ];
+    }
+
+    function flushLive() {
+        liveTimer = 0;
+        if (!mine) return;
+        const { id, t, c, s } = mine;
+        if (FREEHAND.has(t)) {
+            if (!unsentPoints.length) return;
+            send({ type: 'live', id, t, c, s, a: unsentPoints });
+            unsentPoints = [];
+        } else {
+            send({ type: 'live', id, t, c, s, p: mine.p });
+        }
+    }
+
+    function queueLive() {
+        if (!liveTimer) liveTimer = setTimeout(flushLive, LIVE_SEND_MS);
+    }
+
+    function cancelStroke() {
+        if (!mine) return;
+        send({ type: 'live-end', id: mine.id });
+        mine = null;
+        activePointer = null;
+        unsentPoints = [];
+        scheduleLive();
+    }
+
+    liveCanvas.addEventListener('pointerdown', (e) => {
+        if (!canDraw || e.button !== 0 || mine) return;
+        e.preventDefault();
+        liveCanvas.setPointerCapture(e.pointerId);
+        activePointer = e.pointerId;
+        const [x, y] = toBoard(e);
+        mine = { id: uid(), t: tool, c: color, s: size, p: FREEHAND.has(tool) ? [x, y] : [x, y, x, y] };
+        unsentPoints = FREEHAND.has(tool) ? [x, y] : [];
+        flushLive();
+        scheduleLive();
+    });
+
+    liveCanvas.addEventListener('pointermove', (e) => {
+        if (!mine || e.pointerId !== activePointer) return;
+        const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+        if (FREEHAND.has(mine.t)) {
+            const p = mine.p;
+            for (const ev of events.length ? events : [e]) {
+                const [x, y] = toBoard(ev);
+                if (Math.hypot(x - p[p.length - 2], y - p[p.length - 1]) < 1.5) continue;
+                p.push(x, y);
+                unsentPoints.push(x, y);
+            }
+        } else {
+            const [x, y] = toBoard(e);
+            mine.p[2] = x;
+            mine.p[3] = y;
+        }
+        scheduleLive();
+        queueLive();
+    });
+
+    function finishStroke(e) {
+        if (!mine || e.pointerId !== activePointer) return;
+        clearTimeout(liveTimer);
+        liveTimer = 0;
+        const op = mine;
+        mine = null;
+        activePointer = null;
+        unsentPoints = [];
+
+        if (!FREEHAND.has(op.t) && op.p[0] === op.p[2] && op.p[1] === op.p[3]) {
+            send({ type: 'live-end', id: op.id }); // zero-size shape: discard
+            scheduleLive();
+            return;
+        }
+        op.q = Infinity;
+        ops.push(op);
+        drawOp(base, op, false);
+        scheduleLive();
+        send({ type: 'commit', op: strip(op) });
+    }
+
+    liveCanvas.addEventListener('pointerup', finishStroke);
+    liveCanvas.addEventListener('pointercancel', finishStroke);
+
+    // ---------- Toolbar ----------
+
+    document.querySelectorAll('[data-tool]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            document.querySelector('[data-tool].active')?.classList.remove('active');
+            btn.classList.add('active');
+            tool = btn.dataset.tool;
+        });
+    });
+
+    const colorPicker = document.getElementById('color-picker');
+    function selectColor(value, fromSwatch) {
+        color = value.toLowerCase();
+        document.querySelectorAll('.swatch').forEach((s) => s.classList.toggle('active', s === fromSwatch));
+        colorPicker.classList.toggle('active', !fromSwatch);
+        if (fromSwatch) colorPicker.value = color;
+        if (tool === 'eraser') document.querySelector('[data-tool="pen"]').click();
+    }
+    document.querySelectorAll('.swatch').forEach((sw) => sw.addEventListener('click', () => selectColor(sw.dataset.color, sw)));
+    colorPicker.addEventListener('input', () => selectColor(colorPicker.value, null));
+
+    const sizeSlider = document.getElementById('size-slider');
+    const sizePreview = document.getElementById('size-preview');
+    sizeSlider.addEventListener('input', () => {
+        size = Number(sizeSlider.value);
+        sizePreview.textContent = `${size}px`;
+    });
+
+    // ---------- API used by realtime.js ----------
+
+    window.Board = {
+        /** Replace the board with the server's state; keeps my unconfirmed ops and returns them. */
+        load(serverOps) {
+            const known = new Set(serverOps.map((o) => o.id));
+            const pending = ops.filter((o) => o.q === Infinity && !known.has(o.id));
+            ops = serverOps.concat(pending);
+            remoteLive.clear();
+            redraw();
+            scheduleLive();
+            return pending.map(strip);
+        },
+
+        /** A finished op confirmed by the server (mine or someone else's). */
+        commit(op) {
+            remoteLive.delete(op.id);
+            const idx = ops.findIndex((o) => o.id === op.id);
+            if (idx >= 0) {
+                ops[idx] = op;
+                if (!isSortedAt(idx)) {
+                    ops.sort(byQ);
+                    redraw();
+                }
+            } else {
+                ops.push(op);
+                if (isSortedAt(ops.length - 1)) {
+                    drawOp(base, op, false);
+                    if (op.t === 'clear') ops = [op];
+                } else {
+                    ops.sort(byQ);
+                    redraw();
+                }
+            }
+            scheduleLive();
+        },
+
+        remove(id) {
+            const idx = ops.findIndex((o) => o.id === id);
+            if (idx < 0) return;
+            ops.splice(idx, 1);
+            redraw();
+        },
+
+        restore(op) {
+            if (ops.some((o) => o.id === op.id)) return;
+            ops.push(op);
+            ops.sort(byQ);
+            redraw();
+        },
+
+        remoteLive(msg) {
+            let op = remoteLive.get(msg.id);
+            if (!op) {
+                op = { id: msg.id, t: msg.t, c: msg.c, s: msg.s, p: [] };
+                remoteLive.set(msg.id, op);
+            }
+            if (msg.p) op.p = msg.p;
+            else if (msg.a) for (const n of msg.a) op.p.push(n);
+            scheduleLive();
+        },
+
+        remoteLiveEnd(id) {
+            remoteLive.delete(id);
+            scheduleLive();
+        },
+
+        clearRemoteLive() {
+            remoteLive.clear();
+            scheduleLive();
+        },
+
+        setCanDraw(value) {
+            canDraw = value;
+            if (!value) cancelStroke();
+            stage.classList.toggle('can-draw', value);
+        },
+
+        exportImage() {
+            const out = document.createElement('canvas');
+            out.width = W;
+            out.height = H;
+            const ctx = out.getContext('2d');
+            ctx.fillStyle = BG;
+            ctx.fillRect(0, 0, W, H);
+            ctx.drawImage(baseCanvas, 0, 0);
+            return out.toDataURL('image/png');
+        },
+    };
+})();

@@ -1,0 +1,28 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Mill 2D PCB (G-code) | San3a Academy PCB fabrication kit</title>
+  <link rel="icon" href="../../brand/favicon/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../../brand/san3a-brand.css" />
+  <script>
+    var t = localStorage.getItem('mods-theme')
+    if (t) document.documentElement.dataset.theme = t
+    // open the G-code "mill 2D PCB" program by default
+    var q = new URLSearchParams(location.search)
+    if (!q.has('program')) {
+      q.set('program', 'programs/machines/G-code/mill 2D PCB')
+      history.replaceState(null, '', '?' + q.toString())
+    }
+  </script>
+</head>
+<body>
+  <script src="js/mods.js"></script>
+  <!-- Must follow mods.js: it injects its own CSS into <head> when it runs. -->
+  <link rel="stylesheet" href="san3a-mods.css" />
+  <a class="san3a-home" href="../../" aria-label="San3a Academy PCB fabrication kit, home">
+    <img src="../../brand/logos/svg/san3a-symbol-white.svg" alt="" />
+    <span>San3a Academy</span>
+  </a>
+</body>
+</html>
