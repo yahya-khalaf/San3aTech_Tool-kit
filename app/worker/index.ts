@@ -38,6 +38,7 @@ const PUBLIC_PATHS = [
   '/login',
   '/api/login',
   '/api/logout',
+  '/api/session',
   '/api/csv/portfolio',
   '/api/whiteboard',
   '/whiteboard',
@@ -179,6 +180,14 @@ export default {
     }
     if (pathname === '/api/logout' && request.method === 'POST') {
       return handleLogout();
+    }
+    if (pathname === '/api/session' && request.method === 'GET') {
+      // Lets client-side pages (e.g. the Debugging course gate) check the
+      // shared-password session without knowing the password.
+      const authenticated = env.ACCESS_PASSWORD
+        ? await verifySessionCookie(request.headers.get('Cookie'), env.ACCESS_PASSWORD)
+        : true; // no password configured: nothing is protected
+      return json({ authenticated }, 200, { 'Cache-Control': 'no-store' });
     }
 
     if (pathname === '/api/whiteboard' && request.method === 'POST') {

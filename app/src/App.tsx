@@ -25,7 +25,6 @@ import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 function DebuggingGate({ children }: { children: React.ReactNode }) {
   return (
     <PasswordGate
-      sessionKey="san3a_debugging_authenticated"
       title="Debugging Fundamentals"
       description="Enter the protected password to access Debugging Fundamentals."
     >

@@ -14,7 +14,7 @@ The whole site is one **Cloudflare Worker** with static assets. There is no sepa
 | Dashboard | `/` | Password protected |
 | Course library | `/courses` | |
 | Code & Create | `/courses/code-create` | Project journal, challenge wall, student portfolio |
-| Debugging Fundamentals | `/courses/debugging` | Wizard, flowchart, system map, developer editor (client-side `PasswordGate`) |
+| Debugging Fundamentals | `/courses/debugging` | Wizard, flowchart, system map, developer editor. Password protected (same password) |
 | Employability | `/courses/employability` | Pre-course onboarding, PCB Design and Manufacturing |
 
 ### Course tools
@@ -106,7 +106,9 @@ Public onboarding links (Discord invite, survey forms, etc.) are plain `vars` in
 
 ### Access control
 - `app/worker/index.ts` checks a signed session cookie before serving `/`, `/calendar`, the WIGs pages and `/api/*`. Without it, visitors are sent to `/login`.
-- Public paths (no password): `/login`, `/onboarding`, `/employability/*` (including the PCB kit), `/whiteboard`, `/api/whiteboard`, `/api/csv/portfolio`, static assets.
+- **There is no password in the code.** Every password check, including the Debugging Fundamentals gate, compares against the `ACCESS_PASSWORD` secret on the Worker. Logging in once (7-day cookie) unlocks everything. Debugging is a client-side React route, so its gate asks the Worker `GET /api/session` and signs in through `POST /api/login`.
+- If `ACCESS_PASSWORD` is not set, nothing is protected.
+- Public paths (no password): `/login`, `/api/session`, `/onboarding`, `/employability/*` (including the PCB kit), `/whiteboard`, `/api/whiteboard`, `/api/csv/portfolio`, static assets.
 - The sheet URLs never reach the browser: pages fetch `/api/csv/<name>` and the Worker fetches the sheet.
 
 ### Service worker (PWA)

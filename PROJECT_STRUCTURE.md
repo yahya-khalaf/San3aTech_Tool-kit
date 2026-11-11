@@ -61,7 +61,7 @@ The toolkit adheres to a unified design language to ensure a premium, integrated
 Internal-only pages are gated server-side at the Cloudflare Pages edge, not in the browser:
 1. **Enforcement**: `app/functions/_middleware.ts` runs on every request to `/calendar/*`, `/tools/team-wigs.html`, `/tools/individual-wigs.html`, and `/code-create/student-projects-portfolio.html`, and checks an HTTP Basic Auth header before Cloudflare serves any file. Unauthenticated requests never receive the page content.
 2. **Credentials**: A single shared username/password, stored as encrypted environment variables (`ACCESS_USERNAME`, `ACCESS_PASSWORD`) on the Cloudflare Pages project — never shipped to the client. The admin can rotate the password from the Cloudflare dashboard without a code change (redeploy required to apply it).
-3. **Debugging Fundamentals** (`/courses/debugging/*`) still uses the older client-side `PasswordGate` component, since that content lives inside the React app's bundle rather than as a separately-served static path. It's lower-sensitivity course material, not a security boundary.
+3. **Debugging Fundamentals** (`/courses/debugging/*`) is a client-side React route, so the Worker can't block it per request. Its `PasswordGate` asks the Worker (`GET /api/session`) whether the visitor has the shared-password session and otherwise signs them in with `POST /api/login`. There is no password in the code; everything checks the `ACCESS_PASSWORD` secret.
 
 ---
 

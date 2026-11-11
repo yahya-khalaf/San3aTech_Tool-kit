@@ -1,61 +1,72 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 
-// Client-side only — used for the Debugging Fundamentals course pages,
-// which don't carry sensitive data. Team WIGs, Individual WIGs, the Crash
-// Courses Calendar, and the Student Projects Portfolio are gated server-side
-// via HTTP Basic Auth at the Cloudflare Pages edge (see functions/_middleware.ts).
-const PROTECTED_PASSWORD_HASH = '40d6ac2265d0a7dfee9ad07808259c9dd48f03e23584482ece151d10eba3fcda';
+// Gate for client-side routes (Debugging Fundamentals). No password lives in
+// the code: it uses the same shared-password session as the rest of the site.
+// The Worker checks the password against the ACCESS_PASSWORD secret
+// (POST /api/login) and reports the session state (GET /api/session).
 
-async function hashString(value: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(value);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
-async function validatePassword(inputValue: string): Promise<boolean> {
-  const normalized = inputValue.trim();
-  if (!normalized) return false;
-  const enteredHash = await hashString(normalized);
-  return enteredHash === PROTECTED_PASSWORD_HASH;
-}
+type GateState = 'checking' | 'locked' | 'open';
 
 export default function PasswordGate({
-  sessionKey,
   title,
   description,
   children
 }: {
-  sessionKey: string;
   title: string;
   description: string;
   children: ReactNode;
 }) {
-  const [authenticated, setAuthenticated] = useState(false);
+  const [state, setState] = useState<GateState>('checking');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    setAuthenticated(sessionStorage.getItem(sessionKey) === 'true');
-  }, [sessionKey]);
+    let cancelled = false;
+    fetch('/api/session', { credentials: 'same-origin', cache: 'no-store' })
+      .then((res) => (res.ok ? res.json() : { authenticated: false }))
+      .then((data: { authenticated?: boolean }) => {
+        if (!cancelled) setState(data.authenticated ? 'open' : 'locked');
+      })
+      .catch(() => {
+        if (!cancelled) setState('locked');
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  if (authenticated) {
+  if (state === 'open') {
     return <>{children}</>;
+  }
+
+  if (state === 'checking') {
+    return <div className="h-full" aria-busy="true" />;
   }
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const isValid = await validatePassword(password);
-
-    if (isValid) {
-      sessionStorage.setItem(sessionKey, 'true');
-      setStatus('');
-      setAuthenticated(true);
-      return;
+    setSubmitting(true);
+    setStatus('');
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ password })
+      });
+      if (res.ok) {
+        setState('open');
+        return;
+      }
+      const data = await res.json().catch(() => ({}));
+      setStatus(data.error || 'Incorrect password. Please try again.');
+    } catch {
+      setStatus('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+      setPassword('');
     }
-
-    setStatus('Incorrect password. Please try again.');
-    setPassword('');
   };
 
   return (
@@ -78,7 +89,8 @@ export default function PasswordGate({
           />
           <button
             type="submit"
-            className="rounded-xl px-4 py-3 text-white text-sm font-extrabold transition hover:-translate-y-0.5"
+            disabled={submitting}
+            className="rounded-xl px-4 py-3 text-white text-sm font-extrabold transition hover:-translate-y-0.5 disabled:opacity-60"
             style={{ background: 'linear-gradient(135deg, #CF2027, #781629)' }}
           >
             Access {title}
