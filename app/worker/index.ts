@@ -205,8 +205,8 @@ export default {
       return serveAsset(new Request(assetUrl.toString(), request), env);
     }
 
-    const isRoot = pathname === '' || pathname === '/';
-    const isProtected = isRoot || matchesAny(pathname, PROTECTED_PATHS);
+    // The dashboard entry ("/") is public; only the paths in PROTECTED_PATHS need the password.
+    const isProtected = matchesAny(pathname, PROTECTED_PATHS);
     const isPublic = matchesAny(pathname, PUBLIC_PATHS);
 
     if (isProtected && !isPublic) {
