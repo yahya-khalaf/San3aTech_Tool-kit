@@ -27,6 +27,7 @@ interface Env extends CsvEnv {
   PHYSICA_AI_VIDEO_URL?: string;
   ESP32_SURVEY_URL?: string;
   IOT_EXPLORERS_SURVEY_URL?: string;
+  CAD_BEGINNERS_SURVEY_URL?: string;
 }
 
 // Canonical (extensionless) protected paths. The assets binding serves the
@@ -142,14 +143,23 @@ async function serveAsset(request: Request, env: Env): Promise<Response> {
     C: {
       "physica-ai": "Physical AI for Beginners",
       esp32: "ESP32 Hybrid Course",
-      "iot-explorers": "IoT Explorers Bootcamp"
+      "iot-explorers": "IoT Explorers Bootcamp",
+      "cad-beginners": "CAD for Beginners (Hybrid)"
     },
     p: env.PERSONAL_INFO_URL || "https://forms.gle/A1dnvCoEBc4X7q2d6",
     d: env.DISCORD_INVITE_URL || "https://discord.gg/ZDYnw4Zkb",
     s: {
       "physica-ai": env.PHYSICA_AI_SURVEY_URL || "https://forms.gle/VTrmZbxc2ptfahwD9",
       esp32: env.ESP32_SURVEY_URL || "https://forms.gle/3UrLWTDeTE6HTvMT7",
-      "iot-explorers": env.IOT_EXPLORERS_SURVEY_URL || "https://forms.gle/Qy4XAi4MRZnaDRTH8"
+      "iot-explorers": env.IOT_EXPLORERS_SURVEY_URL || "https://forms.gle/Qy4XAi4MRZnaDRTH8",
+      "cad-beginners": env.CAD_BEGINNERS_SURVEY_URL || "https://docs.google.com/forms/d/e/1FAIpQLSfHOhPNMmcAH8ifbngS2yf7-VD6TGiOpWrYhyocTQagfKOeoQ/viewform"
+    },
+    // Student agreement page for each course (San3a Academy terms of use site)
+    ag: {
+      "physica-ai": "https://sites.google.com/san3atech.com/san3aacademytermsofuse/students-agreement/physical-ai-for-beginners-course",
+      esp32: "https://sites.google.com/san3atech.com/san3aacademytermsofuse/students-agreement/esp32-for-beginners-hybrid-course",
+      "iot-explorers": "https://sites.google.com/san3atech.com/san3aacademytermsofuse/students-agreement/iot-explorers-bootcamp",
+      "cad-beginners": "https://sites.google.com/san3atech.com/san3aacademytermsofuse/students-agreement/cad-for-beginners-hybrid-course"
     },
     laptop: env.PHYSICA_AI_LAPTOP_URL || "https://docs.google.com/document/d/1_XWsdEeVYVl1uu7e-oMrSMDstDrw_LequzNFE6F3SOU/edit?usp=sharing",
     video: env.PHYSICA_AI_VIDEO_URL || "https://drive.google.com/file/d/1LOxpHa_hdLkGTN3Yr4UyFORZ4-5aId2I/view?usp=sharing"

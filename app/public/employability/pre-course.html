@@ -307,14 +307,22 @@
       C: {
         "physica-ai": "Physical AI for Beginners",
         esp32: "ESP32 Hybrid Course",
-        "iot-explorers": "IoT Explorers Bootcamp"
+        "iot-explorers": "IoT Explorers Bootcamp",
+        "cad-beginners": "CAD for Beginners (Hybrid)"
       },
       p: "https://forms.gle/A1dnvCoEBc4X7q2d6",
       d: "https://discord.gg/ZDYnw4Zkb",
       s: {
         "physica-ai": "https://forms.gle/VTrmZbxc2ptfahwD9",
         esp32: "https://forms.gle/3UrLWTDeTE6HTvMT7",
-        "iot-explorers": "https://forms.gle/Qy4XAi4MRZnaDRTH8"
+        "iot-explorers": "https://forms.gle/Qy4XAi4MRZnaDRTH8",
+        "cad-beginners": "https://docs.google.com/forms/d/e/1FAIpQLSfHOhPNMmcAH8ifbngS2yf7-VD6TGiOpWrYhyocTQagfKOeoQ/viewform"
+      },
+      ag: {
+        "physica-ai": "https://sites.google.com/san3atech.com/san3aacademytermsofuse/students-agreement/physical-ai-for-beginners-course",
+        esp32: "https://sites.google.com/san3atech.com/san3aacademytermsofuse/students-agreement/esp32-for-beginners-hybrid-course",
+        "iot-explorers": "https://sites.google.com/san3atech.com/san3aacademytermsofuse/students-agreement/iot-explorers-bootcamp",
+        "cad-beginners": "https://sites.google.com/san3atech.com/san3aacademytermsofuse/students-agreement/cad-for-beginners-hybrid-course"
       },
       laptop: "https://docs.google.com/document/d/1_XWsdEeVYVl1uu7e-oMrSMDstDrw_LequzNFE6F3SOU/edit?usp=sharing",
       video: "https://drive.google.com/file/d/1LOxpHa_hdLkGTN3Yr4UyFORZ4-5aId2I/view?usp=sharing"
@@ -372,6 +380,12 @@
           title: 'Complete the course survey',
           links: [{ text: 'Open link', url: X.s[d.c] }]
         },
+        // Each course links to its own page on the San3a Academy student agreement site.
+        ...(X.ag && ok(X.ag[d.c]) ? [{
+          title: 'Read the student agreement',
+          desc: 'Read the student agreement for your course before your first session.',
+          links: [{ text: 'Open agreement', url: X.ag[d.c] }]
+        }] : []),
         {
           title: 'Access your course portal',
           desc: 'Once you fill the pre course survey you can access the course portal "check your inbox"'
@@ -381,10 +395,11 @@
           desc: 'Find Yahya Alariny and send him a message with your name, course name, and round to join the course channel.',
           links: [{ text: 'Open link', url: X.d }]
         },
-        {
+        // CAD for Beginners has no electronic kit, so it skips this step.
+        ...(d.c !== 'cad-beginners' ? [{
           title: 'Your kit and participation setup',
           desc: 'Sign the receipt form for your electronic kit, return it after the course, bring laptop offline, and use a quiet space with camera and mic online.'
-        },
+        }] : []),
         ...(d.c === 'physica-ai' ? [{
           title: 'Prepare your setup',
           desc: 'This course requires specific laptop requirements and pre-course preparation. The pre-session preparation, including required installations and downloads, may take up to 2 hours. Please ensure you complete all preparations before the first session.',

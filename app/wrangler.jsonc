@@ -12,7 +12,8 @@
     "PHYSICA_AI_LAPTOP_URL": "https://docs.google.com/document/d/1_XWsdEeVYVl1uu7e-oMrSMDstDrw_LequzNFE6F3SOU/edit?usp=sharing",
     "PHYSICA_AI_VIDEO_URL": "https://drive.google.com/file/d/1LOxpHa_hdLkGTN3Yr4UyFORZ4-5aId2I/view?usp=sharing",
     "ESP32_SURVEY_URL": "https://forms.gle/3UrLWTDeTE6HTvMT7",
-    "IOT_EXPLORERS_SURVEY_URL": "https://forms.gle/Qy4XAi4MRZnaDRTH8"
+    "IOT_EXPLORERS_SURVEY_URL": "https://forms.gle/Qy4XAi4MRZnaDRTH8",
+    "CAD_BEGINNERS_SURVEY_URL": "https://docs.google.com/forms/d/e/1FAIpQLSfHOhPNMmcAH8ifbngS2yf7-VD6TGiOpWrYhyocTQagfKOeoQ/viewform"
   },
   "assets": {
     "directory": "./dist",
