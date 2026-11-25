@@ -50,7 +50,7 @@ Items marked **[ADD: …]** still need to be completed.
 | Meaning | Craft, trade or skilled making |
 | Sector | Technology and maker education |
 | Website | [www.san3a.academy](https://www.san3a.academy) |
-| Community | [Discord](https://discord.gg/ZDYnw4Zkb) |
+| Community | [Discord](https://discord.gg/nhmQKhAKn2) |
 | Founded | **[ADD: founding year]** |
 | Headquarters | **[ADD: city and country]** |
 | Leadership | **[ADD: founder or CEO name and title]** |
