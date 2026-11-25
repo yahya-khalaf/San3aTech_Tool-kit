@@ -2,39 +2,97 @@
 @tailwind components;
 @tailwind utilities;
 
+/* San3a Academy brand layer. Tokens (--s3-*) load from /brand/san3a-tokens.css. */
 @layer base {
   :root {
     --color-primary-red: #CF2027;
-    --color-primary-red-dark: #781629;
-    --color-primary-red-light: #F9DFE1;
+    --color-primary-red-dark: #A91B24;
+    --color-primary-red-light: #FBE9EA;
   }
 
   body {
-    @apply bg-[#FFF7F3] text-gray-700 font-inter antialiased;
+    @apply antialiased;
+    background: var(--s3-surface);
+    color: var(--s3-text);
+    font-family: var(--s3-font-body);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-montserrat font-bold text-gray-900;
+    @apply font-bold text-gray-900;
+    font-family: var(--s3-font-heading);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--s3-focus-ring);
+    outline-offset: 2px;
   }
 }
 
 @layer components {
+  /* Brand kit Button: primary */
   .btn-primary {
-    @apply bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-md shadow-sm transition-all active:scale-95;
+    @apply inline-flex items-center justify-center gap-2 font-semibold transition-colors;
+    min-height: 44px;
+    padding: var(--s3-space-3) var(--s3-space-5);
+    border-radius: var(--s3-radius-sm);
+    background: var(--s3-primary);
+    color: var(--s3-text-on-primary);
   }
+  .btn-primary:hover { background: var(--s3-primary-hover); }
+  .btn-primary:active { background: var(--s3-primary-active); }
 
+  /* Brand kit Card: square, bordered, flat */
   .card {
-    @apply bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden;
+    @apply overflow-hidden;
+    background: var(--s3-surface-raised);
+    border: 1px solid var(--s3-border);
+    border-radius: var(--s3-radius-none);
   }
 
+  /* Brand kit TextField */
   .input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all;
+    @apply w-full outline-none transition-all;
+    min-height: 44px;
+    padding: var(--s3-space-3);
+    border: 1px solid var(--s3-border-strong);
+    border-radius: var(--s3-radius-sm);
+    background: var(--s3-surface-raised);
+    color: var(--s3-text);
+  }
+  .input:focus {
+    outline: 2px solid var(--s3-focus-ring);
+    outline-offset: 1px;
+    border-color: var(--s3-focus-ring);
+  }
+
+  /* Stripe band from the guideline cover */
+  .s3-stripes { display: grid; grid-template-columns: repeat(8, 1fr); height: 8px; }
+  .s3-stripes > span:nth-child(1) { background: var(--s3-stripe-1); }
+  .s3-stripes > span:nth-child(2) { background: var(--s3-stripe-2); }
+  .s3-stripes > span:nth-child(3) { background: var(--s3-stripe-3); }
+  .s3-stripes > span:nth-child(4) { background: var(--s3-stripe-4); }
+  .s3-stripes > span:nth-child(5) { background: var(--s3-stripe-5); }
+  .s3-stripes > span:nth-child(6) { background: var(--s3-stripe-6); }
+  .s3-stripes > span:nth-child(7) { background: var(--s3-stripe-7); }
+  .s3-stripes > span:nth-child(8) { background: var(--s3-stripe-8); }
+
+  .s3-eyebrow {
+    font: var(--s3-text-label);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .s3-display {
+    font-family: var(--s3-font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
 }
 
 /* Custom styles for React Flow */
 .react-flow__node {
-  @apply rounded-lg border-2 border-gray-200 bg-white p-4 shadow-md !important;
+  @apply rounded-none border-2 border-gray-300 bg-white p-4 shadow-sm !important;
 }
 
 .react-flow__node.selected {

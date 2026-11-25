@@ -86,13 +86,9 @@ function App() {
     <ErrorBoundary>
       <Router>
         <MetrikaRouteTracker />
-        <div className="relative flex h-screen overflow-hidden font-inter">
-          {/* Decorative brand-toned background (glassmorphism needs something colorful behind it) */}
-          <div className="pointer-events-none fixed inset-0 bg-[#FFF7F3]">
-            <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] rounded-full bg-[#CF2027]/15 blur-3xl" />
-            <div className="absolute top-1/3 -right-32 w-[26rem] h-[26rem] rounded-full bg-[#781629]/15 blur-3xl" />
-            <div className="absolute bottom-0 left-1/4 w-[24rem] h-[24rem] rounded-full bg-[#240D18]/10 blur-3xl" />
-          </div>
+        <div className="relative flex h-screen overflow-hidden font-body">
+          {/* Flat brand surface */}
+          <div className="pointer-events-none fixed inset-0 bg-surface" />
 
           {/* Mobile Overlay */}
           {sidebarOpen && (
@@ -105,7 +101,7 @@ function App() {
 
           {/* Sidebar */}
           <nav className={clsx(
-            "w-64 bg-white/70 backdrop-blur-xl border-r border-white/40 flex flex-col z-40 transition-transform duration-300",
+            "w-64 bg-brand-night text-white flex flex-col z-40 transition-transform duration-300",
             "lg:relative lg:translate-x-0",
             "fixed inset-y-0 left-0",
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -113,20 +109,17 @@ function App() {
             {/* Mobile Close Button */}
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-900 rounded-lg hover:bg-white/60"
+              className="lg:hidden absolute top-4 right-4 p-2 text-white/70 hover:text-white rounded-sm hover:bg-white/10"
               aria-label="Close sidebar"
             >
               <X size={20} />
             </button>
 
-            <div className="p-6 border-b border-white/40">
-              <div className="flex items-center gap-3">
-                <img src="/images/San3a-Academy-logo.png" alt="San3a Academy" className="w-10 h-10 object-contain" />
-                <span className="font-montserrat font-bold text-lg text-gray-900 leading-tight">
-                  San3a<br />Toolkit
-                </span>
-              </div>
+            <div className="px-6 pt-6 pb-5">
+              <img src="/brand/san3a-academy-logo.png" alt="San3a Academy" className="h-12 w-auto object-contain" />
+              <p className="mt-3 s3-eyebrow text-white/70">Toolkit</p>
             </div>
+            <div className="s3-stripes" aria-hidden="true"><span /><span /><span /><span /><span /><span /><span /><span /></div>
 
             <div className="flex-1 py-6 px-4 space-y-6 overflow-y-auto">
               <div className="space-y-1">
@@ -134,14 +127,14 @@ function App() {
               </div>
 
               <div>
-                <p className="px-4 mb-2 text-xs font-bold uppercase tracking-widest text-gray-400">Courses</p>
+                <p className="px-4 mb-2 s3-eyebrow text-white/60">Courses</p>
                 <div className="space-y-1">
                   <NavLink to="/courses" icon={<GraduationCap size={20} />} label="Courses" onClick={() => setSidebarOpen(false)} />
                 </div>
               </div>
 
               <div>
-                <p className="px-4 mb-2 text-xs font-bold uppercase tracking-widest text-gray-400">General Tools</p>
+                <p className="px-4 mb-2 s3-eyebrow text-white/60">General Tools</p>
                 <div className="space-y-1">
                   <ExternalNavLink href="/tools/qr-generator.html" icon={<QrCode size={20} />} label="QR Generator" />
                   <ExternalNavLink href="/tools/video-to-gif.html" icon={<Video size={20} />} label="Video to GIF" />
@@ -151,8 +144,8 @@ function App() {
               </div>
             </div>
 
-            <div className="p-4 border-t border-white/40">
-              <div className="p-3 bg-primary-light/40 rounded-lg text-xs text-primary font-medium text-center">
+            <div className="p-4 border-t border-white/10">
+              <div className="p-3 text-xs text-white/60 font-medium text-center">
                 Version 1.0.0 (Beta)
               </div>
             </div>
@@ -163,7 +156,7 @@ function App() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden fixed top-4 left-4 z-20 p-2 bg-white/80 backdrop-blur-md rounded-lg shadow-lg border border-white/50 text-gray-700 hover:text-gray-900"
+              className="lg:hidden fixed top-4 left-4 z-20 p-2 bg-brand-night rounded-sm shadow-lg text-white hover:bg-brand-wine"
               aria-label="Open sidebar"
             >
               <Menu size={24} />
@@ -195,10 +188,10 @@ function NavLink({ to, icon, label, onClick }: { to: string; icon: React.ReactNo
       onClick={onClick}
       className={twMerge(
         clsx(
-          "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group",
+          "flex items-center gap-3 px-4 py-3 rounded-none border-l-2 transition-all duration-200 group",
           isActive
-            ? "bg-primary-light text-primary border border-primary/10 shadow-sm"
-            : "text-gray-500 hover:bg-white/60 hover:text-gray-900"
+            ? "bg-brand-wine text-white border-primary"
+            : "text-white/75 border-transparent hover:bg-white/5 hover:text-white"
         )
       )}
     >
@@ -206,7 +199,7 @@ function NavLink({ to, icon, label, onClick }: { to: string; icon: React.ReactNo
         {icon}
       </span>
       <span className="font-semibold text-sm">{label}</span>
-      {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />}
+      {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />}
     </Link>
   );
 }
@@ -217,7 +210,7 @@ function ExternalNavLink({ href, icon, label, newTab }: { href: string; icon: Re
       href={href}
       target={newTab ? '_blank' : undefined}
       rel={newTab ? 'noreferrer' : undefined}
-      className="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-gray-500 hover:bg-white/60 hover:text-gray-900"
+      className="flex items-center gap-3 px-4 py-3 rounded-none border-l-2 border-transparent transition-all duration-200 text-white/75 hover:bg-white/5 hover:text-white"
     >
       {icon}
       <span className="font-semibold text-sm">{label}</span>

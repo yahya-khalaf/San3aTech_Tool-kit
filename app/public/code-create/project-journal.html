@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,8 @@
   <!-- San3a Typography: Montserrat (Headlines), Arvo (Sub-headlines/Chips), Inter (Body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/brand/favicon.png">
+  <link rel="stylesheet" href="/brand/san3a-tokens.css">
   
   <!-- PapaParse for Quote & Multi-line Aware CSV Parsing -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -29,15 +30,15 @@
       --shadow-sm: 0 4px 12px rgba(36, 13, 24, 0.05);
       --shadow-md: 0 10px 30px rgba(36, 13, 24, 0.08);
       --shadow-lg: 0 18px 40px rgba(36, 13, 24, 0.15);
-      --radius-sm: 8px;
-      --radius-md: 16px;
-      --radius-lg: 24px;
+      --radius-sm: 2px;
+      --radius-md: 0px;
+      --radius-lg: 0px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family:var(--s3-font-body);
       background-color: var(--bg);
       color: var(--ink);
       line-height: 1.5;
@@ -52,18 +53,18 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       height: 6px;
-      background: linear-gradient(90deg, var(--ink), var(--plum), var(--maroon), var(--red), var(--sun));
+      background: linear-gradient(90deg, #211317 0 12.5%, #2B161C 12.5% 25%, #36141E 25% 37.5%, #4D1524 37.5% 50%, #741528 50% 62.5%, #8F172A 62.5% 75%, #B51E24 75% 87.5%, #D11E25 87.5% 100%);
       z-index: 1000;
     }
 
     h1, h2, h3, h4, .brand-heading {
-      font-family: 'Montserrat', sans-serif;
+      font-family:var(--s3-font-display);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .sub-heading {
-      font-family: 'Arvo', Georgia, serif;
+      font-family:var(--s3-font-heading);
     }
 
     .container {
@@ -82,7 +83,7 @@
        PERSISTENT HEADER & COHORT STATS
        ========================================================================== */
     header {
-      background: linear-gradient(135deg, var(--ink), var(--plum));
+      background: var(--ink);
       color: #FFFFFF;
       padding: 32px 0 24px;
       box-shadow: var(--shadow-md);
@@ -127,7 +128,7 @@
 
     .brand-tagline {
       font-size: 11px;
-      color: var(--sun);
+      color:#FFB3B6;
       letter-spacing: 2px;
       font-weight: 700;
       margin-top: 2px;
@@ -147,10 +148,10 @@
       color: #FFFFFF;
       border: none;
       padding: 8px 18px;
-      border-radius: 999px;
+      border-radius: 2px;
       font-size: 13px;
       font-weight: 700;
-      font-family: 'Arvo', Georgia, serif;
+      font-family:var(--s3-font-heading);
       cursor: pointer;
       transition: all 0.2s ease;
       text-decoration: none;
@@ -195,7 +196,7 @@
     }
 
     .summary-stats strong {
-      color: var(--sun);
+      color:#FFB3B6;
       font-size: 16px;
     }
 
@@ -203,7 +204,7 @@
       display: flex;
       height: 10px;
       width: 220px;
-      border-radius: 999px;
+      border-radius: 2px;
       overflow: hidden;
       background: rgba(255, 255, 255, 0.1);
     }
@@ -244,7 +245,7 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--plum);
-      font-family: 'Arvo', Georgia, serif;
+      font-family:var(--s3-font-heading);
     }
 
     select, input[type="text"] {
@@ -273,14 +274,14 @@
 
     .filter-chip {
       padding: 6px 12px;
-      border-radius: 999px;
+      border-radius: 2px;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
       border: 1.5px solid transparent;
       opacity: 0.65;
       transition: all 0.2s ease;
-      font-family: 'Arvo', Georgia, serif;
+      font-family:var(--s3-font-heading);
       user-select: none;
     }
 
@@ -370,13 +371,13 @@
 
     .group-badge {
       background: var(--ink);
-      color: var(--sun);
+      color:#FFB3B6;
       font-size: 10px;
       font-weight: 800;
       padding: 4px 10px;
-      border-radius: 999px;
+      border-radius: 2px;
       letter-spacing: 1px;
-      font-family: 'Arvo', Georgia, serif;
+      font-family:var(--s3-font-heading);
     }
 
     .card-themes {
@@ -425,7 +426,7 @@
     .mini-pill {
       background: var(--bg);
       padding: 3px 8px;
-      border-radius: 6px;
+      border-radius: 2px;
       border: 1px solid rgba(36, 13, 24, 0.08);
     }
 
@@ -496,7 +497,7 @@
       background: var(--bg);
       color: var(--ink);
       padding: 6px 14px;
-      border-radius: 999px;
+      border-radius: 2px;
       font-size: 13px;
       font-weight: 700;
       border: 1px solid rgba(36, 13, 24, 0.1);
@@ -553,7 +554,7 @@
     .spec-details h4 {
       font-size: 12px;
       color: var(--maroon);
-      font-family: 'Arvo', Georgia, serif;
+      font-family:var(--s3-font-heading);
     }
 
     .spec-details div {
@@ -592,7 +593,7 @@
       color: var(--red);
       text-transform: uppercase;
       margin-bottom: 6px;
-      font-family: 'Arvo', Georgia, serif;
+      font-family:var(--s3-font-heading);
     }
 
     .dt-step-card h3 {
@@ -656,20 +657,20 @@
 
     .code-box-header {
       background: var(--plum);
-      color: var(--sun);
+      color:#FFB3B6;
       padding: 10px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 12px;
       font-weight: 700;
-      font-family: 'Arvo', Georgia, serif;
+      font-family:var(--s3-font-heading);
     }
 
     pre.code-block {
       color: #FFEAEA;
       padding: 20px;
-      font-family: 'SF Mono', Consolas, Monaco, monospace;
+      font-family: var(--s3-font-mono);
       font-size: 13.5px;
       line-height: 1.5;
       overflow-x: auto;
@@ -768,7 +769,7 @@
       background: rgba(36, 13, 24, 0.92);
       border: 1px solid rgba(255, 201, 60, 0.4);
       padding: 10px 20px;
-      border-radius: 999px;
+      border-radius: 2px;
       z-index: 2000;
       align-items: center;
       gap: 16px;
@@ -784,7 +785,7 @@
       color: #FFFFFF;
       border: none;
       padding: 4px 10px;
-      border-radius: 6px;
+      border-radius: 2px;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
@@ -812,7 +813,7 @@
     .lightbox img {
       max-width: 90vw;
       max-height: 85vh;
-      border-radius: 12px;
+      border-radius: 2px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
 
@@ -842,6 +843,10 @@
       .journal-section { padding: 22px; }
       .journal-title-area h1 { font-size: 26px; }
     }
+  
+    /* ===== San3a Academy brand layer (UI only) ===== */
+    button, .btn, .btn-action, .primary { letter-spacing: 0.01em; }
+    :focus-visible { outline: 2px solid var(--s3-focus-ring); outline-offset: 2px; }
   </style>
 </head>
 <body>
@@ -852,7 +857,7 @@
       <div class="header-top">
         <div class="brand-lockup">
           <div class="logo-slot">
-            <img id="san3aLogo" src="https://drive.google.com/thumbnail?id=1rCKa03biw85Q-7LveerNCSz1WY00rbc8&amp;sz=w1000" alt="San3a Academy Logo">
+            <img id="san3aLogo" src="/brand/san3a-academy-logo.png" alt="San3a Academy">
           </div>
           <div class="brand-text">
             <h1>CODE &amp; <span>CREATE</span></h1>
@@ -872,7 +877,7 @@
           <span>Participating Teams: <strong id="statTotalTeams">—</strong></span>
         </div>
         <div style="display:flex; align-items:center; gap:10px;">
-          <span style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.7); font-family:'Arvo', serif;">Theme Mix:</span>
+          <span style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.7); font-family:var(--s3-font-heading);">Theme Mix:</span>
           <div class="theme-dist-bar" id="themeDistBar"></div>
         </div>
       </div>
@@ -908,7 +913,7 @@
         </div>
 
         <div class="control-group" style="text-align:right;">
-          <button class="btn" style="background:var(--ink); color:var(--sun);" onclick="togglePresentationMode()">▶ Start Exhibition</button>
+          <button class="btn" style="background:var(--ink); color:#FFB3B6;" onclick="togglePresentationMode()">▶ Start Exhibition</button>
         </div>
       </div>
     </section>
@@ -931,7 +936,7 @@
     <button class="btn btn-secondary" onclick="prevPresentationSection()">⏮ Prev</button>
     <button class="btn" id="presentPlayPauseBtn" onclick="togglePausePresentation()">⏸ Pause</button>
     <button class="btn btn-secondary" onclick="nextPresentationSection()">Next ⏭</button>
-    <span style="color:var(--sun); font-size:12px; font-weight:bold;">Speed:</span>
+    <span style="color:#FFB3B6; font-size:12px; font-weight:bold;">Speed:</span>
     <button class="present-speed-btn" onclick="setPresentSpeed(22000, this)">Slow</button>
     <button class="present-speed-btn active" onclick="setPresentSpeed(14000, this)">Norm</button>
     <button class="present-speed-btn" onclick="setPresentSpeed(8000, this)">Fast</button>

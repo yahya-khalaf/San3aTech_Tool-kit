@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +9,8 @@
 <!-- San3a Brand Typography: Montserrat (Headlines), Arvo (Subheadings/Chips), Inter (Body) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/brand/favicon.png">
+  <link rel="stylesheet" href="/brand/san3a-tokens.css">
 
 <style>
   :root{
@@ -39,7 +40,7 @@
     --blue:var(--san3a-red);
     --danger:var(--san3a-red);
     --shadow:0 20px 70px rgba(0,0,0,.45);
-    --radius:24px;
+    --radius:0px;
   }
 
   *{box-sizing:border-box}
@@ -47,7 +48,7 @@
   body{
     margin:0;
     min-height:100vh;
-    font-family:'Inter',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-family:var(--s3-font-body);
     color:var(--text);
     background:
       radial-gradient(circle at 15% 10%, rgba(120, 22, 41, 0.28), transparent 32%),
@@ -63,7 +64,7 @@
     position:fixed;
     top:0; left:0; right:0;
     height:6px;
-    background:linear-gradient(90deg, var(--san3a-ink), var(--san3a-wine), var(--san3a-red), var(--san3a-sun));
+    background:linear-gradient(90deg, #211317 0 12.5%, #2B161C 12.5% 25%, #36141E 25% 37.5%, #4D1524 37.5% 50%, #741528 50% 62.5%, #8F172A 62.5% 75%, #B51E24 75% 87.5%, #D11E25 87.5% 100%);
     z-index:1000;
   }
 
@@ -96,7 +97,7 @@
   .logo{
     width:48px;
     height:48px;
-    border-radius:14px;
+    border-radius:0;
     display:grid;
     place-items:center;
     font-weight:900;
@@ -118,18 +119,18 @@
     display:block;
     font-size:16px;
     letter-spacing:.04em;
-    font-family:'Montserrat', sans-serif;
+    font-family:var(--s3-font-display);
     text-transform:uppercase;
   }
 
   .brand-text span{
     display:block;
-    color:var(--san3a-sun);
+    color:#FFB3B6;
     font-size:11px;
     letter-spacing:1.5px;
     font-weight:700;
     margin-top:2px;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
     text-transform:uppercase;
   }
 
@@ -139,11 +140,11 @@
     gap:8px;
     padding:9px 14px;
     border:1px solid var(--line);
-    border-radius:999px;
+    border-radius:2px;
     background:rgba(255,255,255,.05);
     color:var(--muted);
     font-size:12px;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
   }
 
   .topbar-actions{
@@ -158,31 +159,31 @@
     align-items:center;
     gap:6px;
     padding:9px 16px;
-    border-radius:999px;
+    border-radius:2px;
     font-size:12px;
     font-weight:800;
     text-decoration:none;
     transition:all .2s ease;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
     box-shadow:0 6px 18px rgba(0,0,0,.25);
   }
 
   .topbar-btn.primary{
-    background:linear-gradient(135deg, var(--san3a-red), var(--san3a-wine));
+    background:var(--san3a-red);
     color:#fff;
     border:1px solid rgba(255,255,255,.15);
   }
   .topbar-btn.primary:hover{
     transform:translateY(-2px);
     box-shadow:0 10px 24px rgba(207,32,39,.38);
-    background:linear-gradient(135deg, #e52830, var(--san3a-maroon-d));
+    background:#A91B24;
   }
 
   .submit-banner-card{
     margin-top:18px;
     padding:20px;
     border:1px solid rgba(255, 201, 60, 0.35);
-    border-radius:20px;
+    border-radius:0;
     background:linear-gradient(135deg, rgba(36, 13, 24, 0.95), rgba(120, 22, 41, 0.45));
     box-shadow:0 10px 25px rgba(0,0,0,.25);
   }
@@ -191,19 +192,19 @@
     display:inline-flex;
     align-items:center;
     gap:5px;
-    color:var(--san3a-sun);
+    color:#FFB3B6;
     font-size:10px;
     font-weight:900;
     letter-spacing:.1em;
     text-transform:uppercase;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
   }
 
   .submit-banner-title{
     margin:6px 0 4px;
     font-size:16px;
     font-weight:800;
-    font-family:'Montserrat', sans-serif;
+    font-family:var(--s3-font-display);
     color:var(--text);
   }
 
@@ -221,20 +222,20 @@
     gap:8px;
     width:100%;
     padding:10px 14px;
-    border-radius:12px;
-    background:linear-gradient(135deg, var(--san3a-red), var(--san3a-wine));
+    border-radius:2px;
+    background:var(--san3a-red);
     color:#fff;
     font-size:13px;
     font-weight:800;
     text-decoration:none;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
     transition:all .2s ease;
     box-shadow:0 6px 16px rgba(207,32,39,.3);
   }
 
   .submit-banner-btn:hover{
     transform:translateY(-2px);
-    background:linear-gradient(135deg, #e52830, var(--san3a-maroon-d));
+    background:#A91B24;
     box-shadow:0 8px 20px rgba(207,32,39,.45);
   }
 
@@ -249,7 +250,7 @@
     position:relative;
     padding:42px;
     border:1px solid var(--line);
-    border-radius:32px;
+    border-radius:0;
     background:
       linear-gradient(135deg, rgba(120, 22, 41, 0.28), rgba(207, 32, 39, 0.12) 45%, rgba(255, 255, 255, 0.025)),
       rgba(36, 13, 24, 0.85);
@@ -274,18 +275,18 @@
     display:inline-flex;
     align-items:center;
     gap:8px;
-    color:var(--san3a-sun);
+    color:#FFB3B6;
     font-weight:800;
     font-size:12px;
     letter-spacing:.12em;
     text-transform:uppercase;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
   }
 
   .eyebrow::before{
     content:"";
-    width:26px;height:3px;border-radius:99px;
-    background:linear-gradient(90deg, var(--san3a-red), var(--san3a-sun));
+    width:26px;height:3px;border-radius:2px;
+    background:var(--san3a-red);
   }
 
   h1{
@@ -294,12 +295,12 @@
     line-height:.95;
     letter-spacing:-.03em;
     max-width:880px;
-    font-family:'Montserrat', sans-serif;
+    font-family:var(--s3-font-display);
     text-transform:uppercase;
   }
 
   .gradient{
-    background:linear-gradient(90deg, #FFFFFF 5%, #FFD9DC 45%, var(--san3a-sun) 90%);
+    background:linear-gradient(90deg, #FFFFFF 5%, #FFD9DC 45%, #FF7A80 90%);
     -webkit-background-clip:text;
     background-clip:text;
     color:transparent;
@@ -323,7 +324,7 @@
   .field,.control-btn{
     min-height:52px;
     border:1px solid var(--line);
-    border-radius:16px;
+    border-radius:0;
     background:rgba(255,255,255,.055);
     color:var(--text);
   }
@@ -356,18 +357,18 @@
     padding:0 18px;
     font-weight:800;
     transition:.2s ease;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
   }
 
   .control-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.09)}
   
   .primary{
     border:0;
-    background:linear-gradient(135deg, var(--san3a-red), var(--san3a-wine));
+    background:var(--san3a-red);
     color:#fff;
     box-shadow:0 12px 28px rgba(207, 32, 39, 0.28);
   }
-  .primary:hover{background:linear-gradient(135deg, #e52830, var(--san3a-maroon-d));}
+  .primary:hover{background:#A91B24;}
 
   .stats{
     display:grid;
@@ -380,7 +381,7 @@
     position:relative;
     padding:24px;
     border:1px solid var(--line);
-    border-radius:22px;
+    border-radius:0;
     background:var(--panel);
     overflow:hidden;
     opacity:0;
@@ -406,7 +407,7 @@
     color:var(--muted);
     font-size:12px;
     font-weight:800;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
     letter-spacing:1px;
     text-transform:uppercase;
   }
@@ -416,7 +417,7 @@
     margin-top:9px;
     font-weight:900;
     letter-spacing:-.02em;
-    font-family:'Montserrat', sans-serif;
+    font-family:var(--s3-font-display);
   }
   .stat .sub{margin-top:8px;color:var(--muted);font-size:12px}
 
@@ -429,7 +430,7 @@
 
   .panel{
     border:1px solid var(--line);
-    border-radius:24px;
+    border-radius:0;
     background:var(--panel);
     box-shadow:0 15px 50px rgba(0,0,0,.22);
   }
@@ -454,10 +455,10 @@
   .panel-head h2{
     margin:0;
     font-size:18px;
-    font-family:'Montserrat', sans-serif;
+    font-family:var(--s3-font-display);
     text-transform:uppercase;
   }
-  .panel-head span{color:var(--muted);font-size:12px;font-family:'Arvo', Georgia, serif;}
+  .panel-head span{color:var(--muted);font-size:12px;font-family:var(--s3-font-heading);}
 
   .theme{
     margin:16px 0 20px;
@@ -479,14 +480,14 @@
   .bar{
     height:10px;
     background:rgba(255,255,255,.07);
-    border-radius:999px;
+    border-radius:2px;
     overflow:hidden;
   }
 
   .bar-fill{
     height:100%;
     width:0;
-    border-radius:999px;
+    border-radius:2px;
     background:var(--theme);
     box-shadow:0 0 18px color-mix(in srgb,var(--theme) 50%,transparent);
     transition:width .8s cubic-bezier(.2,.8,.2,1);
@@ -496,14 +497,14 @@
     display:inline-flex;
     margin-top:8px;
     padding:5px 8px;
-    border-radius:8px;
+    border-radius:2px;
     font-size:10px;
     font-weight:900;
     letter-spacing:.05em;
     text-transform:uppercase;
     background:color-mix(in srgb,var(--theme) 15%,transparent);
     color:var(--theme);
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
   }
 
   .challenge-panel{
@@ -525,20 +526,20 @@
   .challenge-tools h2{
     margin:0;
     font-size:18px;
-    font-family:'Montserrat', sans-serif;
+    font-family:var(--s3-font-display);
     text-transform:uppercase;
   }
   .challenge-tools small{color:var(--muted)}
 
   .random-btn{
     border:1px solid rgba(255, 201, 60, 0.3);
-    color:var(--san3a-sun);
+    color:#FFB3B6;
     background:rgba(255, 201, 60, 0.12);
     padding:10px 14px;
-    border-radius:13px;
+    border-radius:2px;
     font-weight:900;
     transition:.2s;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
   }
 
   .random-btn:hover{transform:translateY(-2px);background:rgba(255, 201, 60, 0.22)}
@@ -555,7 +556,7 @@
     padding:20px;
     min-height:205px;
     border:1px solid var(--line);
-    border-radius:20px;
+    border-radius:0;
     background:
       linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.02)),
       #220B17;
@@ -585,14 +586,14 @@
     align-items:center;
     gap:6px;
     padding:6px 10px;
-    border-radius:9px;
+    border-radius:2px;
     color:var(--theme);
     background:color-mix(in srgb,var(--theme) 15%,transparent);
     font-size:11px;
     font-weight:900;
     text-transform:uppercase;
     letter-spacing:.07em;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
   }
 
   .tag::before{
@@ -631,7 +632,7 @@
     flex:0 0 auto;
     display:grid;
     place-items:center;
-    border-radius:10px;
+    border-radius:2px;
     color:#fff;
     font-size:10px;
     font-weight:900;
@@ -647,9 +648,9 @@
   .group{
     padding:5px 8px;
     border:1px solid var(--line);
-    border-radius:8px;
+    border-radius:2px;
     white-space:nowrap;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
   }
 
   .empty,.error,.loading{
@@ -660,11 +661,11 @@
     text-align:center;
     padding:40px;
     border:1px dashed var(--line);
-    border-radius:20px;
+    border-radius:0;
     color:var(--muted);
   }
 
-  .empty strong,.error strong{display:block;color:var(--text);font-size:20px;margin-bottom:7px;font-family:'Montserrat', sans-serif;}
+  .empty strong,.error strong{display:block;color:var(--text);font-size:20px;margin-bottom:7px;font-family:var(--s3-font-display);}
   .error{border-color:rgba(207,32,39,.4);color:#ffd9dc;background:rgba(207,32,39,.10)}
   .error strong{color:#ffb7b9}
 
@@ -681,17 +682,17 @@
     margin-top:18px;
     padding:20px;
     border:1px solid rgba(207,32,39,.3);
-    border-radius:20px;
+    border-radius:0;
     background:linear-gradient(135deg,rgba(120,22,41,.25),rgba(207,32,39,.12));
   }
 
   .spotlight-label{
-    color:var(--san3a-sun);
+    color:#FFB3B6;
     font-size:10px;
     font-weight:900;
     letter-spacing:.1em;
     text-transform:uppercase;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
   }
 
   .spotlight-text{
@@ -706,7 +707,7 @@
     color:#a8959d;
     font-size:12px;
     padding:28px 0 0;
-    font-family:'Arvo', Georgia, serif;
+    font-family:var(--s3-font-heading);
   }
 
   .refreshing .refresh-icon{animation:spin .6s linear infinite}
@@ -736,7 +737,7 @@
 
   @media (max-width:700px){
     .shell{width:min(100% - 20px,1440px);padding-top:15px}
-    .hero{padding:28px 22px;border-radius:25px}
+    .hero{padding:28px 22px;border-radius:0}
     .topbar{margin-bottom:16px}
     .live-pill{display:none}
     .controls,.stats,.ideas,.theme-list{grid-template-columns:1fr}
@@ -757,7 +758,11 @@
       scroll-behavior:auto!important;
     }
   }
-</style>
+
+    /* ===== San3a Academy brand layer (UI only) ===== */
+    button, .btn, .btn-action, .primary { letter-spacing: 0.01em; }
+    :focus-visible { outline: 2px solid var(--s3-focus-ring); outline-offset: 2px; }
+  </style>
 
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -780,7 +785,7 @@
   <header class="topbar">
     <div class="brand">
       <div class="logo">
-        <img src="../images/San3a-Academy-logo.png" alt="San3a Academy Logo" onerror="this.parentElement.innerHTML='&lt;/&gt;'">
+        <img src="/brand/san3a-academy-logo.png" alt="San3a Academy" onerror="this.parentElement.innerHTML='&lt;/&gt;'">
       </div>
       <div class="brand-text">
         <strong>CODE &amp; CREATE</strong>

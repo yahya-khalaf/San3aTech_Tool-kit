@@ -1,0 +1,199 @@
+/* San3a Academy design tokens: CSS custom properties.
+ * Brand palette and fonts: San3a Academy Branding Guidelines (marketing media kit).
+ * Light/dark semantic values marked "inferred" in the brand kit are proposals for product UI.
+ * Usage: link this file, then set <html data-theme="dark"> to force dark; with no attribute it follows the OS.
+ * Arabic: set <html lang="ar" dir="rtl">; fonts switch automatically via :lang(ar).
+ */
+
+/* Optional web fonts (free alternatives). Self-host Big John, Myriad Pro (Adobe Fonts) and GE SS Text if licensed. */
+@import url("https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Montserrat:wght@700;800&family=Source+Sans+3:wght@300;400;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap");
+
+:root {
+  --s3-brand-night: #240D18;
+  --s3-brand-wine: #3D1221;
+  --s3-brand-maroon: #781629;
+  --s3-brand-red: #CF2027;
+  --s3-stripe-1: #211317;
+  --s3-stripe-2: #2B161C;
+  --s3-stripe-3: #36141E;
+  --s3-stripe-4: #4D1524;
+  --s3-stripe-5: #741528;
+  --s3-stripe-6: #8F172A;
+  --s3-stripe-7: #B51E24;
+  --s3-stripe-8: #D11E25;
+  --s3-site-plum: #4B2C38;
+  --s3-site-red-deep: #A91B24;
+  --s3-site-red-vivid: #ED132E;
+  --s3-site-grey: #E6E6E6;
+  --s3-bg: #FFFFFF;
+  --s3-surface: #F7F3F4;
+  --s3-surface-raised: #FFFFFF;
+  --s3-surface-sunken: #EFE8EA;
+  --s3-surface-inverse: var(--s3-brand-night);
+  --s3-border: #E2D6DA;
+  --s3-border-strong: #8C7A80;
+  --s3-text: var(--s3-brand-night);
+  --s3-text-muted: #6B5A60;
+  --s3-text-inverse: #FFFFFF;
+  --s3-text-on-primary: #FFFFFF;
+  --s3-primary: var(--s3-brand-red);
+  --s3-primary-hover: var(--s3-site-red-deep);
+  --s3-primary-active: var(--s3-brand-maroon);
+  --s3-primary-subtle: #FBE9EA;
+  --s3-link: #B01C22;
+  --s3-focus-ring: var(--s3-brand-maroon);
+  --s3-success: #1F7A4D;
+  --s3-success-subtle: #E6F4EC;
+  --s3-warning: #9A5B00;
+  --s3-warning-subtle: #FDF1DC;
+  --s3-danger: #B42318;
+  --s3-danger-subtle: #FDECEA;
+  --s3-info: #1F5FAD;
+  --s3-info-subtle: #E8F0FB;
+  --s3-font-display: "Big John", "Montserrat", "Arial Black", sans-serif;
+  --s3-font-heading: "Arvo", "Rockwell", Georgia, serif;
+  --s3-font-body: "Myriad Pro", "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --s3-font-arabic: "GE SS Text", "IBM Plex Sans Arabic", "Noto Sans Arabic", Tahoma, sans-serif;
+  --s3-font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --s3-text-display-xl: 400 56px/60px var(--s3-font-display);
+  --s3-text-display-lg: 400 40px/44px var(--s3-font-display);
+  --s3-text-display-md: 400 28px/32px var(--s3-font-display);
+  --s3-text-heading-lg: 700 28px/36px var(--s3-font-heading);
+  --s3-text-heading-md: 700 22px/30px var(--s3-font-heading);
+  --s3-text-heading-sm: 700 18px/26px var(--s3-font-heading);
+  --s3-text-body-lg: 400 18px/28px var(--s3-font-body);
+  --s3-text-body: 400 16px/24px var(--s3-font-body);
+  --s3-text-body-strong: 600 16px/24px var(--s3-font-body);
+  --s3-text-body-sm: 400 14px/20px var(--s3-font-body);
+  --s3-text-caption: 400 12px/16px var(--s3-font-body);
+  --s3-text-label: 600 12px/16px var(--s3-font-body);
+  --s3-text-ar-display: 700 40px/56px var(--s3-font-arabic);
+  --s3-text-ar-heading: 500 24px/36px var(--s3-font-arabic);
+  --s3-text-ar-body: 300 16px/28px var(--s3-font-arabic);
+  --s3-text-code: 400 14px/20px var(--s3-font-mono);
+  --s3-space-0: 0px;
+  --s3-space-0\.5: 2px;
+  --s3-space-1: 4px;
+  --s3-space-2: 8px;
+  --s3-space-3: 12px;
+  --s3-space-4: 16px;
+  --s3-space-5: 20px;
+  --s3-space-6: 24px;
+  --s3-space-8: 32px;
+  --s3-space-12: 48px;
+  --s3-space-16: 64px;
+  --s3-space-24: 96px;
+  --s3-radius-none: 0px;
+  --s3-radius-sm: 2px;
+  --s3-radius-md: 4px;
+  --s3-radius-pill: 9999px;
+  --s3-shadow-none: none;
+  --s3-shadow-sm: 0 1px 2px rgba(36,13,24,0.10);
+  --s3-shadow-md: 0 4px 12px rgba(36,13,24,0.14);
+  --s3-shadow-lg: 0 12px 32px rgba(36,13,24,0.20);
+  --s3-duration-fast: 120ms;
+  --s3-duration-base: 200ms;
+  --s3-duration-slow: 320ms;
+  --s3-bp-sm: 640px;
+  --s3-bp-md: 768px;
+  --s3-bp-lg: 1024px;
+  --s3-bp-xl: 1280px;
+  --s3-z-header: 100;
+  --s3-z-dropdown: 200;
+  --s3-z-overlay: 300;
+  --s3-z-modal: 400;
+  --s3-z-toast: 500;
+  --s3-max-width: 1200px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --s3-bg: var(--s3-brand-night);
+    --s3-surface: var(--s3-brand-wine);
+    --s3-surface-raised: var(--s3-site-plum);
+    --s3-surface-sunken: #1A0911;
+    --s3-surface-inverse: #F7F3F4;
+    --s3-border: #5A3A47;
+    --s3-border-strong: #8A6B77;
+    --s3-text: #F7F3F4;
+    --s3-text-muted: #CDBEC4;
+    --s3-text-inverse: var(--s3-brand-night);
+    --s3-text-on-primary: #FFFFFF;
+    --s3-primary: var(--s3-brand-red);
+    --s3-primary-hover: var(--s3-site-red-deep);
+    --s3-primary-active: var(--s3-brand-maroon);
+    --s3-primary-subtle: #5A1A26;
+    --s3-link: #FF7A80;
+    --s3-focus-ring: #FFB3B6;
+    --s3-success: #5FD39A;
+    --s3-success-subtle: #16352A;
+    --s3-warning: #F5B94A;
+    --s3-warning-subtle: #3D2C10;
+    --s3-danger: #FF8A80;
+    --s3-danger-subtle: #4A1A1A;
+    --s3-info: #8DB8F5;
+    --s3-info-subtle: #172A44;
+    --s3-shadow-sm: 0 1px 2px rgba(0,0,0,0.40);
+    --s3-shadow-md: 0 4px 12px rgba(0,0,0,0.50);
+    --s3-shadow-lg: 0 12px 32px rgba(0,0,0,0.60);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --s3-bg: var(--s3-brand-night);
+  --s3-surface: var(--s3-brand-wine);
+  --s3-surface-raised: var(--s3-site-plum);
+  --s3-surface-sunken: #1A0911;
+  --s3-surface-inverse: #F7F3F4;
+  --s3-border: #5A3A47;
+  --s3-border-strong: #8A6B77;
+  --s3-text: #F7F3F4;
+  --s3-text-muted: #CDBEC4;
+  --s3-text-inverse: var(--s3-brand-night);
+  --s3-text-on-primary: #FFFFFF;
+  --s3-primary: var(--s3-brand-red);
+  --s3-primary-hover: var(--s3-site-red-deep);
+  --s3-primary-active: var(--s3-brand-maroon);
+  --s3-primary-subtle: #5A1A26;
+  --s3-link: #FF7A80;
+  --s3-focus-ring: #FFB3B6;
+  --s3-success: #5FD39A;
+  --s3-success-subtle: #16352A;
+  --s3-warning: #F5B94A;
+  --s3-warning-subtle: #3D2C10;
+  --s3-danger: #FF8A80;
+  --s3-danger-subtle: #4A1A1A;
+  --s3-info: #8DB8F5;
+  --s3-info-subtle: #172A44;
+  --s3-shadow-sm: 0 1px 2px rgba(0,0,0,0.40);
+  --s3-shadow-md: 0 4px 12px rgba(0,0,0,0.50);
+  --s3-shadow-lg: 0 12px 32px rgba(0,0,0,0.60);
+  color-scheme: dark;
+}
+
+/* Bilingual defaults */
+html { font-family: var(--s3-font-body); color: var(--s3-text); background: var(--s3-bg); }
+:lang(ar) {
+  --s3-font-body: var(--s3-font-arabic); --s3-font-heading: var(--s3-font-arabic); --s3-font-display: var(--s3-font-arabic);
+  --s3-text-display-xl: 400 56px/60px var(--s3-font-display);
+  --s3-text-display-lg: 400 40px/44px var(--s3-font-display);
+  --s3-text-display-md: 400 28px/32px var(--s3-font-display);
+  --s3-text-heading-lg: 700 28px/36px var(--s3-font-heading);
+  --s3-text-heading-md: 700 22px/30px var(--s3-font-heading);
+  --s3-text-heading-sm: 700 18px/26px var(--s3-font-heading);
+  --s3-text-body-lg: 400 18px/28px var(--s3-font-body);
+  --s3-text-body: 400 16px/24px var(--s3-font-body);
+  --s3-text-body-strong: 600 16px/24px var(--s3-font-body);
+  --s3-text-body-sm: 400 14px/20px var(--s3-font-body);
+  --s3-text-caption: 400 12px/16px var(--s3-font-body);
+  --s3-text-label: 600 12px/16px var(--s3-font-body);
+  --s3-text-ar-display: 700 40px/56px var(--s3-font-arabic);
+  --s3-text-ar-heading: 500 24px/36px var(--s3-font-arabic);
+  --s3-text-ar-body: 300 16px/28px var(--s3-font-arabic);
+  --s3-text-code: 400 14px/20px var(--s3-font-mono);
+}
+:lang(ar) body { line-height: 1.75; letter-spacing: 0; }
+:focus-visible { outline: 2px solid var(--s3-focus-ring); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }

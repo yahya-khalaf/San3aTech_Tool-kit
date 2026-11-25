@@ -11,11 +11,8 @@ export default function Navbar() {
         <header className="s3-site-header s3-on-dark shrink-0">
             <nav aria-label="Main" className="flex h-16 items-center justify-between gap-4 px-4">
                 <Link to="/" className="flex min-w-0 items-center gap-3 py-2" aria-label={`${PRODUCT_NAME}, home`}>
-                    <img className="h-11 w-auto" src={LOGO.symbolWhite} alt="" />
-                    <span className="flex min-w-0 flex-col leading-tight">
-                        <span className="truncate font-headline text-sm font-extrabold">San3a Academy</span>
-                        <span className="truncate text-xs text-slate-300">PCB fabrication kit</span>
-                    </span>
+                    <img className="h-10 w-auto" src={LOGO.primaryRed} alt="San3a Academy" />
+                    <span className="hidden truncate border-l border-white/20 pl-3 text-xs font-semibold uppercase tracking-[0.12em] text-slate-300 sm:block">PCB fabrication kit</span>
                 </Link>
 
                 <div className="flex items-center gap-1">

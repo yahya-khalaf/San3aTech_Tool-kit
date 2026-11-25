@@ -38,14 +38,13 @@ export class ErrorBoundary extends Component<Props, State> {
 
             return (
                 <div
-                    className="flex items-center justify-center min-h-screen p-6"
-                    style={{ background: 'linear-gradient(135deg, #FFF7F3 0%, #F9DFE1 100%)' }}
+                    className="flex items-center justify-center min-h-screen p-6 bg-surface"
                 >
-                    <div className="max-w-md w-full bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 p-8 text-center">
+                    <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-gray-200 p-8 text-center">
                         <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <AlertTriangle className="text-red-600" size={32} />
                         </div>
-                        <h2 className="text-2xl font-montserrat font-bold text-gray-900 mb-2">
+                        <h2 className="text-2xl font-heading font-bold text-gray-900 mb-2">
                             Something went wrong
                         </h2>
                         <p className="text-gray-600 mb-6">

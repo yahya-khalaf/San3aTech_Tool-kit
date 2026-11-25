@@ -1,14 +1,15 @@
 :root {
-    --bg-color: #14070F;
-    --canvas-bg: #240D18;
-    --toolbar-bg: rgba(36, 13, 24, 0.78);
-    --accent-color: #CF2027;
-    --text-color: #f8fafc;
-    --muted-color: rgba(248, 250, 252, 0.62);
-    --danger-color: #781629;
-    --success-color: #22c55e;
-    --warning-color: #f59e0b;
-    --glass-border: rgba(255, 255, 255, 0.1);
+    /* San3a Academy brand kit (dark theme) */
+    --bg-color: #1A0911;                 /* surface-sunken (dark) */
+    --canvas-bg: #240D18;                /* brand-night; read by board.js */
+    --toolbar-bg: rgba(61, 18, 33, 0.92); /* brand-wine */
+    --accent-color: #CF2027;             /* brand-red */
+    --text-color: #F7F3F4;
+    --muted-color: #CDBEC4;
+    --danger-color: #FF8A80;
+    --success-color: #5FD39A;
+    --warning-color: #F5B94A;
+    --glass-border: #5A3A47;
     --topbar-h: 56px;
     --dock-space: 84px;
 }
@@ -20,7 +21,7 @@
 }
 
 body {
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--s3-font-body);
     background-color: var(--bg-color);
     color: var(--text-color);
     overflow: hidden;
@@ -47,8 +48,6 @@ button {
 }
 
 .glass-morph {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     background: var(--toolbar-bg);
     border: 1px solid var(--glass-border);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -113,7 +112,7 @@ body.role-student .instructor-only {
     gap: 8px;
     height: 36px;
     padding: 0 14px;
-    border-radius: 999px;
+    border-radius: var(--s3-radius-sm);
     border: 1px solid var(--glass-border);
     background: rgba(255, 255, 255, 0.06);
     cursor: pointer;
@@ -148,7 +147,7 @@ body.role-student .instructor-only {
 .icon-btn {
     width: 36px;
     height: 36px;
-    border-radius: 10px;
+    border-radius: var(--s3-radius-sm);
     border: none;
     background: transparent;
     cursor: pointer;
@@ -179,7 +178,7 @@ body.role-student .instructor-only {
     width: min(100%, calc((100dvh - var(--topbar-h) - var(--dock-space) - 24px) * 16 / 9));
     aspect-ratio: 16 / 9;
     background-color: var(--canvas-bg);
-    border-radius: 8px;
+    border-radius: var(--s3-radius-sm);
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
     overflow: hidden;
 }
@@ -212,7 +211,7 @@ body.role-student .instructor-only {
     align-items: center;
     gap: 12px;
     padding: 8px 14px;
-    border-radius: 20px;
+    border-radius: var(--s3-radius-sm);
     max-width: calc(100vw - 24px);
     overflow-x: auto;
     scrollbar-width: none;
@@ -232,7 +231,7 @@ body.view-only #dock {
     align-items: center;
     gap: 8px;
     padding: 10px 18px;
-    border-radius: 999px;
+    border-radius: var(--s3-radius-sm);
     font-size: 0.9rem;
     color: var(--muted-color);
     white-space: nowrap;
@@ -270,7 +269,7 @@ body.view-only #view-only-pill {
     border: none;
     width: 40px;
     height: 40px;
-    border-radius: 12px;
+    border-radius: var(--s3-radius-sm);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -349,7 +348,7 @@ body.view-only #view-only-pill {
 /* ---------- Badges & indicators ---------- */
 .badge {
     padding: 4px 10px;
-    border-radius: 20px;
+    border-radius: var(--s3-radius-sm);
     font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -393,7 +392,7 @@ body.view-only #view-only-pill {
 
 .landing-card {
     width: min(440px, 100%);
-    border-radius: 20px;
+    border-radius: var(--s3-radius-sm);
     padding: 32px 28px;
     display: flex;
     flex-direction: column;
@@ -405,7 +404,7 @@ body.view-only #view-only-pill {
     margin: 0 auto;
     width: 56px;
     height: 56px;
-    border-radius: 16px;
+    border-radius: var(--s3-radius-sm);
     background: var(--accent-color);
     display: flex;
     align-items: center;
@@ -421,7 +420,7 @@ body.view-only #view-only-pill {
     color: #fca5a5;
     background: rgba(207, 32, 39, 0.15);
     border: 1px solid rgba(207, 32, 39, 0.4);
-    border-radius: 10px;
+    border-radius: var(--s3-radius-sm);
     padding: 8px 12px;
     font-size: 0.9rem;
 }
@@ -433,7 +432,7 @@ body.view-only #view-only-pill {
     gap: 8px;
     height: 42px;
     padding: 0 18px;
-    border-radius: 12px;
+    border-radius: var(--s3-radius-sm);
     border: 1px solid var(--glass-border);
     background: rgba(255, 255, 255, 0.08);
     cursor: pointer;
@@ -487,7 +486,7 @@ body.view-only #view-only-pill {
     min-width: 0;
     height: 42px;
     padding: 0 12px;
-    border-radius: 12px;
+    border-radius: var(--s3-radius-sm);
     border: 1px solid var(--glass-border);
     background: rgba(0, 0, 0, 0.25);
     color: var(--text-color);
@@ -498,7 +497,7 @@ body.view-only #view-only-pill {
 #share-dialog {
     margin: auto;
     border: 1px solid var(--glass-border);
-    border-radius: 18px;
+    border-radius: var(--s3-radius-sm);
     background: #1d0b14;
     color: var(--text-color);
     width: min(520px, calc(100vw - 32px));
@@ -547,7 +546,7 @@ body.view-only #view-only-pill {
 
 .toast {
     padding: 12px 18px;
-    border-radius: 10px;
+    border-radius: var(--s3-radius-sm);
     background: var(--toolbar-bg);
     backdrop-filter: blur(8px);
     border-left: 4px solid var(--accent-color);
@@ -588,3 +587,22 @@ body.view-only #view-only-pill {
         padding: 0 10px;
     }
 }
+
+
+/* ---------- San3a Academy brand layer (UI only) ---------- */
+#topbar { background: var(--s3-brand-night); border-bottom-color: var(--glass-border); }
+.brand-logo { height: 32px; width: auto; display: block; }
+.topbar-left .brand {
+    font: var(--s3-text-label);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted-color);
+    padding-left: 12px;
+    border-left: 1px solid var(--glass-border);
+}
+.landing-card { border-radius: var(--s3-radius-none); }
+.landing-card .landing-logo { height: 48px; width: auto; display: block; margin: 0 auto 20px; }
+.landing-card h1 { font-family: var(--s3-font-heading); }
+#share-dialog { border-radius: var(--s3-radius-none); }
+#share-dialog h2, #share-dialog h3 { font-family: var(--s3-font-heading); }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid #FFB3B6; outline-offset: 2px; }

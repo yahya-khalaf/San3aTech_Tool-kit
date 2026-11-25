@@ -71,11 +71,11 @@ export default function PasswordGate({
 
   return (
     <div
-      className="flex items-center justify-center h-full p-6"
-      style={{ background: 'linear-gradient(135deg, rgba(36, 13, 24, 0.96), rgba(120, 22, 41, 0.94))' }}
+      className="flex items-center justify-center h-full p-6 bg-brand-night"
     >
-      <div className="w-full max-w-[420px] bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 p-7">
-        <h2 className="font-montserrat text-2xl font-bold text-gray-900 mb-2">Sign In</h2>
+      <div className="w-full max-w-[420px] bg-white rounded-none shadow-2xl border border-gray-200 p-7">
+        <img src="/brand/san3a-academy-logo.png" alt="San3a Academy" className="h-12 w-auto mb-5" />
+        <h2 className="font-heading text-2xl font-bold text-gray-900 mb-2">Sign In</h2>
         <p className="text-sm text-gray-600 mb-5">{description}</p>
         <form onSubmit={handleSubmit} className="grid gap-3.5">
           <input
@@ -85,17 +85,16 @@ export default function PasswordGate({
             placeholder="Password"
             autoComplete="current-password"
             required
-            className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-[#FFF7F3] text-gray-900 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
+            className="input"
           />
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-xl px-4 py-3 text-white text-sm font-extrabold transition hover:-translate-y-0.5 disabled:opacity-60"
-            style={{ background: 'linear-gradient(135deg, #CF2027, #781629)' }}
+            className="btn-primary disabled:opacity-60"
           >
             Access {title}
           </button>
-          {status && <p className="text-xs font-semibold text-primary min-h-[16px]">{status}</p>}
+          {status && <p className="text-xs font-semibold text-[#B42318] min-h-[16px]">{status}</p>}
         </form>
       </div>
     </div>

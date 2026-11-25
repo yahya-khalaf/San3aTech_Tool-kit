@@ -68,7 +68,7 @@ export default function DebuggerWizard() {
             )}
 
             {/* Header */}
-            <header className="h-16 px-8 flex items-center justify-between bg-white/70 backdrop-blur-xl border-b border-white/40">
+            <header className="h-16 px-8 flex items-center justify-between bg-white border-b border-gray-200">
                 <div className="flex flex-col">
                     <h2 className="text-lg font-bold">{flow.title}</h2>
                     <p className="text-xs text-gray-500 font-medium">Step {currentSession.history.length} of Flow</p>
@@ -118,7 +118,7 @@ export default function DebuggerWizard() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
-                        className="w-full max-w-2xl bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-white/50 overflow-hidden"
+                        className="w-full max-w-2xl bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden"
                     >
                         {/* Logic for Success/Unresolved/Regular Nodes */}
                         <div className="p-10">
@@ -128,7 +128,7 @@ export default function DebuggerWizard() {
                                         <ArrowRightCircle size={48} />
                                     </div>
                                     <div className="space-y-2">
-                                        <h3 className="text-2xl font-montserrat">Next Module</h3>
+                                        <h3 className="text-2xl font-heading">Next Module</h3>
                                         <p className="text-gray-600 text-lg">{currentNode.text}</p>
                                     </div>
                                     <button
@@ -144,7 +144,7 @@ export default function DebuggerWizard() {
                                         {currentSession.status === 'success' ? <CheckCircle2 size={48} /> : <AlertCircle size={48} />}
                                     </div>
                                     <div className="space-y-2">
-                                        <h3 className="text-2xl font-montserrat">{currentSession.status === 'success' ? 'Success!' : 'Needs Escalation'}</h3>
+                                        <h3 className="text-2xl font-heading">{currentSession.status === 'success' ? 'Success!' : 'Needs Escalation'}</h3>
                                         <p className="text-gray-600 text-lg">{currentNode.text}</p>
                                     </div>
                                     <button onClick={resetSession} className="btn-primary px-8 py-3 text-lg mt-4">
@@ -158,7 +158,7 @@ export default function DebuggerWizard() {
                                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold uppercase tracking-wider">
                                             {currentNode.type}
                                         </div>
-                                        <h3 className="text-2xl font-montserrat leading-tight text-gray-900">
+                                        <h3 className="text-2xl font-heading leading-tight text-gray-900">
                                             {currentNode.text}
                                         </h3>
 
@@ -202,7 +202,7 @@ export default function DebuggerWizard() {
             </div>
 
             {/* Footer / Context */}
-            <footer className="p-6 bg-white/70 backdrop-blur-xl border-t border-white/40 text-center">
+            <footer className="p-6 bg-white border-t border-gray-200 text-center">
                 <p className="text-xs text-gray-400 font-medium">
                     Session ID: <span className="font-mono">{currentSession.sessionId.split('-')[0]}</span> •
                     Flow: <span className="font-bold">{flow.flowId}</span>

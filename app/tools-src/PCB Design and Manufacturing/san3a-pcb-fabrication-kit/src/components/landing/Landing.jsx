@@ -39,7 +39,6 @@ export default function Landing() {
     return (
         <div className="s3-landing flex-1 overflow-y-auto">
             <section className="relative overflow-hidden bg-[image:var(--s3-gradient-brand)] text-white s3-on-dark" style={{ background: 'var(--s3-gradient-brand)' }}>
-                <img className="pointer-events-none absolute -bottom-24 -right-16 w-[420px] opacity-[0.07]" src={LOGO.symbolWhite} alt="" />
                 <div className="relative mx-auto grid max-w-6xl gap-10 px-6 py-14 md:grid-cols-[minmax(0,1fr)_300px] md:items-center">
                     <div>
                         <p className="s3-eyebrow">For makers and students at Fab Lab Egypt</p>
@@ -49,7 +48,7 @@ export default function Landing() {
                             images, then calculate and check each toolpath before you go to the machine.
                         </p>
                         <div className="mt-7 flex flex-wrap gap-3">
-                            <Link className="s3-btn s3-btn--sun" to="/gerber">Start with your Gerber files</Link>
+                            <Link className="s3-btn s3-btn--primary" to="/gerber">Start with your Gerber files</Link>
                             <Link className="s3-btn s3-btn--ghost" to="/guide">Read the student guide</Link>
                         </div>
                     </div>

@@ -206,10 +206,10 @@ export default function CoursesHub() {
 
     return (
       <div className="flex flex-col h-full">
-        <header className="h-16 px-8 flex items-center justify-between bg-white/70 backdrop-blur-xl border-b border-white/40">
+        <header className="h-16 px-8 flex items-center justify-between bg-white border-b border-gray-200">
           <Link
             to="/courses"
-            className="inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-semibold text-gray-600 hover:bg-white/60 hover:text-gray-900 transition-colors"
+            className="inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-semibold text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
           >
             <ArrowLeft size={16} />
             Back to courses
@@ -219,15 +219,15 @@ export default function CoursesHub() {
 
         <div className="flex-1 overflow-y-auto p-6 md:p-8">
           <div className="mx-auto max-w-5xl space-y-8">
-            <div className="overflow-hidden rounded-2xl border border-white/50 bg-white/70 backdrop-blur-xl shadow-xl">
+            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl">
               <div className={`bg-gradient-to-r ${selectedCourse.accent} p-6 text-white`}>
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15">
                     <CourseIcon size={24} />
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-[0.2em] text-white/80">{selectedCourse.level}</p>
-                    <h2 className="text-2xl font-montserrat font-bold mt-1">{selectedCourse.title}</h2>
+                    <h2 className="text-2xl font-heading font-bold mt-1 text-white">{selectedCourse.title}</h2>
                   </div>
                 </div>
               </div>
@@ -246,7 +246,7 @@ export default function CoursesHub() {
                   {selectedCourse.tools.map((tool) => (
                     <div
                       key={tool.name}
-                      className="rounded-2xl border border-white/60 bg-white/70 backdrop-blur-md p-6 shadow-md hover:shadow-lg transition-all duration-200"
+                      className="rounded-2xl border border-gray-200 bg-white p-6 shadow-md hover:shadow-lg transition-all duration-200"
                     >
                       <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
                         <div>
@@ -255,7 +255,7 @@ export default function CoursesHub() {
                               {tool.tag}
                             </span>
                           )}
-                          <h4 className="text-xl font-montserrat font-bold text-gray-900">{tool.name}</h4>
+                          <h4 className="text-xl font-heading font-bold text-gray-900">{tool.name}</h4>
                         </div>
                         <CourseStatusPill status={tool.status} />
                       </div>
@@ -267,7 +267,7 @@ export default function CoursesHub() {
                           {tool.features.map((feature) => (
                             <span
                               key={feature}
-                              className="inline-flex items-center rounded-md bg-white/80 border border-gray-200/80 px-2.5 py-1 text-xs font-medium text-gray-700"
+                              className="inline-flex items-center rounded-md bg-white border border-gray-200/80 px-2.5 py-1 text-xs font-medium text-gray-700"
                             >
                               ✓ {feature}
                             </span>
@@ -325,7 +325,7 @@ export default function CoursesHub() {
 
   return (
     <div className="flex flex-col h-full">
-      <header className="h-16 px-8 flex items-center justify-between bg-white/70 backdrop-blur-xl border-b border-white/40">
+      <header className="h-16 px-8 flex items-center justify-between bg-white border-b border-gray-200">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-gray-400 font-bold">Courses</p>
           <h2 className="text-lg font-bold text-gray-900">San3a Academy course tools</h2>
@@ -338,7 +338,7 @@ export default function CoursesHub() {
       <div className="flex-1 overflow-y-auto p-6 md:p-8">
         <div className="mx-auto max-w-6xl">
           <div className="mb-6 flex flex-col gap-2">
-            <h3 className="text-2xl font-montserrat font-bold text-gray-900">Course library</h3>
+            <h3 className="text-2xl font-heading font-bold text-gray-900">Course library</h3>
             <p className="text-gray-600 max-w-2xl">
               Each course groups the tools built specifically for its curriculum. General-purpose tools
               (QR codes, whiteboard, calendar, etc.) live under General Tools in the sidebar instead.
@@ -350,7 +350,7 @@ export default function CoursesHub() {
               const CourseIcon = course.icon;
 
               return (
-                <div key={course.id} className="overflow-hidden rounded-2xl border border-white/50 bg-white/70 backdrop-blur-xl shadow-lg group hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
+                <div key={course.id} className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg group hover:shadow-xl transition-all duration-200">
                   <div className={`bg-gradient-to-r ${course.accent} p-4 text-white`}>
                     <div className="flex items-center justify-between">
                       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15">
@@ -363,7 +363,7 @@ export default function CoursesHub() {
                   </div>
 
                   <div className="p-5">
-                    <h4 className="text-xl font-montserrat font-bold text-gray-900 mb-2">{course.title}</h4>
+                    <h4 className="text-xl font-heading font-bold text-gray-900 mb-2">{course.title}</h4>
                     <p className="text-sm leading-6 text-gray-600 mb-5">{course.description}</p>
 
                     <div className="flex items-center justify-between mb-4">

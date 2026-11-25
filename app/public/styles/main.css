@@ -7,44 +7,41 @@
    1. CSS VARIABLES & DESIGN TOKENS
    ========================================================================== */
 :root {
-    /* San3a Academy Brand Palette (Branding Guidelines) */
-    --san3a-ink: #240D18;
-    --san3a-maroon: #3D1221;
-    --san3a-wine: #781629;
-    --san3a-red: #CF2027;
+    /* San3a Academy brand palette (brand kit tokens, loaded from /brand/san3a-tokens.css) */
+    --san3a-ink: var(--s3-brand-night, #240D18);
+    --san3a-maroon: var(--s3-brand-wine, #3D1221);
+    --san3a-wine: var(--s3-brand-maroon, #781629);
+    --san3a-red: var(--s3-brand-red, #CF2027);
 
     /* Primary Colors - Red Branding */
-    --color-primary-red: var(--san3a-red);
-    --color-primary-red-dark: var(--san3a-wine);
-    --color-primary-red-light: #F9DFE1;
+    --color-primary-red: var(--s3-primary, #CF2027);
+    --color-primary-red-dark: var(--s3-primary-hover, #A91B24);
+    --color-primary-red-light: var(--s3-primary-subtle, #FBE9EA);
 
-    /* Neutral Colors */
-    --color-gray-50: #F9FAFB;
-    --color-gray-100: #F3F4F6;
-    --color-gray-200: #E5E7EB;
-    --color-gray-300: #D1D5DB;
-    --color-gray-400: #9CA3AF;
-    --color-gray-500: #6B7280;
-    --color-gray-600: #4B5563;
-    --color-gray-700: #374151;
-    --color-gray-800: #1F2937;
-    --color-gray-900: var(--san3a-ink);
+    /* Neutral Colors (tinted toward brand-night) */
+    --color-gray-50: var(--s3-surface, #F7F3F4);
+    --color-gray-100: var(--s3-surface-sunken, #EFE8EA);
+    --color-gray-200: var(--s3-border, #E2D6DA);
+    --color-gray-300: #D3C4C9;
+    --color-gray-400: var(--s3-border-strong, #8C7A80);
+    --color-gray-500: var(--s3-text-muted, #6B5A60);
+    --color-gray-600: #5C4A51;
+    --color-gray-700: #4B2C38;
+    --color-gray-800: var(--s3-brand-wine, #3D1221);
+    --color-gray-900: var(--s3-text, #240D18);
 
-    /* Status Colors */
-    --color-blue: #3B82F6;
-    --color-green: #10B981;
-    --color-yellow: #F59E0B;
-    --color-purple: #8B5CF6;
+    /* Status Colors (brand kit) */
+    --color-blue: var(--s3-info, #1F5FAD);
+    --color-green: var(--s3-success, #1F7A4D);
+    --color-yellow: var(--s3-warning, #9A5B00);
+    --color-purple: var(--s3-brand-maroon, #781629);
 
-    /* Typography (San3a Academy Branding Guidelines) */
-    /* Headline font is "Big John"; Montserrat is the substitute already used across the branded tool pages. */
-    --font-primary: 'Montserrat', sans-serif;
-    /* Sub-headline font per brand guide */
-    --font-subheadline: 'Arvo', Georgia, serif;
-    /* Paragraph font is "Myriad Pro"; Inter is the closest free equivalent already used app-wide. */
-    --font-secondary: 'Inter', 'Myriad Pro', sans-serif;
-    /* Arabic font is "GE SS"; Cairo is the closest free equivalent. */
-    --font-arabic: 'Cairo', 'Tahoma', sans-serif;
+    /* Typography (brand kit: Montserrat display, Arvo headings, Source Sans 3 body, IBM Plex Sans Arabic) */
+    --font-primary: var(--s3-font-heading, 'Arvo', Georgia, serif);
+    --font-subheadline: var(--s3-font-heading, 'Arvo', Georgia, serif);
+    --font-secondary: var(--s3-font-body, 'Source Sans 3', system-ui, sans-serif);
+    --font-arabic: var(--s3-font-arabic, 'IBM Plex Sans Arabic', Tahoma, sans-serif);
+    --font-display: var(--s3-font-display, 'Montserrat', sans-serif);
 
     /* Layout */
     --sidebar-width: 280px;
@@ -57,21 +54,21 @@
     --spacing-lg: 2rem;
     --spacing-xl: 3rem;
 
-    /* Border Radius */
-    --radius-sm: 6px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
+    /* Border Radius: square brand (buttons and inputs 2px, cards 0) */
+    --radius-sm: 2px;
+    --radius-md: 2px;
+    --radius-lg: 0px;
+    --radius-xl: 0px;
 
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    /* Shadows: flat brand, floating UI only */
+    --shadow-sm: none;
+    --shadow-md: var(--s3-shadow-sm, 0 1px 2px rgba(36,13,24,0.10));
+    --shadow-lg: var(--s3-shadow-md, 0 4px 12px rgba(36,13,24,0.14));
+    --shadow-xl: var(--s3-shadow-lg, 0 12px 32px rgba(36,13,24,0.20));
 
     /* Transitions */
-    --transition-fast: 0.15s ease;
-    --transition-base: 0.3s ease;
+    --transition-fast: 0.12s ease-out;
+    --transition-base: 0.2s ease-out;
 }
 
 /* ==========================================================================
@@ -792,4 +789,93 @@ button:focus {
 
 .stat-card:nth-child(4) {
     animation-delay: 0.4s;
+}
+
+/* ==========================================================================
+   San3a Academy brand layer (UI only)
+   ========================================================================== */
+.sidebar {
+    background: var(--s3-brand-night);
+    border-right: 0;
+}
+
+.sidebar-header { border-bottom-color: rgba(255, 255, 255, 0.1); }
+
+.sidebar .logo { flex-direction: column; align-items: flex-start; gap: var(--s3-space-2); }
+.sidebar .logo img.s3-logo { height: 44px; width: auto; display: block; }
+.sidebar .logo-text {
+    font: var(--s3-text-label);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.nav-section-title {
+    font: var(--s3-text-label);
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.nav-item {
+    color: rgba(255, 255, 255, 0.78);
+    border-radius: 0;
+    border-left: 2px solid transparent;
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #FFFFFF;
+}
+
+.nav-item.active {
+    background: var(--s3-brand-wine);
+    color: #FFFFFF;
+    border-left-color: var(--s3-brand-red);
+}
+
+.nav-item .badge { border-radius: var(--s3-radius-sm); }
+
+.sidebar-footer { border-top-color: rgba(255, 255, 255, 0.1); }
+.user-avatar { background: var(--s3-brand-red); }
+.user-name { color: #FFFFFF; }
+.user-role { color: rgba(255, 255, 255, 0.6); }
+
+.topbar { box-shadow: none; border-bottom: 1px solid var(--s3-border); }
+.topbar-title h1 { font: var(--s3-text-heading-sm); }
+
+.welcome-card { background: var(--s3-brand-night); }
+.welcome-card::before { display: none; }
+.welcome-content h2 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.btn-primary {
+    min-height: 44px;
+    border-radius: var(--s3-radius-sm);
+    background: var(--s3-primary);
+    color: var(--s3-text-on-primary);
+    box-shadow: none;
+}
+.btn-primary:hover { background: var(--s3-primary-hover); transform: none; box-shadow: none; }
+.btn-primary:active { background: var(--s3-primary-active); }
+
+.tool-card,
+.stat-card {
+    border-radius: var(--s3-radius-none);
+    box-shadow: none;
+    border: 1px solid var(--s3-border);
+}
+.tool-card:hover,
+.stat-card:hover { transform: none; box-shadow: var(--s3-shadow-sm); border-color: var(--s3-border-strong); }
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--s3-focus-ring);
+    outline-offset: 2px;
 }

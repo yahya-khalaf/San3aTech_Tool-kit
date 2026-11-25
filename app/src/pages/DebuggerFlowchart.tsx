@@ -160,7 +160,7 @@ function FlowchartContent() {
     return (
         <div className="flex flex-col h-full">
             {/* Toolbar */}
-            <header className="h-16 px-8 flex items-center justify-between bg-white/70 backdrop-blur-xl border-b border-white/40 z-10">
+            <header className="h-16 px-8 flex items-center justify-between bg-white border-b border-gray-200 z-10">
                 <div className="flex items-center gap-6">
                     <h2 className="text-lg font-bold">Flow Visualization</h2>
                     <div className="flex items-center gap-2">
@@ -218,7 +218,7 @@ function FlowchartContent() {
             </div>
 
             {/* Legend */}
-            <div className="absolute bottom-6 left-6 z-10 p-4 bg-white/80 backdrop-blur-xl rounded-xl border border-white/50 shadow-xl space-y-2 pointer-events-none">
+            <div className="absolute bottom-6 left-6 z-10 p-4 bg-white rounded-xl border border-gray-200 shadow-xl space-y-2 pointer-events-none">
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Legend</p>
                 <div className="flex items-center gap-3 text-xs font-semibold">
                     <div className="w-4 h-4 rounded border-2 border-primary" />

@@ -8,52 +8,62 @@
    component is prefixed s3-, so this file is safe to add to an existing site.
 
    Licensed typefaces are Big John (headlines), Myriad Pro (body) and GE SS
-   (Arabic). Montserrat, Inter and Cairo are their free web substitutes.
+   (Arabic). Montserrat, Source Sans 3 (Inter offline) and IBM Plex Sans Arabic are
+   their free web substitutes.
    ========================================================================== */
 
 /* PCB fabrication kit copy: fonts load from local files instead of Google Fonts,
    so the kit works offline. Cairo is left out because the kit has no Arabic text. */
 @import url("fonts/fonts.css");
+/* Online only: the brand body face. Offline, body text falls back to the local Inter files. */
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap");
 
-/* 1. TOKENS
+/* 1. TOKENS (San3a Academy brand kit; older names kept as aliases)
    ========================================================================== */
 :root {
-  /* Core palette */
-  --s3-ink: #240D18;
-  --s3-maroon: #3D1221;
-  --s3-wine: #781629;
-  --s3-red: #CF2027;
-  --s3-red-hover: #B01A21;
+  /* Brand palette, darkest to brightest */
+  --s3-brand-night: #240D18;
+  --s3-brand-wine: #3D1221;
+  --s3-brand-maroon: #781629;
+  --s3-brand-red: #CF2027;
+
+  /* Older names used by the kit's components */
+  --s3-ink: var(--s3-brand-night);
+  --s3-maroon: var(--s3-brand-wine);   /* dark surface #3D1221 */
+  --s3-wine: var(--s3-brand-maroon);   /* #781629 */
+  --s3-red: var(--s3-brand-red);
+  --s3-red-hover: #A91B24;
 
   /* Surfaces */
-  --s3-paper: #FFF7F3;
-  --s3-blush: #F9DFE1;
-  --s3-sand: #E7D4D0;
+  --s3-paper: #F7F3F4;   /* surface */
+  --s3-blush: #FBE9EA;   /* primary-subtle */
+  --s3-sand: #E2D6DA;    /* border */
   --s3-white: #FFFFFF;
 
-  /* Accents: use sparingly, never as a replacement for red */
-  --s3-sun: #FFC93C;
-  --s3-teal: #2EC4B6;
+  /* Highlights: light red on dark, success green (the kit has no yellow or teal) */
+  --s3-sun: #FFB3B6;
+  --s3-teal: #5FD39A;
+  --s3-focus-ring: #781629;
 
   /* Semantic roles (light surfaces) */
   --s3-bg: var(--s3-paper);
   --s3-surface: var(--s3-white);
   --s3-text: var(--s3-ink);
-  --s3-text-muted: #6B5761;
+  --s3-text-muted: #6B5A60;
   --s3-border: var(--s3-sand);
   --s3-accent: var(--s3-red);
   --s3-on-accent: var(--s3-white);
 
-  /* Gradients */
-  --s3-gradient-brand: linear-gradient(135deg, var(--s3-ink) 0%, var(--s3-maroon) 55%, var(--s3-wine) 100%);
-  --s3-gradient-heat: linear-gradient(135deg, var(--s3-wine) 0%, var(--s3-red) 100%);
-  --s3-gradient-signal: linear-gradient(90deg, var(--s3-ink), var(--s3-wine), var(--s3-red), var(--s3-sun));
+  /* Brand bands: flat night, and the guideline stripe ramp */
+  --s3-gradient-brand: linear-gradient(var(--s3-brand-night), var(--s3-brand-night));
+  --s3-gradient-heat: linear-gradient(var(--s3-brand-red), var(--s3-brand-red));
+  --s3-gradient-signal: linear-gradient(90deg, #211317 0 12.5%, #2B161C 12.5% 25%, #36141E 25% 37.5%, #4D1524 37.5% 50%, #741528 50% 62.5%, #8F172A 62.5% 75%, #B51E24 75% 87.5%, #D11E25 87.5% 100%);
 
   /* Type families */
-  --s3-font-headline: "Big John", "Montserrat", "Segoe UI", sans-serif;
-  --s3-font-subhead: "Arvo", Georgia, serif;
-  --s3-font-body: "Myriad Pro", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --s3-font-arabic: "GE SS", "Cairo", "Tahoma", sans-serif;
+  --s3-font-headline: "Big John", "Montserrat", "Arial Black", sans-serif;
+  --s3-font-subhead: "Arvo", "Rockwell", Georgia, serif;
+  --s3-font-body: "Myriad Pro", "Source Sans 3", "Inter", "Segoe UI", system-ui, sans-serif;
+  --s3-font-arabic: "GE SS Text", "IBM Plex Sans Arabic", "Noto Sans Arabic", Tahoma, sans-serif;
   --s3-font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* Type scale */
@@ -78,15 +88,15 @@
   --s3-space-24: 6rem;
 
   /* Shape */
-  --s3-radius-sm: 8px;
-  --s3-radius-md: 16px;
-  --s3-radius-lg: 24px;
+  --s3-radius-sm: 2px;
+  --s3-radius-md: 0px;
+  --s3-radius-lg: 0px;
   --s3-radius-pill: 999px;
 
   /* Elevation, tinted with ink rather than black */
-  --s3-shadow-sm: 0 4px 12px rgba(36, 13, 24, 0.05);
-  --s3-shadow-md: 0 10px 30px rgba(36, 13, 24, 0.08);
-  --s3-shadow-lg: 0 18px 40px rgba(36, 13, 24, 0.15);
+  --s3-shadow-sm: none;
+  --s3-shadow-md: 0 1px 2px rgba(36, 13, 24, 0.10);
+  --s3-shadow-lg: 0 4px 12px rgba(36, 13, 24, 0.14);
 
   /* Motion */
   --s3-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -122,6 +132,7 @@
 }
 
 .s3-on-dark {
+  --s3-focus-ring: #FFB3B6;
   --s3-bg: var(--s3-ink);
   --s3-surface: var(--s3-maroon);
   --s3-text: var(--s3-white);
@@ -189,7 +200,7 @@
 .s3-on-dark .s3-btn--ghost:hover { background: var(--s3-white); color: var(--s3-ink); }
 
 .s3-btn--sun { background: var(--s3-sun); color: var(--s3-ink); }
-.s3-btn--sun:hover { background: #F5B90F; }
+.s3-btn--sun:hover { background: #FF9CA1; }
 
 .s3-card {
   padding: var(--s3-space-6);
@@ -239,7 +250,7 @@
 .s3-theme :focus-visible,
 .s3-btn:focus-visible,
 .s3-input:focus-visible {
-  outline: 3px solid var(--s3-teal);
+  outline: 2px solid var(--s3-focus-ring);
   outline-offset: 2px;
 }
 
@@ -255,13 +266,13 @@
   font-size: 0;
 }
 
-.s3-logo { aspect-ratio: 2286 / 1274; background-image: url("logos/svg/san3a-primary-red.svg"); }
-.s3-logo--white { background-image: url("logos/svg/san3a-primary-white.svg"); }
-.s3-logo--ink { background-image: url("logos/svg/san3a-primary-ink.svg"); }
+.s3-logo { aspect-ratio: 2000 / 1077; background-image: url("logos/san3a-academy-logo-primary.png"); }
+.s3-logo--white { background-image: url("logos/san3a-academy-logo-primary.png"); }
+.s3-logo--ink { background-image: url("logos/san3a-academy-logo-primary.png"); }
 
-.s3-symbol { aspect-ratio: 818 / 1274; background-image: url("logos/svg/san3a-symbol-red.svg"); }
-.s3-symbol--white { background-image: url("logos/svg/san3a-symbol-white.svg"); }
-.s3-symbol--ink { background-image: url("logos/svg/san3a-symbol-ink.svg"); }
+.s3-symbol { aspect-ratio: 397 / 792; background-image: url("logos/san3a-academy-logo-stacked.png"); }
+.s3-symbol--white { background-image: url("logos/san3a-academy-logo-stacked.png"); }
+.s3-symbol--ink { background-image: url("logos/san3a-academy-logo-stacked.png"); }
 
 @media (prefers-reduced-motion: reduce) {
   .s3-btn { transition: none; }

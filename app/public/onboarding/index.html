@@ -1,66 +1,102 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>San3a Academy - Pre-Course</title>
+  <title>San3a Academy | Pre-course</title>
+  <link rel="icon" type="image/png" href="/brand/favicon.png">
+  <link rel="stylesheet" href="/brand/san3a-tokens.css">
   <style>
-    :root {
-      --i: #240d18;
-      --m: #781629;
-      --r: #cf2027;
-      --p: #fff7f3;
-      --sun: #ffc93c;
-    }
-
+    /* ==========================================================================
+       San3a Academy pre-course page. Every value comes from the tokens above.
+       ========================================================================== */
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      border-top: 14px solid var(--r);
-      background: var(--p);
-      color: var(--i);
-      font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--s3-bg);
+      color: var(--s3-text);
+      font: var(--s3-text-body);
     }
+
+    /* Nav bar: brand-night, logo at the start edge */
+    .s3-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s3-space-6);
+      padding: var(--s3-space-3) var(--s3-space-6);
+      background: var(--s3-brand-night);
+      color: #FFFFFF;
+    }
+
+    .s3-nav .logo {
+      display: block;
+      width: 112px;
+      height: 60px;
+      background: url("/brand/san3a-academy-logo.png") no-repeat center / contain;
+    }
+
+    .s3-nav .tag {
+      font: var(--s3-text-label);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding-block: var(--s3-space-2);
+      border-bottom: 2px solid var(--s3-brand-red);
+    }
+
+    /* Stripe band under the nav, from the guideline cover */
+    .s3-stripes {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      height: 8px;
+    }
+    .s3-stripes span:nth-child(1) { background: var(--s3-stripe-1); }
+    .s3-stripes span:nth-child(2) { background: var(--s3-stripe-2); }
+    .s3-stripes span:nth-child(3) { background: var(--s3-stripe-3); }
+    .s3-stripes span:nth-child(4) { background: var(--s3-stripe-4); }
+    .s3-stripes span:nth-child(5) { background: var(--s3-stripe-5); }
+    .s3-stripes span:nth-child(6) { background: var(--s3-stripe-6); }
+    .s3-stripes span:nth-child(7) { background: var(--s3-stripe-7); }
+    .s3-stripes span:nth-child(8) { background: var(--s3-stripe-8); }
 
     .w {
       max-width: 760px;
       margin: auto;
-      padding: 28px 20px;
+      padding: var(--s3-space-12) var(--s3-space-4) var(--s3-space-16);
     }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--m);
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      border-bottom: 1px solid #ead9d6;
-      padding-bottom: 18px;
-    }
-
-    header span {
-      background: #2ec4b6;
-      color: #fff;
-      padding: 4px 8px;
-      border-radius: 99px;
-      font-size: 0.7rem;
+    .eyebrow {
+      margin: 0;
+      font: var(--s3-text-label);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--s3-link);
     }
 
     h1 {
-      font-size: clamp(2rem, 6vw, 3.5rem);
+      margin: var(--s3-space-2) 0 0;
+      font-family: var(--s3-font-display);
+      font-weight: 800;
+      font-size: clamp(28px, 6vw, 40px);
       line-height: 1.1;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0 0 var(--s3-space-2);
+      font: var(--s3-text-heading-md);
     }
 
     .card {
-      background: #fff;
-      border: 1px solid #e7d4d0;
-      border-radius: 16px;
-      padding: 24px;
-      margin-top: 24px;
+      background: var(--s3-surface-raised);
+      border: 1px solid var(--s3-border);
+      border-radius: var(--s3-radius-none);
+      padding: var(--s3-space-6);
+      margin-top: var(--s3-space-8);
     }
 
     input,
@@ -69,56 +105,108 @@
     a {
       display: block;
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #d6c2bf;
-      border-radius: 8px;
-      font: inherit;
+      min-height: 44px;
+      padding: var(--s3-space-3);
+      margin: var(--s3-space-3) 0;
+      border: 1px solid var(--s3-border-strong);
+      border-radius: var(--s3-radius-sm);
+      background: var(--s3-surface-raised);
+      color: var(--s3-text);
+      font: var(--s3-text-body);
     }
 
+    input::placeholder {
+      color: var(--s3-text-muted);
+    }
+
+    input:focus,
+    select:focus {
+      outline: 2px solid var(--s3-focus-ring);
+      outline-offset: 1px;
+      border-color: var(--s3-focus-ring);
+    }
+
+    /* Primary button */
     button,
     a {
-      background: var(--r);
-      color: #fff;
-      border: 0;
-      font-weight: 800;
+      background: var(--s3-primary);
+      color: var(--s3-text-on-primary);
+      border: 2px solid transparent;
+      font: var(--s3-text-body-strong);
       text-align: center;
       text-decoration: none;
       cursor: pointer;
+      transition: background-color var(--s3-duration-fast), border-color var(--s3-duration-fast), color var(--s3-duration-fast);
+    }
+
+    button:hover,
+    a:hover {
+      background: var(--s3-primary-hover);
+    }
+
+    button:active,
+    a:active {
+      background: var(--s3-primary-active);
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--s3-focus-ring);
+      outline-offset: 2px;
     }
 
     .step {
-      padding: 17px 0;
-      border-bottom: 1px solid #eee;
+      padding: var(--s3-space-6) 0;
+      border-bottom: 1px solid var(--s3-border);
+    }
+
+    .step:last-child {
+      border-bottom: 0;
     }
 
     .step h2 {
       margin: 0;
+      font: var(--s3-text-heading-sm);
     }
 
     .step p {
-      margin: 6px 0;
+      margin: var(--s3-space-2) 0 0;
+      color: var(--s3-text-muted);
     }
 
     .row {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
-      margin-top: 10px;
+      gap: var(--s3-space-3);
+      margin-top: var(--s3-space-4);
     }
 
     .row a {
       margin: 0;
       flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
+    /* "Mark as done" is the secondary button beside the step's link */
     .step button {
       width: auto;
       margin: 0 0 0 auto;
-      padding: 6px 14px;
-      font-size: 0.85rem;
+      margin-inline-start: auto;
+      padding: var(--s3-space-2) var(--s3-space-4);
+      background: transparent;
+      color: var(--s3-text);
+      border-color: var(--s3-border-strong);
+      font: var(--s3-text-body-strong);
+      font-size: 14px;
       white-space: nowrap;
-      border-radius: 6px;
+    }
+
+    .step button:hover {
+      background: transparent;
+      border-color: var(--s3-text);
     }
 
     .done h2,
@@ -129,34 +217,61 @@
     }
 
     .done button {
-      background: #781629;
+      background: var(--s3-success-subtle);
+      border-color: var(--s3-success);
+      color: var(--s3-success);
+    }
+
+    .done button:hover {
+      background: var(--s3-success-subtle);
+      border-color: var(--s3-success);
+    }
+
+    #intro {
+      margin: 0;
+      font: var(--s3-text-body-lg);
+    }
+
+    #intro b {
+      font-weight: 700;
     }
 
     .hidden {
       display: none;
     }
 
+    @media (max-width: 640px) {
+      .s3-nav {
+        padding-inline: var(--s3-space-4);
+      }
+      .card {
+        padding: var(--s3-space-4);
+      }
+    }
+
     .notice-card {
-      background: #fff;
-      border: 1px solid #e7d4d0;
-      border-radius: 16px;
-      padding: 24px;
-      margin-top: 24px;
+      background: var(--s3-surface-raised);
+      border: 1px solid var(--s3-border);
+      border-radius: var(--s3-radius-none);
+      padding: var(--s3-space-6);
+      margin-top: var(--s3-space-8);
       text-align: center;
     }
 
     .notice-card h2 {
-      color: var(--m);
+      color: var(--s3-text);
       margin-top: 0;
     }
   </style>
 </head>
 <body>
+  <header class="s3-nav">
+    <span class="logo" role="img" aria-label="San3a Academy"></span>
+    <span class="tag">Pre-course</span>
+  </header>
+  <div class="s3-stripes" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
   <main class="w">
-    <header>
-      SAN3A ACADEMY <span>PRE-COURSE</span>
-    </header>
-
+    <p class="eyebrow">Zero to maker</p>
     <h1>Everything to do before your course.</h1>
 
     <section id="staff" class="card">

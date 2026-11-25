@@ -48,11 +48,12 @@ The toolkit adheres to a unified design language to ensure a premium, integrated
 
 | Property | Value | Description |
 | :--- | :--- | :--- |
-| **Primary Color** | `#DC2626` | San3a Academy Signature Red |
-| **Secondary Color** | `#111827` | Deep Charcoal for Sidebars/Headers |
-| **Typography** | `Montserrat`, `Inter` | Professional sans-serif pairing |
-| **Visual Effects** | Glassmorphism | Subtle backdrop-blur on cards and topbars |
-| **Responsiveness** | Mobile-First | Fully liquid layout for tablet/mobile use |
+| **Tokens** | `app/public/brand/san3a-tokens.css` | San3a Academy brand kit CSS variables (`--s3-*`), linked by every page |
+| **Primary** | `#CF2027` brand-red, hover `#A91B24`, pressed `#781629` | Primary buttons, links, active states |
+| **Dark ground** | `#240D18` brand-night, `#3D1221` brand-wine | Sidebars, nav bars, hero bands |
+| **Typography** | Arvo (headings), Source Sans 3 (body), Montserrat uppercase (display), IBM Plex Sans Arabic | Free fallbacks for Big John, Myriad Pro and GE SS Text |
+| **Shape** | Square corners: cards 0, buttons and inputs 2px | Flat; color bands and borders before shadows |
+| **Logo** | `app/public/brand/san3a-academy-logo.png` | Official red lockup, on white or brand-night only |
 
 ---
 

@@ -1,14 +1,14 @@
 /* The brand fonts and tokens are loaded from public/brand/san3a-brand.css. */
 
 .s3-theme :focus-visible {
-  outline: 3px solid var(--s3-teal) !important;
+  outline: 2px solid var(--s3-focus-ring) !important;
   outline-offset: 2px;
-  /* Teal alone is only 2.05:1 on Paper, so an Ink ring keeps focus visible. */
-  box-shadow: 0 0 0 2px var(--s3-ink);
+  box-shadow: none;
 }
 
-.dark .s3-theme :focus-visible {
-  box-shadow: none;
+.dark .s3-theme :focus-visible,
+.dark :focus-visible {
+  outline-color: #FFB3B6 !important;
 }
 
 .s3-site-header :focus-visible,
@@ -16,28 +16,36 @@
   box-shadow: none;
 }
 
+/* Brand kit NavBar links: white, tracked, 2px red underline when current or hovered */
 .s3-nav-link {
   display: inline-flex;
   align-items: center;
   height: 40px;
-  padding: 0 0.875rem;
-  border-radius: var(--s3-radius-sm);
-  color: #D8C7CD;
-  font-family: var(--s3-font-headline);
-  font-size: var(--s3-text-sm);
-  font-weight: 700;
+  padding: 0 0.75rem;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--s3-white);
+  font-family: var(--s3-font-body);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   white-space: nowrap;
   transition: background-color var(--s3-duration) var(--s3-ease), color var(--s3-duration) var(--s3-ease);
 }
 
 .s3-nav-link:hover {
-  background: rgba(255, 255, 255, 0.12);
+  border-bottom-color: var(--s3-red);
   color: var(--s3-white);
 }
 
 .s3-nav-link.is-active {
-  background: var(--s3-white);
-  color: var(--s3-ink);
+  border-bottom-color: var(--s3-red);
+  color: var(--s3-white);
+}
+
+.s3-site-header :focus-visible {
+  outline: 2px solid #FFB3B6 !important;
+  outline-offset: 2px;
 }
 
 .s3-landing section[id] {

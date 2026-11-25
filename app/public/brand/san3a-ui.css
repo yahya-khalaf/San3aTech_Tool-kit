@@ -1,0 +1,78 @@
+/* ==========================================================================
+   San3a Academy UI components (brand kit: NavBar, Button, Card, TextField,
+   StripeBand). Load after san3a-tokens.css. Every value comes from a token.
+   ========================================================================== */
+
+/* Nav bar: logo at the start edge, links at the end edge, on brand-night */
+.s3-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3-space-6);
+  padding: var(--s3-space-3) var(--s3-space-6);
+  background: var(--s3-brand-night);
+  color: #FFFFFF;
+  font-family: var(--s3-font-body);
+}
+.s3-nav__brand { display: flex; align-items: center; gap: var(--s3-space-4); color: #FFFFFF; text-decoration: none; min-width: 0; }
+.s3-nav__logo { height: 40px; width: auto; display: block; flex: none; }
+.s3-nav__title { font: var(--s3-text-heading-sm); color: #FFFFFF; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.s3-nav__links { display: flex; align-items: center; flex-wrap: wrap; gap: var(--s3-space-6); list-style: none; margin: 0; padding: 0; }
+.s3-nav a.s3-nav__link,
+.s3-nav__links a {
+  color: #FFFFFF;
+  text-decoration: none;
+  font: 600 15px/20px var(--s3-font-body);
+  letter-spacing: 0.08em;
+  padding-block: var(--s3-space-2);
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--s3-duration-fast);
+}
+.s3-nav a.s3-nav__link:hover,
+.s3-nav__links a:hover,
+.s3-nav__links a[aria-current="page"] { border-bottom-color: var(--s3-brand-red); }
+.s3-nav a:focus-visible { outline: 2px solid #FFB3B6; outline-offset: 2px; }
+:lang(ar) .s3-nav__links a { letter-spacing: 0; }
+
+/* Stripe band: the guideline cover ramp, night to red */
+.s3-stripes { display: grid; grid-template-columns: repeat(8, 1fr); height: 8px; }
+.s3-stripes > span:nth-child(1) { background: var(--s3-stripe-1); }
+.s3-stripes > span:nth-child(2) { background: var(--s3-stripe-2); }
+.s3-stripes > span:nth-child(3) { background: var(--s3-stripe-3); }
+.s3-stripes > span:nth-child(4) { background: var(--s3-stripe-4); }
+.s3-stripes > span:nth-child(5) { background: var(--s3-stripe-5); }
+.s3-stripes > span:nth-child(6) { background: var(--s3-stripe-6); }
+.s3-stripes > span:nth-child(7) { background: var(--s3-stripe-7); }
+.s3-stripes > span:nth-child(8) { background: var(--s3-stripe-8); }
+
+/* Buttons */
+.s3-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s3-space-2);
+  min-height: 44px; padding: var(--s3-space-3) var(--s3-space-5);
+  border: 2px solid transparent; border-radius: var(--s3-radius-sm);
+  font: var(--s3-text-body-strong); letter-spacing: 0.01em;
+  cursor: pointer; text-decoration: none;
+  transition: background-color var(--s3-duration-fast), border-color var(--s3-duration-fast), color var(--s3-duration-fast);
+}
+.s3-btn--primary { background: var(--s3-primary); color: var(--s3-text-on-primary); }
+.s3-btn--primary:hover { background: var(--s3-primary-hover); }
+.s3-btn--primary:active { background: var(--s3-primary-active); }
+.s3-btn--secondary { background: transparent; color: var(--s3-text); border-color: var(--s3-border-strong); }
+.s3-btn--secondary:hover { border-color: var(--s3-text); }
+.s3-btn--ghost { background: transparent; color: var(--s3-link); padding-inline: var(--s3-space-3); }
+.s3-btn--ghost:hover { background: var(--s3-primary-subtle); }
+.s3-btn--on-dark { background: transparent; color: #FFFFFF; border-color: rgba(255, 255, 255, 0.55); }
+.s3-btn--on-dark:hover { border-color: #FFFFFF; background: rgba(255, 255, 255, 0.08); }
+.s3-btn--sm { min-height: 32px; padding: var(--s3-space-1) var(--s3-space-3); font-size: 14px; }
+.s3-btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+
+/* Card */
+.s3-card { background: var(--s3-surface-raised); color: var(--s3-text); border: 1px solid var(--s3-border); border-radius: var(--s3-radius-none); padding: var(--s3-space-6); }
+
+/* Eyebrow label */
+.s3-eyebrow { font: var(--s3-text-label); text-transform: uppercase; letter-spacing: 0.12em; color: var(--s3-link); }
+
+@media (max-width: 640px) {
+  .s3-nav { padding-inline: var(--s3-space-4); gap: var(--s3-space-3); flex-wrap: wrap; }
+  .s3-nav__logo { height: 32px; }
+}

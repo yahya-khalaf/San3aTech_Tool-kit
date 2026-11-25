@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" data-theme="light">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>San3a Tech Individual WIGs Progress</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/brand/favicon.png">
+    <link rel="stylesheet" href="/brand/san3a-tokens.css">
+    <link rel="stylesheet" href="/brand/san3a-ui.css">
 
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript">
@@ -22,29 +24,22 @@
     <!-- /Yandex.Metrika counter -->
     <style>
         :root {
-            /* San3a Branding - Red Palette */
-            --primary: #CF2027;
-            /* Red-600 */
-            --primary-dark: #781629;
-            /* Red-700 */
-            --primary-light: #FCA5A5;
-            /* Red-300 */
-            --accent: #10b981;
-            /* Emerald-500 (Kept for Success/Progress) */
-            --accent-glow: rgba(16, 185, 129, 0.2);
-            --bg: #f8fafc;
-            /* Slate-50 */
-            --card-bg: #ffffff;
-            --text-dark: #0f172a;
-            /* Slate-900 */
-            --text-muted: #64748b;
-            /* Slate-500 */
-            --border: #e2e8f0;
-            /* Slate-200 */
-
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            /* San3a Academy palette (brand kit tokens) */
+            --primary: var(--s3-primary);
+            --primary-dark: var(--s3-primary-hover);
+            --primary-light: #FF7A80;
+            --accent: var(--s3-success);
+            --accent-glow: rgba(31, 122, 77, 0.2);
+            --bg: var(--s3-surface);
+            --card-bg: var(--s3-surface-raised);
+            --text-dark: var(--s3-text);
+            --text-muted: var(--s3-text-muted);
+            --border: var(--s3-border);
+            --hero-max: 1100px;
+            --shadow-sm: none;
+            --shadow-md: var(--s3-shadow-sm);
+            --shadow-lg: var(--s3-shadow-md);
+            --shadow-xl: var(--s3-shadow-lg);
         }
 
         body {
@@ -363,32 +358,161 @@
             display: block;
         }
 
+    
+    /* ===== San3a Academy brand layer (UI only) ===== */
+    body {
+      font-family: var(--s3-font-body);
+      background: var(--bg);
+    }
+
+    .page-hero {
+      max-width: var(--hero-max, 1000px);
+      margin: 0 auto;
+      padding: var(--s3-space-12) 1.5rem 0;
+    }
+
+    .page-hero h1.page-title {
+      margin: var(--s3-space-2) 0 0;
+      font-family: var(--s3-font-display);
+      font-weight: 800;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--s3-text);
+    }
+
+    .page-hero #company-progress {
+      margin-top: var(--s3-space-4);
+      padding: var(--s3-space-1) var(--s3-space-3);
+      color: var(--s3-text-on-primary);
+      background: var(--s3-primary);
+      border-radius: var(--s3-radius-sm);
+      font: var(--s3-text-body-strong);
+      backdrop-filter: none;
+    }
+
+    .dashboard-container { margin-top: var(--s3-space-8); }
+
+    .rankings-section,
+    .team-section,
+    .team-card {
+      border-radius: var(--s3-radius-none);
+      box-shadow: none;
+    }
+
+    .rankings-section:hover,
+    .team-section.open,
+    .team-card:hover {
+      box-shadow: var(--s3-shadow-sm);
+      border-color: var(--s3-border-strong);
+      transform: none;
+    }
+
+    .rankings-header,
+    .team-section-header,
+    .team-header { background: var(--s3-surface-raised); }
+
+    .rankings-header:hover,
+    .team-section-header:hover,
+    .team-header:hover { background: var(--s3-surface); }
+
+    .rankings-title,
+    .team-title {
+      font: var(--s3-text-heading-md);
+      letter-spacing: 0;
+    }
+
+    .team-name {
+      font-family: var(--s3-font-heading);
+      letter-spacing: 0;
+    }
+
+    .member-count {
+      font: var(--s3-text-body-sm);
+      border-radius: var(--s3-radius-sm);
+      background: var(--s3-surface-sunken);
+    }
+
+    .team-progress-badge {
+      color: var(--s3-success);
+      background: var(--s3-success-subtle);
+      border-color: var(--s3-success);
+      border-radius: var(--s3-radius-sm);
+      box-shadow: none;
+    }
+
+    .toggle-icon-wrapper,
+    .section-toggle-icon {
+      border-radius: var(--s3-radius-sm);
+      background: var(--s3-surface-sunken);
+    }
+
+    .team-card:hover .toggle-icon-wrapper,
+    .rankings-section:hover .toggle-icon-wrapper {
+      background: var(--s3-primary-subtle);
+      color: var(--s3-primary);
+    }
+
+    .team-section.open .section-toggle-icon,
+    .team-card.open .toggle-icon-wrapper,
+    .rankings-section.open .toggle-icon-wrapper {
+      background: var(--s3-primary);
+      color: var(--s3-text-on-primary);
+    }
+
+    .team-card-container { background: var(--s3-surface); }
+    .chart-area { background: var(--s3-surface); }
+
+    .legend-color { border-radius: var(--s3-radius-none); }
+
+    footer { color: var(--s3-text-muted); }
+
+    .tooltip {
+      background: var(--s3-brand-night);
+      border-radius: var(--s3-radius-md);
+      box-shadow: var(--s3-shadow-lg);
+      backdrop-filter: none;
+      font-family: var(--s3-font-body);
+    }
+
+    svg text { font-family: var(--s3-font-body); }
+
+    /* Square brand bars (overrides the rounded rx set when drawing) */
+    .chart-content svg rect,
+    .rankings-content svg rect,
+    .team-card-wrapper svg rect { rx: 0; ry: 0; }
+
+    .rankings-title svg { width: 24px; height: 24px; flex: none; }
+
+    header.s3-nav {
+      background: var(--s3-brand-night);
+      text-align: start;
+      padding: var(--s3-space-3) var(--s3-space-6);
+      box-shadow: none;
+      position: static;
+    }
     </style>
 </head>
 
 <body>
     <noscript><div><img src="https://mc.yandex.ru/watch/112138602" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <header>
-        <div class="nav-buttons">
-            <a href="../index.html" class="nav-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
-                Toolkit
-            </a>
-            <a href="team-wigs.html" class="nav-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 12H5M12 19l-7-7 7-7" />
-                </svg>
-                Back to Team View
-            </a>
-        </div>
+    <header class="s3-nav">
+        <a class="s3-nav__brand" href="../index.html"><img class="s3-nav__logo" src="/brand/san3a-academy-logo.png" alt="San3a Academy"></a>
+        <nav aria-label="Dashboards">
+            <ul class="s3-nav__links">
+                <li><a href="../index.html">Toolkit</a></li>
+                <li><a href="team-wigs.html">Team WIGs</a></li>
+                <li><a href="individual-wigs.html" aria-current="page">Individual WIGs</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="s3-stripes" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <section class="page-hero">
+        <p class="s3-eyebrow">San3a Tech progress</p>
         <h1 class="page-title">San3a Tech Individual WIGs</h1>
         <div id="company-progress">Loading...</div>
-    </header>
+    </section>
 
     <div class="dashboard-container" id="dashboard"></div>
     <footer>Data live-synced from Individual Progress Sheet</footer>

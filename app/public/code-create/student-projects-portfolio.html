@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,8 @@
   <!-- Fonts: Montserrat (Headlines), Arvo (Sub-headlines), Inter (Body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/brand/favicon.png">
+  <link rel="stylesheet" href="/brand/san3a-tokens.css">
   
   <!-- PapaParse for Quote/Newline-Aware CSV Parsing -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -28,12 +29,12 @@
       --san3a-teal: #2EC4B6;
       --san3a-shadow: 0 10px 30px rgba(36, 13, 24, 0.08);
       --san3a-shadow-hover: 0 18px 40px rgba(36, 13, 24, 0.15);
-      --border-radius: 16px;
+      --border-radius: 0;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family:var(--s3-font-body);
       background-color: var(--san3a-paper);
       color: var(--san3a-ink);
       line-height: 1.5;
@@ -42,7 +43,7 @@
     }
 
     h1, h2, h3, h4, .brand-heading {
-      font-family: 'Montserrat', sans-serif;
+      font-family:var(--s3-font-display);
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -53,7 +54,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       height: 6px;
-      background: linear-gradient(90deg, var(--san3a-ink), var(--san3a-wine), var(--san3a-red), var(--san3a-sun));
+      background: linear-gradient(90deg, #211317 0 12.5%, #2B161C 12.5% 25%, #36141E 25% 37.5%, #4D1524 37.5% 50%, #741528 50% 62.5%, #8F172A 62.5% 75%, #B51E24 75% 87.5%, #D11E25 87.5% 100%);
       z-index: 1000;
     }
 
@@ -67,7 +68,7 @@
        HEADER & BRAND LOCKUP
        ========================================================================== */
     header {
-      background: linear-gradient(135deg, var(--san3a-ink), var(--san3a-maroon-d));
+      background: var(--san3a-ink);
       color: var(--san3a-white);
       padding: 32px 0 28px;
       box-shadow: var(--san3a-shadow);
@@ -112,7 +113,7 @@
 
     .brand-tagline {
       font-size: 12px;
-      color: var(--san3a-sun);
+      color:#FFB3B6;
       letter-spacing: 2px;
       font-weight: 700;
       margin-top: 2px;
@@ -124,7 +125,7 @@
       gap: 10px;
       background: rgba(255, 255, 255, 0.08);
       padding: 8px 16px;
-      border-radius: 999px;
+      border-radius: 2px;
       font-size: 13px;
       color: rgba(255, 255, 255, 0.85);
     }
@@ -134,7 +135,7 @@
       color: var(--san3a-white);
       border: none;
       padding: 6px 14px;
-      border-radius: 999px;
+      border-radius: 2px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
@@ -196,7 +197,7 @@
     select, input[type="text"] {
       width: 100%;
       padding: 10px 14px;
-      border-radius: 10px;
+      border-radius: 2px;
       border: 1.5px solid rgba(36, 13, 24, 0.15);
       background: var(--san3a-paper);
       color: var(--san3a-ink);
@@ -240,7 +241,7 @@
       font-weight: 900;
       color: var(--san3a-ink);
       line-height: 1.1;
-      font-family: 'Montserrat', sans-serif;
+      font-family:var(--s3-font-display);
     }
 
     .stat-label {
@@ -256,7 +257,7 @@
     .chip {
       display: inline-block;
       padding: 4px 12px;
-      border-radius: 999px;
+      border-radius: 2px;
       font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
@@ -267,7 +268,7 @@
     .chip-home { background: var(--san3a-teal); color: var(--san3a-ink); }
     .chip-inclass { background: var(--san3a-red); color: var(--san3a-white); }
     .chip-bonus { background: var(--san3a-sun); color: var(--san3a-ink); }
-    .chip-group { background: var(--san3a-ink); color: var(--san3a-sun); }
+    .chip-group { background: var(--san3a-ink); color:#FFB3B6; }
 
     /* ==========================================================================
        PROFILE BANNERS
@@ -305,7 +306,7 @@
       color: var(--san3a-maroon-d);
       border: 1px solid rgba(36, 13, 24, 0.12);
       padding: 6px 14px;
-      border-radius: 999px;
+      border-radius: 2px;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
@@ -329,7 +330,7 @@
     .type-count-pill {
       background: var(--san3a-paper);
       padding: 6px 14px;
-      border-radius: 10px;
+      border-radius: 2px;
       font-size: 13px;
       font-weight: 700;
       color: var(--san3a-maroon-d);
@@ -461,7 +462,7 @@
 
     .code-header {
       background: #180913;
-      color: var(--san3a-sun);
+      color:#FFB3B6;
       padding: 8px 16px;
       border-top-left-radius: 12px;
       border-top-right-radius: 12px;
@@ -478,7 +479,7 @@
       color: var(--san3a-white);
       border: none;
       padding: 4px 10px;
-      border-radius: 6px;
+      border-radius: 2px;
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
@@ -495,7 +496,7 @@
       padding: 18px;
       border-bottom-left-radius: 12px;
       border-bottom-right-radius: 12px;
-      font-family: 'SF Mono', Consolas, Monaco, monospace;
+      font-family: var(--s3-font-mono);
       font-size: 13.5px;
       line-height: 1.5;
       overflow-x: auto;
@@ -507,7 +508,7 @@
     /* Photos Container next to Code */
     .side-photo-box {
       background: var(--san3a-paper);
-      border-radius: 14px;
+      border-radius: 0;
       padding: 16px;
       border: 1px solid rgba(36, 13, 24, 0.08);
     }
@@ -536,7 +537,7 @@
     .photo-thumb-side {
       width: 100%;
       height: 100%;
-      border-radius: 10px;
+      border-radius: 2px;
       object-fit: cover;
       cursor: pointer;
       border: 2px solid var(--san3a-white);
@@ -557,7 +558,7 @@
       width: 100%;
       height: 100%;
       background: var(--san3a-white);
-      border-radius: 10px;
+      border-radius: 2px;
       border: 1.5px dashed var(--san3a-red);
       color: var(--san3a-red);
       font-size: 11px;
@@ -628,7 +629,7 @@
     .lightbox img {
       max-width: 90vw;
       max-height: 85vh;
-      border-radius: 12px;
+      border-radius: 2px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
 
@@ -663,6 +664,10 @@
       .submission-card { padding: 18px; }
     }
 
+  
+    /* ===== San3a Academy brand layer (UI only) ===== */
+    button, .btn, .btn-action, .primary { letter-spacing: 0.01em; }
+    :focus-visible { outline: 2px solid var(--s3-focus-ring); outline-offset: 2px; }
   </style>
 
   <!-- Yandex.Metrika counter -->
@@ -687,7 +692,7 @@
       <div class="header-top">
         <div class="brand-lockup">
           <div class="logo-slot">
-            <img src="../images/San3a-Academy-logo.png" alt="San3a Academy Logo" onerror="this.style.display='none'">
+            <img src="/brand/san3a-academy-logo.png" alt="San3a Academy" onerror="this.style.display='none'">
           </div>
           <div class="brand-text">
             <h1>CODE &amp; <span>CREATE</span></h1>
@@ -698,7 +703,7 @@
           <button class="btn-action btn-secondary" onclick="goHome()">🏠 Home View</button>
           <span id="lastUpdated">Updating...</span>
           <button class="btn-action" id="refreshBtn">🔄 Refresh</button>
-          <a href="https://forms.gle/xLrEQwgiiLGuLKMG8" target="_blank" rel="noreferrer" class="btn-action" style="background: linear-gradient(135deg, var(--san3a-red), var(--san3a-wine)); box-shadow: 0 4px 14px rgba(207, 32, 39, 0.35);">
+          <a href="https://forms.gle/xLrEQwgiiLGuLKMG8" target="_blank" rel="noreferrer" class="btn-action" style="background: var(--san3a-red);">
             🚀 Submit Student Project
           </a>
         </div>
@@ -735,7 +740,7 @@
         </div>
         <div class="control-group">
           <label>5. Project Submission</label>
-          <a href="https://forms.gle/xLrEQwgiiLGuLKMG8" target="_blank" rel="noreferrer" class="btn-action" style="height: 42px; justify-content: center; border-radius: 10px; font-size: 13px; background: linear-gradient(135deg, var(--san3a-red), var(--san3a-wine)); box-shadow: 0 4px 12px rgba(207, 32, 39, 0.25);">
+          <a href="https://forms.gle/xLrEQwgiiLGuLKMG8" target="_blank" rel="noreferrer" class="btn-action" style="height: 42px; justify-content: center; border-radius: 2px; font-size: 13px; background: var(--san3a-red);">
             ➕ Submit Project
           </a>
         </div>

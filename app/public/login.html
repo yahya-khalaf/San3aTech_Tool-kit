@@ -1,99 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" data-theme="light">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign In — San3a Academy Toolkit</title>
+  <link rel="icon" type="image/png" href="/brand/favicon.png">
+  <link rel="stylesheet" href="/brand/san3a-tokens.css">
   <style>
+    /* San3a Academy sign-in: brand-night ground, square card, red primary button */
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, rgba(36, 13, 24, 0.96), rgba(120, 22, 41, 0.94));
+      font: var(--s3-text-body);
+      background: var(--s3-brand-night);
       padding: 24px;
     }
 
     .panel {
       width: min(100%, 420px);
-      background: rgba(255, 255, 255, 0.98);
-      border-radius: 24px;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-      padding: 28px 24px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: var(--s3-surface-raised);
+      border-radius: var(--s3-radius-none);
+      box-shadow: var(--s3-shadow-lg);
+      padding: var(--s3-space-8) var(--s3-space-6);
+      border: 1px solid var(--s3-border);
+    }
+
+    .panel .logo {
+      display: block;
+      height: 48px;
+      width: auto;
+      margin-bottom: var(--s3-space-6);
     }
 
     .panel h2 {
-      font-size: 28px;
-      margin: 0 0 8px;
-      color: #240D18;
+      font: var(--s3-text-heading-lg);
+      margin: 0 0 var(--s3-space-2);
+      color: var(--s3-text);
     }
 
     .panel p {
-      color: #3D1221;
-      font-size: 14px;
-      margin: 0 0 20px;
+      color: var(--s3-text-muted);
+      font: var(--s3-text-body-sm);
+      margin: 0 0 var(--s3-space-5);
     }
 
     form {
       display: grid;
-      gap: 14px;
+      gap: var(--s3-space-3);
     }
 
     input {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1.5px solid rgba(36, 13, 24, 0.15);
-      font-size: 16px;
-      background: #FFF7F3;
-      color: #240D18;
+      min-height: 44px;
+      padding: var(--s3-space-3);
+      border-radius: var(--s3-radius-sm);
+      border: 1px solid var(--s3-border-strong);
+      font: var(--s3-text-body);
+      background: var(--s3-surface-raised);
+      color: var(--s3-text);
     }
 
     input:focus {
-      outline: none;
-      border-color: #CF2027;
-      box-shadow: 0 0 0 4px rgba(207, 32, 39, 0.08);
+      outline: 2px solid var(--s3-focus-ring);
+      outline-offset: 1px;
+      border-color: var(--s3-focus-ring);
     }
 
     button {
-      border: none;
-      border-radius: 12px;
-      padding: 12px 16px;
-      background: linear-gradient(135deg, #CF2027, #781629);
-      color: #fff;
-      font-size: 15px;
-      font-weight: 800;
+      min-height: 44px;
+      border: 2px solid transparent;
+      border-radius: var(--s3-radius-sm);
+      padding: var(--s3-space-3) var(--s3-space-5);
+      background: var(--s3-primary);
+      color: var(--s3-text-on-primary);
+      font: var(--s3-text-body-strong);
       cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.2s ease;
+      transition: background-color var(--s3-duration-fast);
     }
 
-    button:hover {
-      transform: translateY(-1px);
-    }
+    button:hover { background: var(--s3-primary-hover); }
+    button:active { background: var(--s3-primary-active); }
 
     button:disabled {
-      opacity: 0.7;
+      opacity: 0.45;
       cursor: default;
-      transform: none;
     }
 
     .status {
       min-height: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #CF2027;
+      font: var(--s3-text-label);
+      color: var(--s3-danger);
     }
+
+    .s3-stripes { display: grid; grid-template-columns: repeat(8, 1fr); height: 8px; width: min(100%, 420px); }
+    .s3-stripes > span:nth-child(1) { background: var(--s3-stripe-1); }
+    .s3-stripes > span:nth-child(2) { background: var(--s3-stripe-2); }
+    .s3-stripes > span:nth-child(3) { background: var(--s3-stripe-3); }
+    .s3-stripes > span:nth-child(4) { background: var(--s3-stripe-4); }
+    .s3-stripes > span:nth-child(5) { background: var(--s3-stripe-5); }
+    .s3-stripes > span:nth-child(6) { background: var(--s3-stripe-6); }
+    .s3-stripes > span:nth-child(7) { background: var(--s3-stripe-7); }
+    .s3-stripes > span:nth-child(8) { background: var(--s3-stripe-8); }
   </style>
 </head>
 
 <body>
   <div class="panel">
+    <img class="logo" src="/brand/san3a-academy-logo.png" alt="San3a Academy">
     <h2>Sign In</h2>
     <p>Enter the internal password to access this page.</p>
     <form id="loginForm">
@@ -102,6 +122,7 @@
       <div class="status" id="status" aria-live="polite"></div>
     </form>
   </div>
+  <div class="s3-stripes" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
   <script>
     const form = document.getElementById('loginForm');
